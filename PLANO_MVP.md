@@ -86,7 +86,7 @@ Estimativa: seis semanas de trabalho parcial da equipe. Como a disponibilidade n
 | M4 — conclusão | Semana 5 | Moisés implementa chefe, início, pausa e telas finais; Matheus anima aviso de ataque; Eduardo prepara ginásio | Partida completa até vitória ou derrota; chefe comunica ataque antes do dano; reinício limpa todo o estado |
 | M5 — entrega | Semana 6 | Todos testam; Igor balanceia; Moisés exporta; arte/áudio essenciais entram sem expandir escopo | Build Windows executa sem editor, controles documentados e todos os casos críticos abaixo aprovados |
 
-Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M4, integrando Napoleão, pausa e vitória final. Não começar pela loja ou arte definitiva.
+Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M5, preparação de exportação, áudio essencial e verificação final. Não começar pela loja ou arte definitiva.
 
 ## Verificação e definição de pronto
 
@@ -135,6 +135,15 @@ Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo,
 - `tests/test_progression.gd`: validade do banco, oito questões únicas em quatro ofertas, resposta única, recompensa única, cura limitada, erro sem bônus, portas, interação repetida e reset.
 - Testes de combate e progressão aprovados sem falhas; importação aprovada. A arena permanece com arte provisória.
 
-M4 e M5 ainda pendentes. A exclusão local preexistente de `README.md` foi mantida fora dos commits. Versionamento: plano/base em `c26ebc9` e M1 em `c2a2a84`, enviados a `origin/master`; cada próxima etapa terá commit após validação, seguido de push.
+### M4 — implementado e validado tecnicamente em 19/10/2026
+
+- Napoleão exclusivo da quarta sala, ginásio provisório, aviso de direção fixa, investida e recuperação. Pergunta antes do chefe com explicação do padrão.
+- Vitória, derrota, nova partida, retorno ao início e pausa com Esc. Pausa preserva movimento, invulnerabilidade e temporizadores.
+- Resolução da sala adiada até o fim do frame, priorizando derrota em morte simultânea. Pausa no último golpe não perde a conclusão da sala.
+- `tests/test_run.gd`: quatro salas até vitória, fases do chefe, direção fixa, pausa, retomada, morte simultânea e reinício da pausa; todas as três suítes aprovadas.
+- Capturas renderizadas no Godot em 960×540 e 1280×720: menu, perguntas, feedback, combate e chefe inspecionados; texto legível e arena inteira visível. Capturas locais em `builds/previews/`, fora do Git.
+- Partida funcional de ponta a ponta disponível. Balanceamento e sensação de controle ainda precisam de playtest humano.
+
+M5 em andamento. Os templates de exportação não foram encontrados na pasta padrão local; a build Windows ainda não foi gerada. A exclusão local preexistente de `README.md` foi mantida fora dos commits. Versionamento: plano/base em `c26ebc9`, M1 em `c2a2a84`, M2/M3 em `43fa130`, enviados a `origin/master`; cada próxima etapa terá commit após validação, seguido de push.
 
 Validação técnica: importação pelo editor headless e execução da cena por 120 frames no Godot 4.7.2. A validação visual e a experiência dos controles ainda exigem teste manual.

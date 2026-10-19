@@ -104,7 +104,8 @@ func answer_question(index: int) -> void:
 	state = State.FEEDBACK
 	var result := "Acertou!" if correct else "Ainda dá para vencer!"
 	var reward_text := "Bônus reservado: %s." % questions.reward_description(questions.pending_reward) if correct else "Sem bônus nesta sala. Você pode avançar normalmente."
-	ui.show_panel(result, "%s\n\nResposta correta: %s\n%s\n\nVença os inimigos para liberar a saída." % [reward_text, questions.selected.options[questions.selected.correct], questions.selected.explanation], [{"text": "Entrar no combate", "action": begin_combat}])
+	var tip := "Napoleão espera no ginásio! A linha amarela avisa a direção da investida. Saia da linha e ataque durante a recuperação." if room_index == 3 else "Vença os inimigos para liberar a saída."
+	ui.show_panel(result, "%s\n\nResposta correta: %s\n%s\n\n%s" % [reward_text, questions.selected.options[questions.selected.correct], questions.selected.explanation, tip], [{"text": "Entrar no combate", "action": begin_combat}])
 
 func begin_combat() -> void:
 	if state != State.FEEDBACK:
@@ -129,7 +130,7 @@ func _on_room_cleared() -> void:
 	_resolve_room.call_deferred(run_epoch)
 
 func _resolve_room(epoch: int) -> void:
-	if epoch != run_epoch or state != State.COMBAT or player.health <= 0:
+	if epoch != run_epoch or state != State.COMBAT or player.health <= 0 or not room.enemies.is_empty():
 		return
 	var reward: String = questions.consume_reward()
 	last_reward = "Sem bônus nesta sala."
@@ -139,6 +140,12 @@ func _resolve_room(epoch: int) -> void:
 		player.heal(20)
 	if not reward.is_empty():
 		last_reward = "Recebido: %s." % questions.reward_description(reward)
+	if room_index == 3:
+		state = State.VICTORY
+		player.active = false
+		ui.show_panel("Você voltou para casa!", "Napoleão foi derrotado e o livro se abriu.\nVocê concluiu as quatro salas de School Rush.\n\nVida restante: %d/100 • Dano da régua: %d" % [player.health, player.damage], [{"text": "Nova partida", "action": start_run}, {"text": "Início", "action": show_menu}])
+		_update_hud()
+		return
 	state = State.CLEARED
 	room.open_door()
 	_update_hud()
@@ -146,16 +153,27 @@ func _resolve_room(epoch: int) -> void:
 func advance_room() -> void:
 	if state != State.CLEARED or not room.can_exit(player.position):
 		return
-	if room_index == 2:
-		state = State.VICTORY
-		player.active = false
-		ui.show_panel("Três salas concluídas!", "Você concluiu o circuito de combate. O chefe será integrado no próximo marco.", [{"text": "Jogar novamente", "action": start_run}, {"text": "Início", "action": show_menu}])
-		return
 	room_index += 1
 	_prepare_question()
 
+func toggle_pause() -> void:
+	if state == State.PAUSED:
+		state = previous_state
+		get_tree().paused = false
+		ui.hide_panel()
+		if state == State.COMBAT and room.enemies.is_empty():
+			_resolve_room(run_epoch)
+	elif state in [State.COMBAT, State.CLEARED]:
+		previous_state = state
+		state = State.PAUSED
+		get_tree().paused = true
+		ui.show_panel("Pausa", "WASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar", [{"text": "Continuar", "action": toggle_pause}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
+
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact") and not event.is_echo():
+	if event.is_action_pressed("ui_cancel") and not event.is_echo():
+		toggle_pause()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("interact") and not event.is_echo():
 		advance_room()
 
 func _process(_delta: float) -> void:
@@ -167,6 +185,8 @@ func _update_hud() -> void:
 	var message := "WASD / setas: mover   •   Shift: correr   •   Espaço: régua"
 	if state == State.COMBAT and not questions.pending_reward.is_empty():
 		message = "Bônus após a sala: %s   •   Espaço: régua" % questions.reward_description(questions.pending_reward)
+	if state == State.COMBAT and room_index == 3:
+		message = "NAPOLEÃO   •   Desvie da linha amarela e ataque na recuperação   •   Esc: pausa"
 	elif state == State.CLEARED:
 		message = "%s Vá à porta verde e pressione E." % last_reward
 	ui.update_hud(player.health, player.damage, room_index + 1, room.enemies.size(), message)

@@ -2,11 +2,13 @@ extends Node2D
 
 signal cleared
 const ENEMY = preload("res://scripts/enemies/enemy.gd")
+const BOSS = preload("res://scripts/enemies/boss.gd")
 const ENTRY := Vector2(100, 210)
 const DOOR := Vector2(770, 210)
 var enemies: Array[Node] = []
 var door_open: bool = false
 var combat_active: bool = false
+var boss_room: bool = false
 
 func _ready() -> void:
 	for wall in [Rect2(0, -12, 800, 24), Rect2(0, 408, 800, 24), Rect2(-12, 0, 24, 420), Rect2(788, 0, 24, 420)]:
@@ -28,14 +30,16 @@ func clear_enemies() -> void:
 	enemies.clear()
 	combat_active = false
 	door_open = false
+	boss_room = false
 	queue_redraw()
 
 func populate(index: int, player: CharacterBody2D) -> void:
 	clear_enemies()
+	boss_room = index == 3
 	var points := [Vector2(520, 110), Vector2(650, 300), Vector2(470, 320), Vector2(680, 100)]
-	for i in range(index + 2):
-		var enemy := ENEMY.new()
-		enemy.position = points[i]
+	for i in range(1 if boss_room else index + 2):
+		var enemy = BOSS.new() if boss_room else ENEMY.new()
+		enemy.position = Vector2(600, 210) if boss_room else points[i]
 		enemy.target = player
 		enemy.died.connect(_on_enemy_died)
 		enemies.append(enemy)
@@ -70,12 +74,16 @@ func can_exit(player_position: Vector2) -> bool:
 	return door_open and player_position.distance_to(DOOR) <= 65.0
 
 func _draw() -> void:
-	draw_rect(Rect2(0, 0, 800, 420), Color("24354a"))
+	draw_rect(Rect2(0, 0, 800, 420), Color("353047") if boss_room else Color("24354a"))
 	for x in range(40, 800, 40):
 		draw_line(Vector2(x, 12), Vector2(x, 408), Color("304257"), 1.0)
 	for y in range(40, 420, 40):
 		draw_line(Vector2(12, y), Vector2(788, y), Color("304257"), 1.0)
 	draw_rect(Rect2(0, 0, 800, 420), Color("7087a3"), false, 24.0)
-	draw_rect(Rect2(300, 15, 200, 28), Color("38675f"))
+	if boss_room:
+		draw_arc(Vector2(400, 210), 100.0, 0.0, TAU, 48, Color("817386"), 2.0)
+		draw_line(Vector2(400, 12), Vector2(400, 408), Color("817386"), 2.0)
+	else:
+		draw_rect(Rect2(300, 15, 200, 28), Color("38675f"))
 	draw_rect(Rect2(750, 170, 38, 80), Color("54d6a8") if door_open else Color("936577"))
 	draw_line(Vector2(762, 210), Vector2(780, 210), Color.WHITE, 3.0)
