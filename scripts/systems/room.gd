@@ -1,0 +1,81 @@
+extends Node2D
+
+signal cleared
+const ENEMY = preload("res://scripts/enemies/enemy.gd")
+const ENTRY := Vector2(100, 210)
+const DOOR := Vector2(770, 210)
+var enemies: Array[Node] = []
+var door_open: bool = false
+var combat_active: bool = false
+
+func _ready() -> void:
+	for wall in [Rect2(0, -12, 800, 24), Rect2(0, 408, 800, 24), Rect2(-12, 0, 24, 420), Rect2(788, 0, 24, 420)]:
+		var body := StaticBody2D.new()
+		body.position = wall.get_center()
+		body.collision_layer = 2
+		body.collision_mask = 0
+		var collider := CollisionShape2D.new()
+		var shape := RectangleShape2D.new()
+		shape.size = wall.size
+		collider.shape = shape
+		body.add_child(collider)
+		add_child(body)
+
+func clear_enemies() -> void:
+	for enemy in enemies:
+		enemy.active = false
+		enemy.queue_free()
+	enemies.clear()
+	combat_active = false
+	door_open = false
+	queue_redraw()
+
+func populate(index: int, player: CharacterBody2D) -> void:
+	clear_enemies()
+	var points := [Vector2(520, 110), Vector2(650, 300), Vector2(470, 320), Vector2(680, 100)]
+	for i in range(index + 2):
+		var enemy := ENEMY.new()
+		enemy.position = points[i]
+		enemy.target = player
+		enemy.died.connect(_on_enemy_died)
+		enemies.append(enemy)
+		add_child(enemy)
+	set_combat(true)
+	queue_redraw()
+
+func set_combat(enabled: bool) -> void:
+	combat_active = enabled
+	for enemy in enemies:
+		enemy.active = enabled
+
+func strike(origin: Vector2, direction: Vector2, damage: int) -> void:
+	if not combat_active:
+		return
+	for enemy in enemies.duplicate():
+		var offset: Vector2 = enemy.global_position - origin
+		if offset.length() <= 60.0 and (offset.length() < 1.0 or direction.dot(offset.normalized()) >= 0.5):
+			enemy.take_damage(damage)
+
+func _on_enemy_died(enemy: Node) -> void:
+	enemies.erase(enemy)
+	if enemies.is_empty():
+		combat_active = false
+		cleared.emit()
+
+func open_door() -> void:
+	door_open = true
+	queue_redraw()
+
+func can_exit(player_position: Vector2) -> bool:
+	return door_open and player_position.distance_to(DOOR) <= 65.0
+
+func _draw() -> void:
+	draw_rect(Rect2(0, 0, 800, 420), Color("24354a"))
+	for x in range(40, 800, 40):
+		draw_line(Vector2(x, 12), Vector2(x, 408), Color("304257"), 1.0)
+	for y in range(40, 420, 40):
+		draw_line(Vector2(12, y), Vector2(788, y), Color("304257"), 1.0)
+	draw_rect(Rect2(0, 0, 800, 420), Color("7087a3"), false, 24.0)
+	draw_rect(Rect2(300, 15, 200, 28), Color("38675f"))
+	draw_rect(Rect2(750, 170, 38, 80), Color("54d6a8") if door_open else Color("936577"))
+	draw_line(Vector2(762, 210), Vector2(780, 210), Color.WHITE, 3.0)

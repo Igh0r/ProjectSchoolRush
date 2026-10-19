@@ -6,7 +6,7 @@ Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
-O repositório contém um protótipo Godot 4.7: jogador `CharacterBody2D`, colisão circular, arena retangular criada por código, controles WASD/setas e formas geométricas provisórias. Ainda não existem combate, inimigos, vida, perguntas, portas, progressão, menus, áudio ou exportação configurada. Não há evidência de testes de jogabilidade.
+Na análise inicial, o repositório continha apenas movimentação e arena. O estado atualizado e as validações por etapa estão registrados no fim deste documento. O alvo técnico usado é Godot 4.7.2, com formas geométricas provisórias.
 
 Na revisão inicial foram adicionados corrida com Shift, proteção contra registro duplicado dos controles e câmera fixa no centro da arena. A câmera antes seguia o jogador e deixava partes da sala fora da tela. O cache `.godot/` foi excluído do versionamento via `.gitignore`; arquivos `.gd.uid` devem ser mantidos. A exclusão de README já presente no diretório não foi revertida.
 
@@ -86,7 +86,7 @@ Estimativa: seis semanas de trabalho parcial da equipe. Como a disponibilidade n
 | M4 — conclusão | Semana 5 | Moisés implementa chefe, início, pausa e telas finais; Matheus anima aviso de ataque; Eduardo prepara ginásio | Partida completa até vitória ou derrota; chefe comunica ataque antes do dano; reinício limpa todo o estado |
 | M5 — entrega | Semana 6 | Todos testam; Igor balanceia; Moisés exporta; arte/áudio essenciais entram sem expandir escopo | Build Windows executa sem editor, controles documentados e todos os casos críticos abaixo aprovados |
 
-Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M1, começando por um único inimigo e o golpe da régua. Não começar pela loja ou arte definitiva.
+Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M2, integrando perguntas, feedback e recompensa ao combate. Não começar pela loja ou arte definitiva.
 
 ## Verificação e definição de pronto
 
@@ -118,6 +118,15 @@ Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo,
 
 ## Estado desta revisão
 
-Concluído: análise do protótipo, recorte do MVP, proposta de regras e parâmetros, plano por aceite, corrida, câmera fixa e higiene de versionamento. Não concluído: M1–M5 e validação manual do movimento. Este documento é um plano de desenvolvimento; o repositório ainda não contém um MVP jogável completo.
+### M1 — implementado e validado tecnicamente em 19/10/2026
+
+- Régua frontal (Espaço), cooldown, vida, invulnerabilidade e feedback visual.
+- Dois dados perseguem o jogador e causam dano por contato; morte e reinício completos.
+- Cena reutilizável de sala, menu inicial, HUD e tela de conclusão provisória.
+- Corrida reintegrada: na retomada, o arquivo local do jogador estava novamente sem a implementação de Shift.
+- `tests/test_combat.gd`: cone frontal, cooldown, invulnerabilidade, derrota e três reinícios, sem falhas.
+- Importação headless aprovada em Godot 4.7.2. Teste manual de sensação do combate segue pendente; M1 tem aceite técnico, não aceite final de playtest.
+
+M2–M5 ainda pendentes. A exclusão local preexistente de `README.md` foi mantida fora dos commits. Versionamento: plano/base registrados em `c26ebc9`, enviado a `origin/master`; cada próxima etapa terá commit após validação, seguido de push.
 
 Validação técnica: importação pelo editor headless e execução da cena por 120 frames no Godot 4.7.2. A validação visual e a experiência dos controles ainda exigem teste manual.
