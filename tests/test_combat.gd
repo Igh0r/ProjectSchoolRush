@@ -49,5 +49,6 @@ func run_tests() -> void:
 		check(game.state == game.State.CLEARED, "Eliminar todos deve concluir a sala")
 	game.queue_free()
 	await process_frame
+	await create_timer(0.1).timeout # Aguarda a thread de áudio liberar playbacks.
 	print("COMBAT TESTS: %d failure(s)" % failures)
 	quit(1 if failures else 0)

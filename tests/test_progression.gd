@@ -85,5 +85,6 @@ func run_tests() -> void:
 	check(game.player.health == 100 and game.player.damage == 10 and game.room_index == 0, "Reset deve limpar progressão")
 	game.queue_free()
 	await process_frame
+	await create_timer(0.1).timeout
 	print("PROGRESSION TESTS: %d failure(s)" % failures)
 	quit(1 if failures else 0)

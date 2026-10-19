@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal died
+signal hurt
 signal health_changed(value: int)
 signal attacked(origin: Vector2, direction: Vector2, damage: int)
 
@@ -55,6 +56,7 @@ func take_damage(amount: int) -> void:
 	invulnerability = 0.7
 	health_changed.emit(health)
 	queue_redraw()
+	hurt.emit()
 	if health == 0:
 		active = false
 		died.emit()

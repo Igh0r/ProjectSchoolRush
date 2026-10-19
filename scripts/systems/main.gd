@@ -4,12 +4,14 @@ const PLAYER_SCENE = preload("res://scenes/player/player.tscn")
 const ROOM_SCENE = preload("res://scenes/room/room.tscn")
 const UI_SCRIPT = preload("res://scripts/ui/game_ui.gd")
 const QUESTIONS = preload("res://scripts/systems/question_manager.gd")
+const SOUND_SCRIPT = preload("res://scripts/systems/sound_effects.gd")
 enum State { MENU, QUESTION, ANSWER, FEEDBACK, COMBAT, CLEARED, DEFEAT, VICTORY, PAUSED }
 var state: State = State.MENU
 var previous_state: State = State.COMBAT
 var player
 var room
 var ui
+var sounds
 var questions = QUESTIONS.new()
 var room_index: int = 0
 var run_epoch: int = 0
@@ -18,6 +20,8 @@ var last_reward: String = ""
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_register_controls()
+	sounds = SOUND_SCRIPT.new()
+	add_child(sounds)
 	room = ROOM_SCENE.instantiate()
 	room.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(room)
@@ -29,6 +33,8 @@ func _ready() -> void:
 	add_child(player)
 	player.position = room.ENTRY
 	player.attacked.connect(room.strike)
+	player.attacked.connect(func(_origin: Vector2, _direction: Vector2, _damage: int): sounds.play_cue("attack"))
+	player.hurt.connect(func(): sounds.play_cue("hurt"))
 	player.died.connect(_on_player_died)
 	player.health_changed.connect(func(_value: int): _update_hud())
 	room.cleared.connect(_on_room_cleared)
@@ -41,6 +47,7 @@ func _register_controls() -> void:
 		"move_left": [KEY_A, KEY_LEFT], "move_right": [KEY_D, KEY_RIGHT],
 		"move_up": [KEY_W, KEY_UP], "move_down": [KEY_S, KEY_DOWN],
 		"sprint": [KEY_SHIFT], "attack": [KEY_SPACE], "interact": [KEY_E],
+		"mute": [KEY_M],
 	}
 	for action in bindings:
 		if not InputMap.has_action(action):
@@ -58,7 +65,7 @@ func show_menu() -> void:
 	player.active = false
 	room.clear_enemies()
 	questions.reset()
-	ui.show_panel("School Rush", "Preso em um livro, você precisa vencer os desafios para voltar para casa.\n\nEscolha uma pergunta. Acerte para reservar uma melhoria e vença a sala para recebê-la. Errar não impede o avanço.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar", [{"text": "Iniciar partida", "action": start_run}])
+	ui.show_panel("School Rush", "Preso em um livro, você precisa vencer os desafios para voltar para casa.\n\nEscolha uma pergunta. Acerte para reservar uma melhoria e vença a sala para recebê-la. Errar não impede o avanço.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: ligar/desligar som", [{"text": "Iniciar partida", "action": start_run}])
 	_update_hud()
 
 func start_run() -> void:
@@ -101,6 +108,7 @@ func answer_question(index: int) -> void:
 	if state != State.ANSWER or index < 0 or index > 3:
 		return
 	var correct: bool = questions.answer(index)
+	sounds.play_cue("correct" if correct else "wrong")
 	state = State.FEEDBACK
 	var result := "Acertou!" if correct else "Ainda dá para vencer!"
 	var reward_text := "Bônus reservado: %s." % questions.reward_description(questions.pending_reward) if correct else "Sem bônus nesta sala. Você pode avançar normalmente."
@@ -133,6 +141,7 @@ func _resolve_room(epoch: int) -> void:
 	if epoch != run_epoch or state != State.COMBAT or player.health <= 0 or not room.enemies.is_empty():
 		return
 	var reward: String = questions.consume_reward()
+	sounds.play_cue("clear")
 	last_reward = "Sem bônus nesta sala."
 	if reward == "Matemática":
 		player.damage += 2
@@ -167,7 +176,7 @@ func toggle_pause() -> void:
 		previous_state = state
 		state = State.PAUSED
 		get_tree().paused = true
-		ui.show_panel("Pausa", "WASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar", [{"text": "Continuar", "action": toggle_pause}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
+		ui.show_panel("Pausa", "WASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar • M: ligar/desligar som", [{"text": "Continuar", "action": toggle_pause}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not event.is_echo():
@@ -175,6 +184,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("interact") and not event.is_echo():
 		advance_room()
+	elif event.is_action_pressed("mute") and not event.is_echo():
+		sounds.toggle_mute()
 
 func _process(_delta: float) -> void:
 	_update_hud()

@@ -43,4 +43,5 @@ func capture() -> void:
 	await save_preview("10-resized")
 	game.queue_free()
 	await process_frame
+	await create_timer(0.1).timeout
 	quit()

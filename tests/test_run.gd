@@ -80,5 +80,6 @@ func run_tests() -> void:
 	check(game.player.damage == 10 and game.player.health == 100, "Reinício após chefe deve limpar atributos")
 	game.queue_free()
 	await process_frame
+	await create_timer(0.1).timeout
 	print("RUN TESTS: %d failure(s)" % failures)
 	quit(1 if failures else 0)

@@ -2,6 +2,8 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
+**Situação atual:** ciclo completo implementado (M1–M4), versão Windows 0.1.0 exportada e testes técnicos aprovados. M5 permanece aberto para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md).
+
 ## Objetivo e situação atual
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
@@ -86,7 +88,7 @@ Estimativa: seis semanas de trabalho parcial da equipe. Como a disponibilidade n
 | M4 — conclusão | Semana 5 | Moisés implementa chefe, início, pausa e telas finais; Matheus anima aviso de ataque; Eduardo prepara ginásio | Partida completa até vitória ou derrota; chefe comunica ataque antes do dano; reinício limpa todo o estado |
 | M5 — entrega | Semana 6 | Todos testam; Igor balanceia; Moisés exporta; arte/áudio essenciais entram sem expandir escopo | Build Windows executa sem editor, controles documentados e todos os casos críticos abaixo aprovados |
 
-Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M5, preparação de exportação, áudio essencial e verificação final. Não começar pela loja ou arte definitiva.
+Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima etapa: playtest do MVP 0.1.0 e correções orientadas pelos resultados. Não começar pela loja ou arte definitiva.
 
 ## Verificação e definição de pronto
 
@@ -144,6 +146,36 @@ Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo,
 - Capturas renderizadas no Godot em 960×540 e 1280×720: menu, perguntas, feedback, combate e chefe inspecionados; texto legível e arena inteira visível. Capturas locais em `builds/previews/`, fora do Git.
 - Partida funcional de ponta a ponta disponível. Balanceamento e sensação de controle ainda precisam de playtest humano.
 
-M5 em andamento. Os templates de exportação não foram encontrados na pasta padrão local; a build Windows ainda não foi gerada. A exclusão local preexistente de `README.md` foi mantida fora dos commits. Versionamento: plano/base em `c26ebc9`, M1 em `c2a2a84`, M2/M3 em `43fa130`, enviados a `origin/master`; cada próxima etapa terá commit após validação, seguido de push.
+### M5 — entrega técnica preparada em 19/10/2026; aceite humano pendente
 
-Validação técnica: importação pelo editor headless e execução da cena por 120 frames no Godot 4.7.2. A validação visual e a experiência dos controles ainda exigem teste manual.
+- Efeitos sonoros sintetizados para ataque, dano, resposta e conclusão; tecla M alterna o som. Arte continua provisória.
+- Proporção 16:9 preservada no redimensionamento; menu, respostas, feedback, sala liberada, pausa e vitória inspecionados em capturas renderizadas.
+- Quatro suítes aprovadas, sem erros nem avisos de objetos pendentes: combate, progressão, partida e movimento. A última verifica corrida, diagonal, paredes e congelamento da invulnerabilidade na pausa.
+- A thread de áudio recebe tempo para liberar playbacks na limpeza dos testes; canais são parados ao sair da cena.
+- Templates oficiais 4.7.2 baixados e componentes Windows x64 instalados. Preset de exportação versionado; recursos embutidos em `builds/windows/SchoolRush.exe`.
+- Executável exportado iniciado e encerrado após 120 frames, tanto headless quanto com renderização OpenGL, sem erros. Isso comprova inicialização local, não uma partida manual em outro computador.
+- `tools/check.ps1` reproduz importação e testes. Com `-Export`, também gera o executável, avisos do Godot, guia de uso e verifica inicialização standalone com limite de tempo.
+- Um teste externo via `--script` não foi executado pelo template release; o processo foi encerrado. Os testes de lógica foram executados pelo editor headless; a build release passou pelos testes de inicialização descritos acima.
+- Guia `COMO_JOGAR.md` e pacote local `builds/SchoolRush-MVP-0.1.0-windows-x64.zip` preparados para a equipe. Binários e capturas ficam fora do Git.
+
+### Pendências para aprovar o MVP
+
+| Pendência | Responsável | Evidência esperada |
+| --- | --- | --- |
+| Definir faixa escolar e revisar as dez questões | Igor | Questões corretas e adequadas ao público |
+| Executar cinco playtests de duas partidas | Equipe | Tempo, mortes, acertos e dúvidas; quatro pessoas entendem o ciclo sem orientação |
+| Ajustar combate, duração e dificuldade a partir dos testes | Moisés + Igor | Partida compreensível e alvo de 5–8 minutos avaliado |
+| Validar áudio e sensação dos controles | Matheus + equipe | Feedback perceptível e volume confortável |
+| Testar a pasta exportada em outro PC sem Godot | Equipe | Uma partida até vitória e outra até derrota, com reinício funcional |
+
+Não declarar o MVP finalizado antes desses aceites. A exclusão local preexistente de `README.md` foi mantida fora dos commits.
+
+### Histórico de versionamento
+
+Trabalho na branch existente `master`, com pushes para `origin/master` após cada etapa validada:
+
+- `c26ebc9`: plano e base inicial.
+- `c2a2a84`: M1 — combate, inimigos, vida e reinício.
+- `43fa130`: M2/M3 — perguntas, bônus e três salas.
+- `8e9fdea`: M4 — Napoleão, pausa e partida completa.
+- M5: commit separado de áudio, exportação, verificações finais e plano atualizado (consultar `git log` para o hash).
