@@ -36,7 +36,7 @@ func _ready() -> void:
 	player.attacked.connect(func(_origin: Vector2, _direction: Vector2, _damage: int): sounds.play_cue("attack"))
 	player.hurt.connect(func(): sounds.play_cue("hurt"))
 	player.died.connect(_on_player_died)
-	player.health_changed.connect(func(_value: int): _update_hud())
+	player.health_changed.connect(func(_value: int, _maximum: int): _update_hud())
 	room.cleared.connect(_on_room_cleared)
 	ui = UI_SCRIPT.new()
 	add_child(ui)
@@ -76,6 +76,7 @@ func start_run() -> void:
 	last_reward = ""
 	room.clear_enemies()
 	player.active = false
+	ui.reset_health_feedback()
 	player.reset_run()
 	questions.reset()
 	_prepare_question()
@@ -152,7 +153,7 @@ func _resolve_room(epoch: int) -> void:
 	if room_index == 3:
 		state = State.VICTORY
 		player.active = false
-		ui.show_panel("Você voltou para casa!", "Napoleão foi derrotado e o livro se abriu.\nVocê concluiu as quatro salas de School Rush.\n\nVida restante: %d/100 • Dano da régua: %d" % [player.health, player.damage], [{"text": "Nova partida", "action": start_run}, {"text": "Início", "action": show_menu}])
+		ui.show_panel("Você voltou para casa!", "Napoleão foi derrotado e o livro se abriu.\nVocê concluiu as quatro salas de School Rush.\n\nVida restante: %d/%d • Dano da régua: %d" % [player.health, player.max_health, player.damage], [{"text": "Nova partida", "action": start_run}, {"text": "Início", "action": show_menu}])
 		_update_hud()
 		return
 	state = State.CLEARED
@@ -200,4 +201,4 @@ func _update_hud() -> void:
 		message = "NAPOLEÃO   •   Desvie da linha amarela e ataque na recuperação   •   Esc: pausa"
 	elif state == State.CLEARED:
 		message = "%s Vá à porta verde e pressione E." % last_reward
-	ui.update_hud(player.health, player.damage, room_index + 1, room.enemies.size(), message)
+	ui.update_hud(player.health, player.max_health, player.damage, room_index + 1, room.enemies.size(), message)

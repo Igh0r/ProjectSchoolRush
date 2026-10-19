@@ -60,4 +60,4 @@ func consume_reward() -> String:
 	return reward
 
 func reward_description(subject: String) -> String:
-	return "+2 de dano da régua" if subject == "Matemática" else "+20 de vida (máximo 100)"
+	return "+2 de dano da régua" if subject == "Matemática" else "+20 de vida (até a vida máxima)"

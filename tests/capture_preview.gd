@@ -41,6 +41,22 @@ func capture() -> void:
 	root.size = Vector2i(1280, 720)
 	game.start_run()
 	await save_preview("10-resized")
+	root.size = Vector2i(960, 540)
+	game.choose_question(0)
+	game.answer_question(0)
+	game.begin_combat()
+	game.room.set_combat(false)
+	game.player.take_damage(10)
+	await save_preview("11-health-damage")
+	game.player.invulnerability = 0.0
+	game.player.take_damage(65)
+	await save_preview("12-health-low")
+	game.player.increase_max_health(20)
+	await save_preview("13-health-maximum")
+	game.player.heal(20)
+	await save_preview("14-health-heal")
+	root.size = Vector2i(1280, 720)
+	await save_preview("15-health-resized")
 	game.queue_free()
 	await process_frame
 	await create_timer(0.1).timeout

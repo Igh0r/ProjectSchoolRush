@@ -2,12 +2,14 @@ extends CharacterBody2D
 
 signal died
 signal hurt
-signal health_changed(value: int)
+signal health_changed(value: int, maximum: int)
 signal attacked(origin: Vector2, direction: Vector2, damage: int)
 
 @export var speed: float = 230.0
 @export var sprint_multiplier: float = 1.4
-var health: int = 100
+const BASE_MAX_HEALTH: int = 100
+var max_health: int = BASE_MAX_HEALTH
+var health: int = BASE_MAX_HEALTH
 var damage: int = 10
 var active: bool = false
 var facing := Vector2.DOWN
@@ -16,14 +18,15 @@ var attack_cooldown: float = 0.0
 var swing_time: float = 0.0
 
 func reset_run() -> void:
-	health = 100
+	max_health = BASE_MAX_HEALTH
+	health = max_health
 	damage = 10
 	facing = Vector2.DOWN
 	invulnerability = 0.0
 	attack_cooldown = 0.0
 	swing_time = 0.0
 	velocity = Vector2.ZERO
-	health_changed.emit(health)
+	health_changed.emit(health, max_health)
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
@@ -50,11 +53,11 @@ func attack() -> void:
 	queue_redraw()
 
 func take_damage(amount: int) -> void:
-	if not active or health <= 0 or invulnerability > 0.0:
+	if not active or health <= 0 or invulnerability > 0.0 or amount <= 0:
 		return
 	health = maxi(0, health - amount)
 	invulnerability = 0.7
-	health_changed.emit(health)
+	health_changed.emit(health, max_health)
 	queue_redraw()
 	hurt.emit()
 	if health == 0:
@@ -62,8 +65,16 @@ func take_damage(amount: int) -> void:
 		died.emit()
 
 func heal(amount: int) -> void:
-	health = mini(100, health + amount)
-	health_changed.emit(health)
+	if amount <= 0 or health <= 0:
+		return
+	health = mini(max_health, health + amount)
+	health_changed.emit(health, max_health)
+
+func increase_max_health(amount: int) -> void:
+	if amount <= 0 or health <= 0:
+		return
+	max_health += amount
+	health_changed.emit(health, max_health)
 
 func _draw() -> void:
 	draw_circle(Vector2.ZERO, 15.0, Color.WHITE if invulnerability > 0.0 else Color("54d6a8"))

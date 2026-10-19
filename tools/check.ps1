@@ -17,7 +17,7 @@ function Invoke-GodotCheck {
 }
 
 Invoke-GodotCheck -Arguments @('--editor', '--import', '--quit')
-foreach ($suite in @('combat', 'progression', 'run', 'movement')) {
+foreach ($suite in @('combat', 'progression', 'run', 'movement', 'health')) {
     Invoke-GodotCheck -Arguments @('--script', "res://tests/test_$suite.gd")
 }
 if ($Export) {

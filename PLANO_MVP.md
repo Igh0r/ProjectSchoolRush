@@ -2,9 +2,34 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual:** ciclo completo implementado (M1–M4), versão Windows 0.1.0 exportada e testes técnicos aprovados. M5 permanece aberto para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md).
+**Situação atual:** ciclo completo implementado (M1–M4) e bloco B1 concluído: barra de vida e limite máximo independente. Versão Windows atual: **0.1.1**, primeira entrega incremental de preparação para a expansão 0.2. M5 permanece aberto para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md).
 
 ## Objetivo e situação atual
+
+### Expansão 0.2 — blocos de execução
+
+A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os marcos M1–M5 abaixo registram a base 0.1.0.
+
+| Bloco | Escopo | Situação |
+| --- | --- | --- |
+| B1 — vida do jogador | Barra com valor numérico, indicação de dano/cura/vida baixa, vida máxima independente e reset | Concluído; testes e inspeção visual aprovados |
+| B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Planejado; faixa escolar a definir |
+| B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Planejado |
+| B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Planejado |
+| B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Planejado |
+
+Aceite de B1: barra e texto devem acompanhar dano, cura e mudança da vida máxima; cura não ultrapassa o limite; vida baixa usa aviso textual; reinício restaura vida e limite iniciais sem exibir uma cura falsa. Este bloco não adiciona ainda novas recompensas ou disciplinas.
+
+Entrega B1 (0.1.1):
+
+- Barra fixa com valor atual/máximo; avisos temporários mostram dano e cura efetivos. Abaixo ou igual a 25%, exibe “VIDA BAIXA”; ao morrer, “SEM VIDA”. Cor é um reforço, não a única indicação.
+- Vida máxima começa em 100 e pode ser ampliada pela API do jogador. Ampliar o limite não cura automaticamente. Dano/cura negativos são ignorados, cura não ressuscita e reinício restaura 100/100.
+- HUD, descrição da cura e tela de vitória passam a respeitar o limite atual. A nova API fica preparada para Ciências, ainda sem recompensa disponível na partida.
+- `tests/test_health.gd` cobre sincronização da barra pelo sinal, limiar percentual, alteração do limite, cura limitada, dano letal, pausa dos avisos e reset. As cinco suítes passaram; o encerramento da nova suíte respeita um frame de processamento do áudio antes de liberar a cena.
+- Capturas de dano, vida baixa, aumento do limite e cura inspecionadas em 960×540 e 1280×720, sem sobreposição com a arena.
+- Executável 0.1.1 exportado e inicialização headless aprovada. Build em `builds/windows/SchoolRush.exe`; pacote em `builds/SchoolRush-MVP-0.1.1-windows-x64.zip`.
+
+**Próximo bloco:** B2 — disciplinas e recompensas configuráveis. Definir a faixa escolar antes de produzir as novas perguntas. B3–B5 continuam planejados.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
