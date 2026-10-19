@@ -10,10 +10,16 @@ func check(condition: bool, message: String) -> void:
 		failures += 1
 		push_error(message)
 
+func enter_combat(game: Node) -> void:
+	game.start_run()
+	game.choose_question(0)
+	game.answer_question((game.questions.selected.correct + 1) % 4)
+	game.begin_combat()
+
 func run_tests() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
-	game.start_run()
+	enter_combat(game)
 	check(game.room.enemies.size() == 2, "A primeira sala deve ter dois inimigos")
 	var front = game.room.enemies[0]
 	var back = game.room.enemies[1]
@@ -33,12 +39,13 @@ func run_tests() -> void:
 	check(game.state == game.State.DEFEAT, "Morte deve encerrar a partida")
 	check(not front.active, "Derrota deve parar os inimigos")
 	for i in range(3):
-		game.start_run()
+		enter_combat(game)
 		await process_frame
 		check(game.room.enemies.size() == 2 and game.player.health == 100, "Reinício deve restaurar vida e inimigos")
 		check(game.player.damage == 10, "Reinício deve restaurar dano")
 		for enemy in game.room.enemies.duplicate():
 			enemy.take_damage(100)
+		await process_frame
 		check(game.state == game.State.CLEARED, "Eliminar todos deve concluir a sala")
 	game.queue_free()
 	await process_frame

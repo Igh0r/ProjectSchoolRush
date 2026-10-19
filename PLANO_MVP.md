@@ -86,7 +86,7 @@ Estimativa: seis semanas de trabalho parcial da equipe. Como a disponibilidade n
 | M4 — conclusão | Semana 5 | Moisés implementa chefe, início, pausa e telas finais; Matheus anima aviso de ataque; Eduardo prepara ginásio | Partida completa até vitória ou derrota; chefe comunica ataque antes do dano; reinício limpa todo o estado |
 | M5 — entrega | Semana 6 | Todos testam; Igor balanceia; Moisés exporta; arte/áudio essenciais entram sem expandir escopo | Build Windows executa sem editor, controles documentados e todos os casos críticos abaixo aprovados |
 
-Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M2, integrando perguntas, feedback e recompensa ao combate. Não começar pela loja ou arte definitiva.
+Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima tarefa de implementação: M4, integrando Napoleão, pausa e vitória final. Não começar pela loja ou arte definitiva.
 
 ## Verificação e definição de pronto
 
@@ -127,6 +127,14 @@ Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo,
 - `tests/test_combat.gd`: cone frontal, cooldown, invulnerabilidade, derrota e três reinícios, sem falhas.
 - Importação headless aprovada em Godot 4.7.2. Teste manual de sensação do combate segue pendente; M1 tem aceite técnico, não aceite final de playtest.
 
-M2–M5 ainda pendentes. A exclusão local preexistente de `README.md` foi mantida fora dos commits. Versionamento: plano/base registrados em `c26ebc9`, enviado a `origin/master`; cada próxima etapa terá commit após validação, seguido de push.
+### M2 e M3 — implementados e validados tecnicamente em 19/10/2026
+
+- Banco provisório de dez questões, duas ofertas por sala, quatro alternativas, feedback e explicação. Revisão pedagógica e definição da faixa escolar ainda pendentes.
+- Questões apresentadas não se repetem; acerto reserva bônus, erro permite seguir. Bônus consumido apenas após limpar a sala e cancelado na derrota.
+- Três salas encadeadas com 2/3/4 dados, porta bloqueada durante combate e avanço com E somente perto da saída. Vida e dano persistem entre salas.
+- `tests/test_progression.gd`: validade do banco, oito questões únicas em quatro ofertas, resposta única, recompensa única, cura limitada, erro sem bônus, portas, interação repetida e reset.
+- Testes de combate e progressão aprovados sem falhas; importação aprovada. A arena permanece com arte provisória.
+
+M4 e M5 ainda pendentes. A exclusão local preexistente de `README.md` foi mantida fora dos commits. Versionamento: plano/base em `c26ebc9` e M1 em `c2a2a84`, enviados a `origin/master`; cada próxima etapa terá commit após validação, seguido de push.
 
 Validação técnica: importação pelo editor headless e execução da cena por 120 frames no Godot 4.7.2. A validação visual e a experiência dos controles ainda exigem teste manual.
