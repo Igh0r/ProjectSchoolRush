@@ -7,6 +7,9 @@ const WALL_THICKNESS: float = 24.0
 func _ready() -> void:
     _register_controls()
     _create_arena()
+    var camera := Camera2D.new()
+    camera.position = ARENA_SIZE / 2.0
+    add_child(camera)
     var player := PLAYER_SCENE.instantiate() as CharacterBody2D
     player.position = ARENA_SIZE / 2.0
     add_child(player)
@@ -18,6 +21,7 @@ func _register_controls() -> void:
         "move_right": [KEY_D, KEY_RIGHT],
         "move_up": [KEY_W, KEY_UP],
         "move_down": [KEY_S, KEY_DOWN],
+        "sprint": [KEY_SHIFT],
     }
     for action in bindings:
         if not InputMap.has_action(action):
@@ -25,7 +29,8 @@ func _register_controls() -> void:
         for keycode in bindings[action]:
             var event := InputEventKey.new()
             event.physical_keycode = keycode
-            InputMap.action_add_event(action, event)
+            if not InputMap.action_has_event(action, event):
+                InputMap.action_add_event(action, event)
 
 func _create_arena() -> void:
     var floor := Polygon2D.new()
@@ -63,5 +68,5 @@ func _create_instructions() -> void:
     add_child(ui)
     var label := Label.new()
     label.position = Vector2(16, 12)
-    label.text = "SCHOOL RUSH  |  Mover: WASD ou setas  |  Etapa 1: arena"
+    label.text = "SCHOOL RUSH  |  Mover: WASD ou setas  |  Correr: Shift  |  Protótipo de movimento"
     ui.add_child(label)

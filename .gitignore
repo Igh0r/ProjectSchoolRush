@@ -1,0 +1,4 @@
+# Cache local do editor; manter arquivos .gd.uid no versionamento.
+.godot/
+builds/
+*.tmp
