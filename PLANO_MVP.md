@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (21/10/2026):** ciclo completo implementado (M1–M4), B1 e B2 concluídos: barra de vida, quatro disciplinas e recompensas configuráveis. Versão Windows atual: **0.1.2**, entrega incremental da expansão 0.2. Público confirmado: **Ensino Médio**. M5 permanece aberto para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md).
+**Situação atual (21/10/2026):** ciclo completo implementado (M1–M4) e B1–B4 concluídos: barra de vida, quatro disciplinas, recompensas, novos monstros e encontros progressivos. Versão candidata Windows: **0.2.0-rc1**. Público confirmado: **Ensino Médio**. B5/M5 permanecem abertos para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), integração de arte em [SPRITES.md](SPRITES.md) e roteiro de aceite em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -16,7 +16,7 @@ A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os ma
 | B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Concluído; vinte questões para Ensino Médio, sete suítes aprovadas |
 | B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Concluído; oito suítes aprovadas, integração dos encontros em B4 |
 | B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Concluído; nove suítes aprovadas |
-| B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Planejado |
+| B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Candidata 0.2.0-rc1 exportada e validada tecnicamente; aceite humano pendente |
 
 Aceite de B1: barra e texto devem acompanhar dano, cura e mudança da vida máxima; cura não ultrapassa o limite; vida baixa usa aviso textual; reinício restaura vida e limite iniciais sem exibir uma cura falsa. Este bloco não adiciona ainda novas recompensas ou disciplinas.
 
@@ -58,7 +58,15 @@ Entrega B4 (21/10/2026):
 - Nove suítes aprovadas. A nova integração verifica cenas corretas em cada sala, saída bloqueada com inimigos vivos, sequência completa após erros, limpeza de projéteis na conclusão/derrota/menu e reinício a partir da pausa.
 - A verificação de fluxo derrota inimigos por código; comprova progressão sem recompensas, mas não substitui avaliação humana da dificuldade do combate.
 
-**Próximo bloco:** B5 — revisar parâmetros iniciais, exportar a versão candidata 0.2.0-rc1 e preparar o roteiro de playtest. Aceite humano, revisão pedagógica e teste em outro PC continuam necessários para a versão 0.2 final.
+B5 — preparação da candidata (21/10/2026):
+
+- Balanceamento inicial mantém a primeira sala e o chefe. Vida total passa de 420 para 425; mínimo teórico de golpes sem bônus e em alvo único passa de 42 para 44. Isso controla o aumento de resistência, mas não mede o impacto dos novos ataques na dificuldade.
+- No máximo uma nuvem e um centurião por sala. Avisos com direção fixa e recuperação dão oportunidade de esquiva e contra-ataque. Não houve ajuste baseado em jogadores, pois ainda não há resultados de playtest.
+- [PLAYTEST.md](PLAYTEST.md) registra composição, parâmetros, roteiro para cinco pessoas/duas partidas, ficha de observação, revisão das vinte questões e critérios para promover a candidata à versão final.
+- Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
+- Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
+
+**Próxima etapa:** executar o roteiro com jogadores, revisar questões e integrar os sprites quando estiverem disponíveis no projeto. Corrigir os problemas observados e então promover a candidata para 0.2.0 final; não ampliar o escopo antes desses resultados.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -238,6 +246,7 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `8e9fdea`: M4 — Napoleão, pausa e partida completa.
 - `9e6a086`: M5 — áudio, exportação, verificações e plano atualizado.
 - `aed10a2`: B1 — barra de vida, limite máximo e versão 0.1.1.
-- B2: disciplinas de Ensino Médio, catálogo, recompensas e versão 0.1.2 (consultar `git log` para o hash desta entrega).
+- `a400b8a`: B2 — disciplinas de Ensino Médio, catálogo, recompensas e versão 0.1.2.
 - `1b35dc4`: B3 — monstros com avisos, projéteis e cenas preparadas para sprites.
-- B4: encontros progressivos e dicas por sala (consultar `git log` para o hash desta entrega).
+- `6339c21`: B4 — encontros progressivos e dicas por sala.
+- B5: preparação da versão 0.2.0-rc1, roteiro de playtest e exportação (consultar `git log` para o hash desta entrega).

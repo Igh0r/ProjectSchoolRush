@@ -6,6 +6,8 @@
 
 > **Atualização do MVP (21/10/2026):** público definido como Ensino Médio. A versão 0.1.2 inclui Matemática, História, Ciências e Português, com vinte questões e recompensas descritas no plano. A revisão pedagógica permanece pendente.
 
+> **Expansão candidata 0.2.0-rc1:** nuvem com tiro anunciado e centurião com golpe frontal entram gradualmente nas salas 2 e 3. As quatro cenas de inimigos estão preparadas para sprites; o roteiro de validação está em [PLAYTEST.md](PLAYTEST.md). A versão final depende de playtest e revisão pedagógica.
+
 ## 1. Informações básicas
 
 - **Nome do jogo:** School Rush
