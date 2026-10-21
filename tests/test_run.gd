@@ -1,6 +1,7 @@
 extends SceneTree
 
 var failures: int = 0
+var earned: Dictionary = {"math": 0, "history": 0, "science": 0, "portuguese": 0}
 
 func _initialize() -> void:
 	call_deferred("run_tests")
@@ -13,6 +14,7 @@ func check(condition: bool, message: String) -> void:
 func fight(game: Node) -> void:
 	game.choose_question(0)
 	game.answer_question(game.questions.selected.correct)
+	earned[game.questions.pending_reward] += 1
 	game.begin_combat()
 
 func run_tests() -> void:
@@ -64,7 +66,9 @@ func run_tests() -> void:
 			game.player.position = game.room.DOOR
 			game.advance_room()
 	check(game.state == game.State.VICTORY and not game.player.active, "Chefe morto deve encerrar com vitória")
-	check(game.player.damage == 18, "Quatro acertos devem conceder quatro bônus")
+	check(game.player.damage == 10 + 2 * earned.math, "Dano final deve refletir só os acertos de Matemática")
+	check(game.player.max_health == 100 + 10 * earned.science, "Vida máxima final deve refletir os acertos de Ciências")
+	check(is_equal_approx(game.player.speed_bonus_percent, 5.0 * earned.portuguese), "Velocidade final deve refletir os acertos de Português")
 	game.start_run()
 	game.room_index = 3
 	fight(game)
@@ -78,6 +82,7 @@ func run_tests() -> void:
 	game.start_run()
 	check(not paused and game.state == game.State.QUESTION, "Reiniciar da pausa deve desbloquear árvore")
 	check(game.player.damage == 10 and game.player.health == 100, "Reinício após chefe deve limpar atributos")
+	check(game.player.max_health == 100 and game.player.speed_bonus_percent == 0, "Reinício deve limpar todos os novos bônus")
 	game.queue_free()
 	await process_frame
 	await create_timer(0.1).timeout

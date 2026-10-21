@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual:** ciclo completo implementado (M1–M4) e bloco B1 concluído: barra de vida e limite máximo independente. Versão Windows atual: **0.1.1**, primeira entrega incremental de preparação para a expansão 0.2. M5 permanece aberto para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md).
+**Situação atual (21/10/2026):** ciclo completo implementado (M1–M4), B1 e B2 concluídos: barra de vida, quatro disciplinas e recompensas configuráveis. Versão Windows atual: **0.1.2**, entrega incremental da expansão 0.2. Público confirmado: **Ensino Médio**. M5 permanece aberto para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md).
 
 ## Objetivo e situação atual
 
@@ -13,7 +13,7 @@ A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os ma
 | Bloco | Escopo | Situação |
 | --- | --- | --- |
 | B1 — vida do jogador | Barra com valor numérico, indicação de dano/cura/vida baixa, vida máxima independente e reset | Concluído; testes e inspeção visual aprovados |
-| B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Planejado; faixa escolar a definir |
+| B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Concluído; vinte questões para Ensino Médio, sete suítes aprovadas |
 | B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Planejado |
 | B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Planejado |
 | B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Planejado |
@@ -29,7 +29,19 @@ Entrega B1 (0.1.1):
 - Capturas de dano, vida baixa, aumento do limite e cura inspecionadas em 960×540 e 1280×720, sem sobreposição com a arena.
 - Executável 0.1.1 exportado e inicialização headless aprovada. Build em `builds/windows/SchoolRush.exe`; pacote em `builds/SchoolRush-MVP-0.1.1-windows-x64.zip`.
 
-**Próximo bloco:** B2 — disciplinas e recompensas configuráveis. Definir a faixa escolar antes de produzir as novas perguntas. B3–B5 continuam planejados.
+Entrega B2 (0.1.2, 21/10/2026):
+
+- Catálogo `data/curriculum.json` com vinte questões autorais de revisão introdutória para Ensino Médio: cinco de Matemática, História, Ciências e Português. As questões anteriores também foram ajustadas ao público. Orientações de edição em [data/README.md](data/README.md); revisão pedagógica ainda pendente.
+- Duas matérias diferentes por oferta; prioridade às menos apresentadas. As quatro aparecem nas duas primeiras salas, cada matéria aparece duas vezes na partida e nenhuma das oito questões apresentadas se repete.
+- Recompensas configuradas no catálogo: Matemática +2 de dano; História cura 20; Ciências +10 de vida máxima e cura 10; Português +5% da velocidade inicial, limitado a +20%. Na partida atual, Português pode ser escolhido duas vezes, chegando a +10%.
+- Acerto reserva o bônus, vitória na sala aplica uma vez e derrota cancela. Limites de cura e velocidade são respeitados; reinício restaura todos os atributos. Pausa e vitória mostram os atributos atualizados.
+- Validação do catálogo bloqueia dados inválidos, incluindo alternativas repetidas, referência de matéria desconhecida, índice incorreto e recompensa inválida. O JSON é incluído explicitamente no executável exportado.
+- O verificador de exportação preserva o handle do processo antes da espera, garantindo leitura do código de saída também no Windows PowerShell. Uma falha inicial de leitura foi investigada; a execução direta retornou 0 e a checagem foi corrigida.
+- Sete suítes aprovadas: catálogo, combate, progressão, partida, movimento, vida e recompensas. Cobertura inclui 50 sequências de ofertas, efeitos dos quatro bônus, aplicação única, cancelamento na derrota, movimento com bônus, limite de velocidade e reset.
+- O teste de movimento processa um frame após retomar a pausa antes de liberar a cena. Isso corrige um aviso intermitente de objetos de áudio pendentes; cinco execuções isoladas e a validação completa passaram sem o aviso.
+- Capturas de escolha, resposta, feedback, recompensa de Ciências e atributos de Português inspecionadas em 960×540; enunciados e ações legíveis. Build 0.1.2 e pacote `builds/SchoolRush-MVP-0.1.2-windows-x64.zip` preparados; inicialização standalone validada.
+
+**Próximo bloco:** B3 — implementar nuvem com ataque à distância e centurião com golpe frontal anunciado, em cenas reutilizáveis preparadas para receber sprites. Validar aviso, dano, colisão, pausa e morte de cada inimigo antes de misturar encontros em B4. B5 reúne balanceamento e aceite humano da expansão.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -37,7 +49,9 @@ Na análise inicial, o repositório continha apenas movimentação e arena. O es
 
 Na revisão inicial foram adicionados corrida com Shift, proteção contra registro duplicado dos controles e câmera fixa no centro da arena. A câmera antes seguia o jogador e deixava partes da sala fora da tela. O cache `.godot/` foi excluído do versionamento via `.gitignore`; arquivos `.gd.uid` devem ser mantidos. A exclusão de README já presente no diretório não foi revertida.
 
-## Escopo fechado para a primeira entrega
+## Escopo da base e atualização da expansão
+
+A tabela registra o recorte atual. B2 amplia as disciplinas da base 0.1.0; B3 e B4 serão as próximas ampliações de inimigos e encontros, sem adicionar salas ou sistemas de loja.
 
 | Incluído no MVP | Adiado para depois da validação |
 | --- | --- |
@@ -46,21 +60,21 @@ Na revisão inicial foram adicionados corrida com Shift, proteção contra regis
 | Movimento, corrida sem stamina e régua de plástico | Lapiseira, níveis de arma, poderes e inventário |
 | Dado flutuante que persegue e ataca por contato | Demais inimigos, NPC vendedor e loja |
 | Napoleão com um ataque telegrafado | Múltiplas fases e padrões do chefe |
-| Matemática e História, cinco questões por matéria | Mais matérias, puzzles e travessias especiais |
+| Matemática, História, Ciências e Português, cinco questões por matéria | Outras matérias, puzzles e travessias especiais |
 | Vida, sala atual, resultado da pergunta e recompensa no HUD | Pontuação competitiva e metaprogressão |
 | Início, pausa, derrota, vitória e reinício | Save, narração e configurações avançadas |
 | Arte provisória legível e efeitos essenciais | Arte final completa e trilha específica do chefe |
 
-Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Perguntas e conteúdo visual devem ser adequados ao público definido pela equipe; Igor deve registrar a faixa escolar antes de produzir o banco definitivo.
+Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público definido: Ensino Médio. Igor deve revisar as vinte questões quanto à correção e adequação antes do aceite pedagógico.
 
 ## Regras que removem as ambiguidades do GDD
 
-1. Ao iniciar, oferecer duas perguntas, uma de cada matéria. Mostrar enunciado e recompensa antes da escolha. A pergunta escolhida abre quatro alternativas e admite uma única resposta.
+1. Ao iniciar, oferecer duas perguntas de matérias diferentes, priorizando as menos apresentadas. Mostrar enunciado e recompensa antes da escolha. A pergunta escolhida abre quatro alternativas e admite uma única resposta.
 2. Exibir resultado e explicação curta, com botão para continuar. Durante pergunta e feedback, o combate permanece bloqueado.
-3. Acerto reserva uma recompensa; ela só é aplicada após eliminar todos os inimigos da sala. Matemática concede +2 de dano da régua; História recupera 20 de vida, limitada ao máximo. Exibir os valores na interface.
+3. Acerto reserva uma recompensa; ela só é aplicada após eliminar todos os inimigos da sala. Matemática concede +2 de dano da régua; História recupera 20 de vida, limitada ao máximo; Ciências amplia o máximo em 10 e recupera 10; Português soma 5% da velocidade inicial, com limite acumulado de 20%. Exibir os valores na interface.
 4. Erro mostra a resposta correta e não reserva bônus. O jogador ainda pode concluir a sala e avançar. Não retirar vida nem repetir a pergunta como punição.
 5. A porta permanece fechada durante o combate. Ao limpar a sala, aplicar o bônus uma vez e permitir avançar com E perto da porta. Avançar abre a escolha da próxima sala; não usar transição automática por contato.
-6. Repetir o fluxo antes das quatro salas, incluindo o chefe. Uma questão apresentada sai do conjunto da partida mesmo se não for escolhida: quatro salas consomem oito das dez questões. Reiniciar repõe o banco e todos os atributos.
+6. Repetir o fluxo antes das quatro salas, incluindo o chefe. Uma questão apresentada sai do conjunto da partida mesmo se não for escolhida: quatro salas consomem oito das vinte questões. Reiniciar repõe o banco e todos os atributos.
 7. Vida zero encerra imediatamente a partida; não há reinício só da sala. Matar o chefe e permanecer vivo encerra com vitória. Se ambos morrerem no mesmo passo de simulação, derrota tem precedência.
 8. Esc pausa apenas durante combate ou sala liberada. Retomar preserva o estado anterior. Telas finais oferecem reiniciar e voltar ao início.
 
@@ -113,7 +127,7 @@ Estimativa: seis semanas de trabalho parcial da equipe. Como a disponibilidade n
 | M4 — conclusão | Semana 5 | Moisés implementa chefe, início, pausa e telas finais; Matheus anima aviso de ataque; Eduardo prepara ginásio | Partida completa até vitória ou derrota; chefe comunica ataque antes do dano; reinício limpa todo o estado |
 | M5 — entrega | Semana 6 | Todos testam; Igor balanceia; Moisés exporta; arte/áudio essenciais entram sem expandir escopo | Build Windows executa sem editor, controles documentados e todos os casos críticos abaixo aprovados |
 
-Caminho crítico: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Próxima etapa: playtest do MVP 0.1.0 e correções orientadas pelos resultados. Não começar pela loja ou arte definitiva.
+Caminho crítico da base: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Na expansão, seguir B3 → B4 → B5, mantendo aberto o playtest da versão atual. Não começar pela loja ou arte definitiva.
 
 ## Verificação e definição de pronto
 
@@ -124,7 +138,7 @@ Checklist manual obrigatório da entrega:
 - WASD/setas e Shift funcionam; diagonal não é mais rápida; paredes seguram o jogador mesmo correndo.
 - Um golpe não causa múltiplos danos no mesmo inimigo; contato respeita invulnerabilidade; inimigos mortos param de atacar.
 - Todas as questões têm quatro alternativas, índice correto válido e explicação revisada; escolher/responder repetidamente não duplica eventos.
-- Acerto aplica um bônus após a sala; erro aplica zero; cura não excede 100; morte antes de limpar cancela bônus.
+- Acerto aplica um bônus após a sala; erro aplica zero; cura não excede o máximo atual; morte antes de limpar cancela bônus. Ciências amplia o limite e Português respeita o teto de velocidade.
 - A porta só abre sem inimigos; interagir repetidamente não pula salas; chefe só aparece na quarta sala.
 - Pausar interrompe movimento, dano e temporizadores; retomar não deixa o jogo congelado.
 - Vitória/derrota bloqueiam combate; reiniciar três vezes não mantém bônus, perguntas consumidas ou inimigos anteriores.
@@ -187,7 +201,7 @@ Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo,
 
 | Pendência | Responsável | Evidência esperada |
 | --- | --- | --- |
-| Definir faixa escolar e revisar as dez questões | Igor | Questões corretas e adequadas ao público |
+| Revisar as vinte questões para Ensino Médio | Igor | Questões corretas e adequadas ao público confirmado |
 | Executar cinco playtests de duas partidas | Equipe | Tempo, mortes, acertos e dúvidas; quatro pessoas entendem o ciclo sem orientação |
 | Ajustar combate, duração e dificuldade a partir dos testes | Moisés + Igor | Partida compreensível e alvo de 5–8 minutos avaliado |
 | Validar áudio e sensação dos controles | Matheus + equipe | Feedback perceptível e volume confortável |
@@ -203,4 +217,6 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `c2a2a84`: M1 — combate, inimigos, vida e reinício.
 - `43fa130`: M2/M3 — perguntas, bônus e três salas.
 - `8e9fdea`: M4 — Napoleão, pausa e partida completa.
-- M5: commit separado de áudio, exportação, verificações finais e plano atualizado (consultar `git log` para o hash).
+- `9e6a086`: M5 — áudio, exportação, verificações e plano atualizado.
+- `aed10a2`: B1 — barra de vida, limite máximo e versão 0.1.1.
+- B2: disciplinas de Ensino Médio, catálogo, recompensas e versão 0.1.2 (consultar `git log` para o hash desta entrega).

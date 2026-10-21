@@ -4,6 +4,8 @@
 
 > **Recorte de MVP (19/10/2026):** o [Plano de execução do MVP](PLANO_MVP.md) define o escopo, as regras propostas, os parâmetros iniciais e os critérios de aceite da primeira entrega. Em caso de divergência, usar esse recorte para implementar o MVP. O conteúdo abaixo permanece como visão ampliada do jogo; não representa compromisso de entrega integral na primeira versão. O cronograma de oito semanas abaixo é a referência original, substituída para o MVP pelos marcos do plano.
 
+> **Atualização do MVP (21/10/2026):** público definido como Ensino Médio. A versão 0.1.2 inclui Matemática, História, Ciências e Português, com vinte questões e recompensas descritas no plano. A revisão pedagógica permanece pendente.
+
 ## 1. Informações básicas
 
 - **Nome do jogo:** School Rush

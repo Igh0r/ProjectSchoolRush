@@ -11,6 +11,7 @@ const BASE_MAX_HEALTH: int = 100
 var max_health: int = BASE_MAX_HEALTH
 var health: int = BASE_MAX_HEALTH
 var damage: int = 10
+var speed_bonus_percent: float = 0.0
 var active: bool = false
 var facing := Vector2.DOWN
 var invulnerability: float = 0.0
@@ -21,6 +22,7 @@ func reset_run() -> void:
 	max_health = BASE_MAX_HEALTH
 	health = max_health
 	damage = 10
+	speed_bonus_percent = 0.0
 	facing = Vector2.DOWN
 	invulnerability = 0.0
 	attack_cooldown = 0.0
@@ -38,7 +40,7 @@ func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if direction != Vector2.ZERO:
 		facing = direction
-	velocity = direction * speed * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
+	velocity = direction * movement_speed() * (sprint_multiplier if Input.is_action_pressed("sprint") else 1.0)
 	move_and_slide()
 	if Input.is_action_pressed("attack"):
 		attack()
@@ -75,6 +77,30 @@ func increase_max_health(amount: int) -> void:
 		return
 	max_health += amount
 	health_changed.emit(health, max_health)
+
+func movement_speed() -> float:
+	return speed * (1.0 + speed_bonus_percent / 100.0)
+
+func apply_reward(reward: Dictionary) -> bool:
+	if health <= 0 or reward.is_empty():
+		return false
+	match reward.get("type", ""):
+		"damage":
+			damage += int(reward.amount)
+		"heal":
+			var previous := health
+			heal(int(reward.amount))
+			return health > previous
+		"max_health":
+			increase_max_health(int(reward.amount))
+			heal(int(reward.heal))
+		"speed":
+			var previous := speed_bonus_percent
+			speed_bonus_percent = minf(float(reward.cap), speed_bonus_percent + float(reward.amount))
+			return speed_bonus_percent > previous
+		_:
+			return false
+	return true
 
 func _draw() -> void:
 	draw_circle(Vector2.ZERO, 15.0, Color.WHITE if invulnerability > 0.0 else Color("54d6a8"))

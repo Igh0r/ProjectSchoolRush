@@ -65,10 +65,16 @@ func show_menu() -> void:
 	player.active = false
 	room.clear_enemies()
 	questions.reset()
+	if not questions.validation_errors.is_empty():
+		push_error("Catálogo inválido: " + "; ".join(questions.validation_errors))
+		ui.show_panel("Conteúdo indisponível", "Não foi possível carregar as perguntas. A partida estará disponível após corrigir o banco de questões.", [])
+		return
 	ui.show_panel("School Rush", "Preso em um livro, você precisa vencer os desafios para voltar para casa.\n\nEscolha uma pergunta. Acerte para reservar uma melhoria e vença a sala para recebê-la. Errar não impede o avanço.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: ligar/desligar som", [{"text": "Iniciar partida", "action": start_run}])
 	_update_hud()
 
 func start_run() -> void:
+	if not questions.validation_errors.is_empty():
+		return
 	get_tree().paused = false
 	run_epoch += 1
 	state = State.QUESTION
@@ -90,10 +96,13 @@ func _prepare_question() -> void:
 	room.queue_redraw()
 	var choices: Array = []
 	var offered = questions.offer()
+	if offered.size() != 2:
+		ui.show_panel("Perguntas indisponíveis", "Não há perguntas suficientes para continuar. Inicie uma nova partida.", [{"text": "Voltar ao início", "action": show_menu}])
+		return
 	for i in range(offered.size()):
 		var question: Dictionary = offered[i]
-		choices.append({"text": "%s • %s\nRecompensa: %s" % [question.subject, question.prompt, questions.reward_description(question.subject)], "action": choose_question.bind(i)})
-	ui.show_panel("Sala %d • Escolha seu desafio" % (room_index + 1), "A recompensa só será concedida se você acertar e concluir o combate.", choices)
+		choices.append({"text": "%s • %s\nRecompensa: %s" % [questions.subject_name(question.subject), question.prompt, questions.reward_description(question.subject)], "action": choose_question.bind(i)})
+	ui.show_panel("Sala %d • Escolha seu desafio" % (room_index + 1), "%s • Acerte e vença o combate para receber o bônus." % questions.audience, choices)
 	_update_hud()
 
 func choose_question(index: int) -> void:
@@ -103,7 +112,7 @@ func choose_question(index: int) -> void:
 	var choices: Array = []
 	for i in range(4):
 		choices.append({"text": "%s) %s" % [char(65 + i), questions.selected.options[i]], "action": answer_question.bind(i)})
-	ui.show_panel(questions.selected.subject, questions.selected.prompt, choices)
+	ui.show_panel(questions.subject_name(questions.selected.subject), "%s\n%s" % [questions.selected.topic, questions.selected.prompt], choices)
 
 func answer_question(index: int) -> void:
 	if state != State.ANSWER or index < 0 or index > 3:
@@ -114,7 +123,7 @@ func answer_question(index: int) -> void:
 	var result := "Acertou!" if correct else "Ainda dá para vencer!"
 	var reward_text := "Bônus reservado: %s." % questions.reward_description(questions.pending_reward) if correct else "Sem bônus nesta sala. Você pode avançar normalmente."
 	var tip := "Napoleão espera no ginásio! A linha amarela avisa a direção da investida. Saia da linha e ataque durante a recuperação." if room_index == 3 else "Vença os inimigos para liberar a saída."
-	ui.show_panel(result, "%s\n\nResposta correta: %s\n%s\n\n%s" % [reward_text, questions.selected.options[questions.selected.correct], questions.selected.explanation, tip], [{"text": "Entrar no combate", "action": begin_combat}])
+	ui.show_panel(result, "%s\n\nResposta correta: %s\n%s\n\n%s" % [reward_text, questions.selected.options[int(questions.selected.correct)], questions.selected.explanation, tip], [{"text": "Entrar no combate", "action": begin_combat}])
 
 func begin_combat() -> void:
 	if state != State.FEEDBACK:
@@ -144,16 +153,13 @@ func _resolve_room(epoch: int) -> void:
 	var reward: String = questions.consume_reward()
 	sounds.play_cue("clear")
 	last_reward = "Sem bônus nesta sala."
-	if reward == "Matemática":
-		player.damage += 2
-	elif reward == "História":
-		player.heal(20)
 	if not reward.is_empty():
-		last_reward = "Recebido: %s." % questions.reward_description(reward)
+		var changed: bool = player.apply_reward(questions.reward_config(reward))
+		last_reward = "Recebido: %s." % questions.reward_description(reward) if changed else "Bônus sem efeito: atributo já no limite."
 	if room_index == 3:
 		state = State.VICTORY
 		player.active = false
-		ui.show_panel("Você voltou para casa!", "Napoleão foi derrotado e o livro se abriu.\nVocê concluiu as quatro salas de School Rush.\n\nVida restante: %d/%d • Dano da régua: %d" % [player.health, player.max_health, player.damage], [{"text": "Nova partida", "action": start_run}, {"text": "Início", "action": show_menu}])
+		ui.show_panel("Você voltou para casa!", "Napoleão foi derrotado e o livro se abriu.\nVocê concluiu as quatro salas de School Rush.\n\nVida: %d/%d • Régua: %d • Velocidade: +%s%%" % [player.health, player.max_health, player.damage, String.num(player.speed_bonus_percent, 1)], [{"text": "Nova partida", "action": start_run}, {"text": "Início", "action": show_menu}])
 		_update_hud()
 		return
 	state = State.CLEARED
@@ -177,7 +183,7 @@ func toggle_pause() -> void:
 		previous_state = state
 		state = State.PAUSED
 		get_tree().paused = true
-		ui.show_panel("Pausa", "WASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar • M: ligar/desligar som", [{"text": "Continuar", "action": toggle_pause}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
+		ui.show_panel("Pausa", "Vida: %d/%d • Régua: %d • Velocidade: +%s%%\n\nWASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar • M: ligar/desligar som" % [player.health, player.max_health, player.damage, String.num(player.speed_bonus_percent, 1)], [{"text": "Continuar", "action": toggle_pause}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not event.is_echo():

@@ -17,7 +17,7 @@ function Invoke-GodotCheck {
 }
 
 Invoke-GodotCheck -Arguments @('--editor', '--import', '--quit')
-foreach ($suite in @('combat', 'progression', 'run', 'movement', 'health')) {
+foreach ($suite in @('catalog', 'combat', 'progression', 'run', 'movement', 'health', 'rewards')) {
     Invoke-GodotCheck -Arguments @('--script', "res://tests/test_$suite.gd")
 }
 if ($Export) {
@@ -30,6 +30,8 @@ if ($Export) {
     $smokeLog = Join-Path $buildRoot 'standalone-smoke.log'
     $smokeErrors = Join-Path $buildRoot 'standalone-smoke-errors.log'
     $gameProcess = Start-Process -FilePath (Join-Path $buildRoot 'windows/SchoolRush.exe') -ArgumentList @('--headless', '--quit-after', '120') -WorkingDirectory (Join-Path $buildRoot 'windows') -WindowStyle Hidden -RedirectStandardOutput $smokeLog -RedirectStandardError $smokeErrors -PassThru
+    # Preserve o handle antes de esperar: Windows PowerShell pode perder o ExitCode após a saída.
+    $null = $gameProcess.Handle
     if (-not $gameProcess.WaitForExit(15000)) {
         $gameProcess.Kill()
         throw 'O teste de inicialização do executável excedeu 15 segundos.'
@@ -38,7 +40,7 @@ if ($Export) {
     $smokeOutput = (Get-Content -LiteralPath $smokeLog -Raw) + (Get-Content -LiteralPath $smokeErrors -Raw)
     Write-Output $smokeOutput
     if ($gameProcess.ExitCode -ne 0 -or $smokeOutput -match '(?m)^(SCRIPT ERROR|ERROR):') {
-        throw 'O executável exportado falhou no teste de inicialização.'
+        throw "O executável exportado falhou no teste de inicialização (código: $($gameProcess.ExitCode))."
     }
 }
 Write-Output 'Verificações concluídas sem falhas.'

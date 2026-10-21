@@ -34,6 +34,9 @@ func run_tests() -> void:
 	var diagonal: float = await travel(game.player, ["move_right", "move_down"], 12)
 	check(absf(sprint / walk - 1.4) < 0.05, "Corrida deve aumentar velocidade em 40%")
 	check(absf(diagonal / walk - 1.0) < 0.05, "Diagonal não pode aumentar velocidade")
+	game.player.apply_reward(game.questions.reward_config("portuguese"))
+	var boosted: float = await travel(game.player, ["move_right"], 12)
+	check(absf(boosted / walk - 1.05) < 0.05, "Bônus de Português deve aumentar o deslocamento real")
 	await travel(game.player, ["move_right", "sprint"], 90)
 	check(game.player.position.x <= 774.0, "Parede direita deve segurar jogador correndo")
 	await travel(game.player, ["move_up", "sprint"], 45)
@@ -52,6 +55,7 @@ func run_tests() -> void:
 	game.player.active = false
 	game.player.take_damage(10)
 	check(game.player.health == saved_health, "Jogador inativo não deve receber dano")
+	await process_frame # Processa a retomada do áudio antes de liberar a cena.
 	game.queue_free()
 	await process_frame
 	await create_timer(0.1).timeout

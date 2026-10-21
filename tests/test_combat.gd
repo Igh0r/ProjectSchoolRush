@@ -13,7 +13,7 @@ func check(condition: bool, message: String) -> void:
 func enter_combat(game: Node) -> void:
 	game.start_run()
 	game.choose_question(0)
-	game.answer_question((game.questions.selected.correct + 1) % 4)
+	game.answer_question((int(game.questions.selected.correct) + 1) % 4)
 	game.begin_combat()
 
 func run_tests() -> void:
