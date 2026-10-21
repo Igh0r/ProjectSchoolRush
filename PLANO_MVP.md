@@ -15,7 +15,7 @@ A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os ma
 | B1 — vida do jogador | Barra com valor numérico, indicação de dano/cura/vida baixa, vida máxima independente e reset | Concluído; testes e inspeção visual aprovados |
 | B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Concluído; vinte questões para Ensino Médio, sete suítes aprovadas |
 | B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Concluído; oito suítes aprovadas, integração dos encontros em B4 |
-| B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Planejado |
+| B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Concluído; nove suítes aprovadas |
 | B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Planejado |
 
 Aceite de B1: barra e texto devem acompanhar dano, cura e mudança da vida máxima; cura não ultrapassa o limite; vida baixa usa aviso textual; reinício restaura vida e limite iniciais sem exibir uma cura falsa. Este bloco não adiciona ainda novas recompensas ou disciplinas.
@@ -50,7 +50,15 @@ Entrega B3 (21/10/2026):
 - Oito suítes aprovadas. A nova suíte verifica mira fixa, esquiva, dano único, colisão varrida e paredes, tempo de vida, pausa, morte/limpeza e troca do visual sem alterar colisão. Capturas dos avisos, golpe e recuperação em `tests/capture_enemies.gd`.
 - Avisos e áreas de ataque inspecionados em capturas renderizadas a 960×540 e 1280×720; geometria, texto e barras legíveis.
 
-**Próximo bloco:** B4 — introduzir nuvem na segunda sala e centurião na terceira, misturando comportamentos sem aumentar o número de salas. B5 reúne build candidata, balanceamento inicial e aceite humano da expansão.
+Entrega B4 (21/10/2026):
+
+- Sala 1: dois dados. Sala 2: dois dados e uma nuvem. Sala 3: dois dados, uma nuvem e um centurião. Sala 4: Napoleão. Composições e dicas ficam em `room.gd`, mantendo quatro salas e no máximo quatro inimigos simultâneos.
+- Feedback da pergunta apresenta como reconhecer e evitar a nova ameaça antes do combate. Spawns preservam distância mínima de 160 px da entrada.
+- Telas de dicas e encontros da segunda e terceira salas inspecionadas em 960×540; texto e botão de entrada no combate cabem no painel.
+- Nove suítes aprovadas. A nova integração verifica cenas corretas em cada sala, saída bloqueada com inimigos vivos, sequência completa após erros, limpeza de projéteis na conclusão/derrota/menu e reinício a partir da pausa.
+- A verificação de fluxo derrota inimigos por código; comprova progressão sem recompensas, mas não substitui avaliação humana da dificuldade do combate.
+
+**Próximo bloco:** B5 — revisar parâmetros iniciais, exportar a versão candidata 0.2.0-rc1 e preparar o roteiro de playtest. Aceite humano, revisão pedagógica e teste em outro PC continuam necessários para a versão 0.2 final.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -67,7 +75,7 @@ A tabela registra o recorte atual. B2 amplia as disciplinas da base 0.1.0; B3 e 
 | Uma partida com três salas comuns e uma sala de chefe | Múltiplos andares e geração procedural |
 | Uma sala de aula reutilizada e ginásio do chefe | Biblioteca, laboratório e pátio |
 | Movimento, corrida sem stamina e régua de plástico | Lapiseira, níveis de arma, poderes e inventário |
-| Dado flutuante que persegue e ataca por contato | Demais inimigos, NPC vendedor e loja |
+| Dado por contato, nuvem com projétil e centurião com golpe frontal | Outros inimigos, NPC vendedor e loja |
 | Napoleão com um ataque telegrafado | Múltiplas fases e padrões do chefe |
 | Matemática, História, Ciências e Português, cinco questões por matéria | Outras matérias, puzzles e travessias especiais |
 | Vida, sala atual, resultado da pergunta e recompensa no HUD | Pontuação competitiva e metaprogressão |
@@ -99,11 +107,13 @@ Valores de partida para experimentar, não metas finais.
 | Entrada do golpe | Espaço; acertar cada inimigo no máximo uma vez por golpe |
 | Dano recebido | Invulnerabilidade de 0,7 s após dano, com feedback visual |
 | Dado | 30 de vida; 10 de dano; 100 px/s; intervalo de contato 1 s |
-| Salas comuns | 2, 3 e 4 dados; posições fixas, a pelo menos 160 px da entrada |
+| Nuvem | 25 de vida; tiro de 12 de dano a 230 px/s; mira fixa 0,8 s; recuperação 1,2 s |
+| Centurião | 45 de vida; golpe de 18 de dano até 105 px; aviso 0,75 s; recuperação 1,1 s |
+| Salas comuns | 2 dados; 2 dados + nuvem; 2 dados + nuvem + centurião; spawns a pelo menos 160 px da entrada |
 | Napoleão | 150 de vida; investida de 20 de dano |
 | Ciclo do chefe | Mira fixa com aviso de 0,8 s, investida de até 0,5 s a 420 px/s, recuperação de 1,2 s |
 
-A investida termina ao atingir parede; não reposiciona a mira durante o aviso. Sem invocações ou projéteis. Na sala liberada e nas interfaces não ocorre dano. Ataque tem área frontal, para que posicionamento seja relevante. Validar a duração e ajustar vida/quantidade de inimigos antes de adicionar conteúdo.
+A investida de Napoleão termina ao atingir parede; não reposiciona a mira durante o aviso. O chefe não invoca inimigos nem dispara projéteis; projéteis pertencem apenas à nuvem. Na sala liberada e nas interfaces não ocorre dano. Ataques de régua e centurião têm área frontal, para que posicionamento seja relevante. Validar duração e dificuldade em playtest antes de adicionar conteúdo.
 
 ## Organização técnica proposta
 
@@ -229,3 +239,5 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `9e6a086`: M5 — áudio, exportação, verificações e plano atualizado.
 - `aed10a2`: B1 — barra de vida, limite máximo e versão 0.1.1.
 - B2: disciplinas de Ensino Médio, catálogo, recompensas e versão 0.1.2 (consultar `git log` para o hash desta entrega).
+- `1b35dc4`: B3 — monstros com avisos, projéteis e cenas preparadas para sprites.
+- B4: encontros progressivos e dicas por sala (consultar `git log` para o hash desta entrega).

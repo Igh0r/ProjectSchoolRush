@@ -8,6 +8,12 @@ const ENEMY_SCENES := {
 	"boss": preload("res://scenes/enemies/boss.tscn"),
 }
 const PROJECTILE = preload("res://scripts/enemies/projectile.gd")
+const ENCOUNTERS := [
+	{"kinds": ["dice", "dice"], "tip": "Dados perseguem e machucam por contato. Aproxime-se, golpeie e recue."},
+	{"kinds": ["dice", "dice", "cloud"], "tip": "Nova ameaça: nuvem. A linha e o aviso DISPARO indicam a mira fixa. Saia da linha e aproxime-se entre os tiros."},
+	{"kinds": ["dice", "dice", "cloud", "centurion"], "tip": "Nova ameaça: centurião. Saia do setor marcado GOLPE e ataque durante a recuperação. Cuidado também com a nuvem!"},
+	{"kinds": ["boss"], "tip": "Napoleão espera no ginásio! A linha amarela avisa a direção da investida. Saia da linha e ataque durante a recuperação."},
+]
 const ENTRY := Vector2(100, 210)
 const DOOR := Vector2(770, 210)
 var enemies: Array[Node] = []
@@ -44,10 +50,14 @@ func populate(index: int, player: CharacterBody2D) -> void:
 	clear_enemies()
 	boss_room = index == 3
 	var points := [Vector2(520, 110), Vector2(650, 300), Vector2(470, 320), Vector2(680, 100)]
-	for i in range(1 if boss_room else index + 2):
-		spawn_enemy("boss" if boss_room else "dice", Vector2(600, 210) if boss_room else points[i], player)
+	var kinds: Array = ENCOUNTERS[index].kinds
+	for i in range(kinds.size()):
+		spawn_enemy(kinds[i], Vector2(600, 210) if boss_room else points[i], player)
 	set_combat(true)
 	queue_redraw()
+
+func encounter_tip(index: int) -> String:
+	return ENCOUNTERS[index].tip
 
 func spawn_enemy(kind: String, point: Vector2, player: CharacterBody2D) -> Node:
 	var enemy = ENEMY_SCENES[kind].instantiate()

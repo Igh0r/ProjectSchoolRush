@@ -32,6 +32,16 @@ func capture() -> void:
 	cloud.phase = cloud.Phase.WARNING
 	cloud.queue_redraw()
 	await save_preview("24-monsters-resized")
+	root.size = Vector2i(960, 540)
+	for room_index in [1, 2]:
+		game.start_run()
+		game.room_index = room_index
+		game._prepare_question()
+		game.choose_question(0)
+		game.answer_question(int(game.questions.selected.correct))
+		await save_preview("25-room-%d-tip" % (room_index + 1))
+		game.begin_combat()
+		await save_preview("26-room-%d-encounter" % (room_index + 1))
 	game.queue_free()
 	await process_frame
 	await create_timer(0.1).timeout

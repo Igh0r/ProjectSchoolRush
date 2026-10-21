@@ -122,7 +122,7 @@ func answer_question(index: int) -> void:
 	state = State.FEEDBACK
 	var result := "Acertou!" if correct else "Ainda dá para vencer!"
 	var reward_text := "Bônus reservado: %s." % questions.reward_description(questions.pending_reward) if correct else "Sem bônus nesta sala. Você pode avançar normalmente."
-	var tip := "Napoleão espera no ginásio! A linha amarela avisa a direção da investida. Saia da linha e ataque durante a recuperação." if room_index == 3 else "Vença os inimigos para liberar a saída."
+	var tip: String = room.encounter_tip(room_index)
 	ui.show_panel(result, "%s\n\nResposta correta: %s\n%s\n\n%s" % [reward_text, questions.selected.options[int(questions.selected.correct)], questions.selected.explanation, tip], [{"text": "Entrar no combate", "action": begin_combat}])
 
 func begin_combat() -> void:
