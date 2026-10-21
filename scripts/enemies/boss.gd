@@ -6,9 +6,9 @@ var phase_time: float = 0.8
 var charge_direction := Vector2.LEFT
 
 func _ready() -> void:
+	max_health = 150
+	body_radius = 24.0
 	super._ready()
-	health = 150
-	(get_child(0).shape as CircleShape2D).radius = 24.0
 	_lock_direction()
 
 func _lock_direction() -> void:
@@ -35,6 +35,7 @@ func _physics_process(delta: float) -> void:
 		if get_slide_collision_count() > 0:
 			phase = Phase.RECOVERY
 			phase_time = 1.2
+	_update_visual("attack" if phase == Phase.CHARGE else "idle")
 	queue_redraw()
 
 func _draw() -> void:
@@ -42,9 +43,9 @@ func _draw() -> void:
 		draw_line(Vector2.ZERO, charge_direction * 210.0, Color("ffdd80"), 5.0)
 		draw_arc(Vector2.ZERO, 30.0, 0.0, TAU, 32, Color("ffdd80"), 2.0)
 	var color := Color("f3a95f") if phase != Phase.RECOVERY else Color("a3b4c8")
-	draw_rect(Rect2(-24, -24, 48, 48), Color.WHITE if hit_flash > 0.0 else color)
-	draw_colored_polygon(PackedVector2Array([Vector2(-32, -18), Vector2(0, -38), Vector2(32, -18)]), Color("111d2a"))
-	draw_circle(Vector2(-7, -6), 3, Color.WHITE)
-	draw_circle(Vector2(7, -6), 3, Color.WHITE)
-	draw_rect(Rect2(-30, 32, 60, 5), Color("172537"))
-	draw_rect(Rect2(-30, 32, 60 * float(health) / 150.0, 5), Color("54d6a8"))
+	if not has_sprite():
+		draw_rect(Rect2(-24, -24, 48, 48), Color.WHITE if hit_flash > 0.0 else color)
+		draw_colored_polygon(PackedVector2Array([Vector2(-32, -18), Vector2(0, -38), Vector2(32, -18)]), Color("111d2a"))
+		draw_circle(Vector2(-7, -6), 3, Color.WHITE)
+		draw_circle(Vector2(7, -6), 3, Color.WHITE)
+	draw_health_bar(60, 32)

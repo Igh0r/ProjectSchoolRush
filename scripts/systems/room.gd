@@ -1,11 +1,17 @@
 extends Node2D
 
 signal cleared
-const ENEMY = preload("res://scripts/enemies/enemy.gd")
-const BOSS = preload("res://scripts/enemies/boss.gd")
+const ENEMY_SCENES := {
+	"dice": preload("res://scenes/enemies/dice.tscn"),
+	"cloud": preload("res://scenes/enemies/cloud.tscn"),
+	"centurion": preload("res://scenes/enemies/centurion.tscn"),
+	"boss": preload("res://scenes/enemies/boss.tscn"),
+}
+const PROJECTILE = preload("res://scripts/enemies/projectile.gd")
 const ENTRY := Vector2(100, 210)
 const DOOR := Vector2(770, 210)
 var enemies: Array[Node] = []
+var projectiles: Array[Node] = []
 var door_open: bool = false
 var combat_active: bool = false
 var boss_room: bool = false
@@ -24,6 +30,7 @@ func _ready() -> void:
 		add_child(body)
 
 func clear_enemies() -> void:
+	clear_projectiles()
 	for enemy in enemies:
 		enemy.active = false
 		enemy.queue_free()
@@ -38,17 +45,43 @@ func populate(index: int, player: CharacterBody2D) -> void:
 	boss_room = index == 3
 	var points := [Vector2(520, 110), Vector2(650, 300), Vector2(470, 320), Vector2(680, 100)]
 	for i in range(1 if boss_room else index + 2):
-		var enemy = BOSS.new() if boss_room else ENEMY.new()
-		enemy.position = Vector2(600, 210) if boss_room else points[i]
-		enemy.target = player
-		enemy.died.connect(_on_enemy_died)
-		enemies.append(enemy)
-		add_child(enemy)
+		spawn_enemy("boss" if boss_room else "dice", Vector2(600, 210) if boss_room else points[i], player)
 	set_combat(true)
 	queue_redraw()
 
+func spawn_enemy(kind: String, point: Vector2, player: CharacterBody2D) -> Node:
+	var enemy = ENEMY_SCENES[kind].instantiate()
+	enemy.position = point
+	enemy.target = player
+	enemy.died.connect(_on_enemy_died)
+	if enemy.has_signal("shot_requested"):
+		enemy.shot_requested.connect(_spawn_projectile)
+	enemies.append(enemy)
+	add_child(enemy)
+	enemy.active = combat_active
+	return enemy
+
+func _spawn_projectile(source: Node, origin: Vector2, direction: Vector2) -> void:
+	if not combat_active or not is_instance_valid(source) or not enemies.has(source) or source.health <= 0:
+		return
+	var shot = PROJECTILE.new()
+	shot.position = to_local(origin)
+	shot.direction = direction.normalized()
+	shot.target = source.target
+	shot.source = source
+	shot.finished.connect(func(projectile: Node): projectiles.erase(projectile))
+	projectiles.append(shot)
+	add_child(shot)
+
+func clear_projectiles(source: Node = null) -> void:
+	for shot in projectiles.duplicate():
+		if source == null or shot.source == source:
+			shot.cancel()
+
 func set_combat(enabled: bool) -> void:
 	combat_active = enabled
+	if not enabled:
+		clear_projectiles()
 	for enemy in enemies:
 		enemy.active = enabled
 
@@ -61,9 +94,11 @@ func strike(origin: Vector2, direction: Vector2, damage: int) -> void:
 			enemy.take_damage(damage)
 
 func _on_enemy_died(enemy: Node) -> void:
+	clear_projectiles(enemy)
 	enemies.erase(enemy)
 	if enemies.is_empty():
 		combat_active = false
+		clear_projectiles()
 		cleared.emit()
 
 func open_door() -> void:

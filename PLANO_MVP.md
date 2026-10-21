@@ -14,7 +14,7 @@ A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os ma
 | --- | --- | --- |
 | B1 — vida do jogador | Barra com valor numérico, indicação de dano/cura/vida baixa, vida máxima independente e reset | Concluído; testes e inspeção visual aprovados |
 | B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Concluído; vinte questões para Ensino Médio, sete suítes aprovadas |
-| B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Planejado |
+| B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Concluído; oito suítes aprovadas, integração dos encontros em B4 |
 | B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Planejado |
 | B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Planejado |
 
@@ -41,7 +41,16 @@ Entrega B2 (0.1.2, 21/10/2026):
 - O teste de movimento processa um frame após retomar a pausa antes de liberar a cena. Isso corrige um aviso intermitente de objetos de áudio pendentes; cinco execuções isoladas e a validação completa passaram sem o aviso.
 - Capturas de escolha, resposta, feedback, recompensa de Ciências e atributos de Português inspecionadas em 960×540; enunciados e ações legíveis. Build 0.1.2 e pacote `builds/SchoolRush-MVP-0.1.2-windows-x64.zip` preparados; inicialização standalone validada.
 
-**Próximo bloco:** B3 — implementar nuvem com ataque à distância e centurião com golpe frontal anunciado, em cenas reutilizáveis preparadas para receber sprites. Validar aviso, dano, colisão, pausa e morte de cada inimigo antes de misturar encontros em B4. B5 reúne balanceamento e aceite humano da expansão.
+Entrega B3 (21/10/2026):
+
+- Cenas reutilizáveis para dado, nuvem, centurião e Napoleão. `Visual/AnimatedSprite2D` separado da colisão; frames vazios mantêm arte provisória. Instruções em [SPRITES.md](SPRITES.md). Não foram encontrados sprites de monstros na pasta.
+- Nuvem: 25 de vida, aproximação a 70 px/s, mira fixa anunciada por 0,8 s e recuperação de 1,2 s; projétil a 230 px/s causa 12 de dano. O tiro usa colisão varrida contra parede/jogador, dura até 3,5 s e desaparece ao atingir, ao morrer a nuvem ou ao encerrar o combate.
+- Centurião: 45 de vida, aproximação a 85 px/s, aviso de 0,75 s, golpe frontal único de 18 de dano até 105 px, setor de ±0,65 rad e recuperação de 1,1 s. Não causa dano por contato; sair do setor evita o golpe.
+- Avisos usam geometria e texto: linha e “DISPARO” para nuvem, setor e “GOLPE” para centurião. Barras de vida permanecem visíveis com sprites.
+- Oito suítes aprovadas. A nova suíte verifica mira fixa, esquiva, dano único, colisão varrida e paredes, tempo de vida, pausa, morte/limpeza e troca do visual sem alterar colisão. Capturas dos avisos, golpe e recuperação em `tests/capture_enemies.gd`.
+- Avisos e áreas de ataque inspecionados em capturas renderizadas a 960×540 e 1280×720; geometria, texto e barras legíveis.
+
+**Próximo bloco:** B4 — introduzir nuvem na segunda sala e centurião na terceira, misturando comportamentos sem aumentar o número de salas. B5 reúne build candidata, balanceamento inicial e aceite humano da expansão.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
