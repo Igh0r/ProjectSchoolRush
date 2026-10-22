@@ -5,12 +5,15 @@ const ROOM_SCENE = preload("res://scenes/room/room.tscn")
 const UI_SCRIPT = preload("res://scripts/ui/game_ui.gd")
 const QUESTIONS = preload("res://scripts/systems/question_manager.gd")
 const SOUND_SCRIPT = preload("res://scripts/systems/sound_effects.gd")
+const QUEST_BGM = preload("res://bgm/Quest Loop.ogg")
+const BOSS_BGM = preload("res://bgm/Marche du Roi.ogg")
 enum State { MENU, QUESTION, ANSWER, FEEDBACK, COMBAT, CLEARED, DEFEAT, VICTORY, PAUSED }
 var state: State = State.MENU
 var previous_state: State = State.COMBAT
 var player
 var room
 var ui
+var music: AudioStreamPlayer
 var sounds
 var questions = QUESTIONS.new()
 var room_index: int = 0
@@ -20,6 +23,11 @@ var last_reward: String = ""
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_register_controls()
+	music = AudioStreamPlayer.new()
+	music.name = "BackgroundMusic"
+	music.process_mode = Node.PROCESS_MODE_ALWAYS
+	music.volume_db = -8.0
+	add_child(music)
 	sounds = SOUND_SCRIPT.new()
 	add_child(sounds)
 	room = ROOM_SCENE.instantiate()
@@ -75,6 +83,7 @@ func show_menu() -> void:
 func start_run() -> void:
 	if not questions.validation_errors.is_empty():
 		return
+	play_music(QUEST_BGM, true)
 	get_tree().paused = false
 	run_epoch += 1
 	state = State.QUESTION
@@ -128,6 +137,8 @@ func answer_question(index: int) -> void:
 func begin_combat() -> void:
 	if state != State.FEEDBACK:
 		return
+	if room_index == 3:
+		play_music(BOSS_BGM, false)
 	state = State.COMBAT
 	player.active = true
 	room.populate(room_index, player)
@@ -208,3 +219,12 @@ func _update_hud() -> void:
 	elif state == State.CLEARED:
 		message = "%s Vá à porta verde e pressione E." % last_reward
 	ui.update_hud(player.health, player.max_health, player.damage, room_index + 1, room.enemies.size(), message)
+
+func play_music(stream: AudioStream, looping: bool) -> void:
+	var ogg := stream as AudioStreamOggVorbis
+	if ogg != null:
+		ogg.loop = looping
+	if music.stream == stream and music.playing:
+		return
+	music.stream = stream
+	music.play()
