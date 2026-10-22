@@ -28,6 +28,9 @@ func run_tests() -> void:
 	await physics_frame
 	check(cloud.health == 25 and guard.health == 45, "Cenas devem inicializar vida própria")
 	check(cloud.has_node("Visual/AnimatedSprite2D") and guard.has_node("CollisionShape2D"), "Cenas precisam de visual separado da colisão")
+	check(cloud.has_sprite(), "Cena deve carregar os sprites selecionados")
+	cloud.get_node("Visual/AnimatedSprite2D").sprite_frames = SpriteFrames.new()
+	cloud._update_visual("idle")
 	check(not cloud.has_sprite(), "Cena sem frames deve manter arte provisória")
 	var frames := SpriteFrames.new()
 	frames.add_animation("idle")

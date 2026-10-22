@@ -1,0 +1,31 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/monsters/boss/idle.png" id="idle"]
+
+[sub_resource type="AtlasTexture" id="idle0"]
+
+atlas = ExtResource("idle")
+
+region = Rect2(128, 48, 352, 416)
+
+[sub_resource type="AtlasTexture" id="idle1"]
+
+atlas = ExtResource("idle")
+
+region = Rect2(640, 48, 352, 416)
+
+[sub_resource type="AtlasTexture" id="idle2"]
+
+atlas = ExtResource("idle")
+
+region = Rect2(1152, 48, 352, 416)
+
+[sub_resource type="AtlasTexture" id="idle3"]
+
+atlas = ExtResource("idle")
+
+region = Rect2(1664, 48, 352, 416)
+
+[resource]
+
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("idle0")}, {"duration": 1.0, "texture": SubResource("idle1")}, {"duration": 1.0, "texture": SubResource("idle2")}, {"duration": 1.0, "texture": SubResource("idle3")}], "loop": true, "name": &"idle", "speed": 6.0}]

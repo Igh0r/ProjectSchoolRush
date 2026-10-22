@@ -35,7 +35,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				phase = Phase.APPROACH
 	move_and_slide()
-	_update_visual("attack" if phase == Phase.WARNING else "move" if velocity != Vector2.ZERO else "idle")
+	_update_visual("attack" if phase == Phase.RECOVERY and phase_time > 1.0 else "move" if velocity != Vector2.ZERO else "idle")
 	queue_redraw()
 
 func _draw() -> void:

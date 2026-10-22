@@ -2,3 +2,6 @@
 .godot/
 builds/
 *.tmp
+# Pacotes brutos ficam locais; somente os recursos selecionados entram na build.
+/art/*
+!/art/.gdignore

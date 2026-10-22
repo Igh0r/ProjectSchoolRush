@@ -6,6 +6,18 @@ Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
 ## Objetivo e situação atual
 
+### Expansão autorizada em 22/10/2026 — arte e conteúdo
+
+O usuário solicitou continuar a expansão e disponibilizou os pacotes em `art/`. Esta autorização substitui a orientação anterior de aguardar playtest antes de ampliar conteúdo. B5 continua aberto; os novos blocos não representam aceite humano.
+
+| Bloco | Escopo | Situação |
+| --- | --- | --- |
+| C1 — arte selecionada | Analisar os pacotes, integrar sprites dos monstros existentes e registrar o que exige preparação | Concluído; dez suítes e inspeção visual aprovadas |
+| C2 — conteúdo | Cacto e cientista, nova rota de encontros e cenários visuais a partir do material disponível | Em execução |
+| C3 — entrega | Testes de arte/perigos/rotas, inspeção visual, guia e nova build candidata | Planejado |
+
+Entrega C1: coleção inventariada em [ART_ANALYSIS.md](ART_ANALYSIS.md); sprites dos quatro monstros existentes configurados, com cópias de produção e recursos reproduzíveis. Quadros isolados de efeitos foram excluídos das animações de corpo do cacto/cientista. Dez suítes passaram; escala, avisos e silhuetas inspecionados em capturas renderizadas. Os pacotes de jogador, HUD, armas e tiles são referências e precisam de preparação adicional. A música adicionada pela equipe foi preservada.
+
 ### Expansão 0.2 — blocos de execução
 
 A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os marcos M1–M5 abaixo registram a base 0.1.0.

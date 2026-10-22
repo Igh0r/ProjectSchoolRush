@@ -3,6 +3,8 @@ extends CharacterBody2D
 signal died(enemy: Node)
 @export var max_health: int = 30
 @export var body_radius: float = 16.0
+@export var face_target: bool = false
+var visual_direction := Vector2.RIGHT
 var target: CharacterBody2D
 var active: bool = false
 var health: int = 30
@@ -35,6 +37,7 @@ func _update_visual(animation_name: String) -> void:
 	sprite.visible = frames.has_animation(chosen) and frames.get_frame_count(chosen) > 0
 	if sprite.visible:
 		sprite.play(chosen)
+		sprite.flip_h = face_target and visual_direction.x < 0.0
 		sprite.modulate = Color(2, 2, 2) if hit_flash > 0.0 else Color.WHITE
 
 func has_sprite() -> bool:
@@ -51,11 +54,12 @@ func _physics_process(delta: float) -> void:
 	contact_cooldown = maxf(0.0, contact_cooldown - delta)
 	hit_flash = maxf(0.0, hit_flash - delta)
 	velocity = global_position.direction_to(target.global_position) * 100.0
+	visual_direction = velocity
 	move_and_slide()
 	if global_position.distance_to(target.global_position) < 32.0 and contact_cooldown <= 0.0:
 		target.take_damage(10)
 		contact_cooldown = 1.0
-	_update_visual("move")
+	_update_visual("attack" if contact_cooldown > 0.8 else "move")
 	queue_redraw()
 
 func take_damage(amount: int) -> void:

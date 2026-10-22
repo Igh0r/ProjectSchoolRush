@@ -14,6 +14,7 @@ func _ready() -> void:
 func _lock_direction() -> void:
 	if is_instance_valid(target):
 		charge_direction = global_position.direction_to(target.global_position)
+		visual_direction = charge_direction
 
 func _physics_process(delta: float) -> void:
 	if not active or health <= 0 or not is_instance_valid(target):

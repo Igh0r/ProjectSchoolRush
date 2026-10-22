@@ -25,10 +25,12 @@ func _physics_process(delta: float) -> void:
 	if phase == Phase.APPROACH:
 		if global_position.distance_to(target.global_position) > 95.0:
 			velocity = global_position.direction_to(target.global_position) * 85.0
+			visual_direction = velocity
 		else:
 			attack_direction = global_position.direction_to(target.global_position)
 			if attack_direction == Vector2.ZERO:
 				attack_direction = Vector2.LEFT
+			visual_direction = attack_direction
 			phase = Phase.WARNING
 			phase_time = 0.75
 	else:
@@ -45,7 +47,7 @@ func _physics_process(delta: float) -> void:
 				Phase.RECOVERY:
 					phase = Phase.APPROACH
 	move_and_slide()
-	_update_visual("attack" if phase in [Phase.WARNING, Phase.STRIKE] else "move" if velocity != Vector2.ZERO else "idle")
+	_update_visual("attack" if phase == Phase.STRIKE else "move" if velocity != Vector2.ZERO else "idle")
 	queue_redraw()
 
 func _draw() -> void:

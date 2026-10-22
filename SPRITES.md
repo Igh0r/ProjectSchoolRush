@@ -1,6 +1,6 @@
 # Usar sprites nos monstros
 
-As cenas estão em `scenes/enemies/`: `dice.tscn`, `cloud.tscn`, `centurion.tscn` e `boss.tscn`. Cada uma separa o corpo físico, `CollisionShape2D`, do desenho em `Visual/AnimatedSprite2D`. Sem frames configurados, o jogo usa formas provisórias.
+As cenas estão em `scenes/enemies/`: `dice.tscn`, `cloud.tscn`, `centurion.tscn` e `boss.tscn`. Cada uma separa o corpo físico, `CollisionShape2D`, do desenho em `Visual/AnimatedSprite2D`. Os sprites fornecidos em `art/` já estão ligados aos recursos em `assets/monsters/`. Sem frames configurados, o jogo usa formas provisórias.
 
 1. Copie os PNGs ou spritesheets para uma pasta como `assets/monsters/` no projeto. Aguarde a importação do Godot.
 2. Abra a cena do monstro e selecione `Visual/AnimatedSprite2D`.
@@ -16,4 +16,4 @@ O aviso de ataque é independente da duração da animação: nuvem 0,8 s, centu
 
 Use `tests/capture_enemies.gd` para conferir os avisos em 960×540 e 1280×720. Não cubra o cone, a linha de mira ou as barras com um sprite muito grande. Depois execute `tools/check.ps1` e gere uma nova build. Verifique a licença dos arquivos que escolher distribuir.
 
-Nenhum sprite de monstro foi encontrado no projeto nesta entrega; as cenas estão preparadas, mas a arte final ainda não foi integrada.
+Em 22/10/2026, a coleção foi analisada e os monstros selecionados foram integrados. Veja [ART_ANALYSIS.md](ART_ANALYSIS.md) para origem, limitações e materiais que ainda exigem preparação. `tools/prepare_art.ps1` regenera os recursos a partir da pasta original; não é necessário executá-lo para jogar ou exportar um checkout com `assets/`.
