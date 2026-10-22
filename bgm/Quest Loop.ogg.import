@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dhflwojy0lmge"
+path="res://.godot/imported/Quest Loop.ogg-6c666c078a26ead45b6d8eab44383664.oggvorbisstr"
+
+[deps]
+
+source_file="res://bgm/Quest Loop.ogg"
+dest_files=["res://.godot/imported/Quest Loop.ogg-6c666c078a26ead45b6d8eab44383664.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
