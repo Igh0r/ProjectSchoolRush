@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (21/10/2026):** ciclo completo implementado (M1–M4) e B1–B4 concluídos: barra de vida, quatro disciplinas, recompensas, novos monstros e encontros progressivos. Versão candidata Windows: **0.2.0-rc1**. Público confirmado: **Ensino Médio**. B5/M5 permanecem abertos para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), integração de arte em [SPRITES.md](SPRITES.md) e roteiro de aceite em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (22/10/2026):** base jogável, B1–B4 e C1–C3 concluídos. Seis monstros com sprites, duas rotas de quatro salas, quatro pisos e vinte questões para **Ensino Médio**. Candidata Windows disponível: **0.2.0-rc2**. B5/M5 permanecem abertos para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e roteiro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -14,7 +14,7 @@ O usuário solicitou continuar a expansão e disponibilizou os pacotes em `art/`
 | --- | --- | --- |
 | C1 — arte selecionada | Analisar os pacotes, integrar sprites dos monstros existentes e registrar o que exige preparação | Concluído; dez suítes e inspeção visual aprovadas |
 | C2 — conteúdo | Cacto e cientista, nova rota de encontros e cenários visuais a partir do material disponível | Concluído; onze suítes e capturas aprovadas |
-| C3 — entrega | Testes de arte/perigos/rotas, inspeção visual, guia e nova build candidata | Em execução |
+| C3 — entrega | Testes de arte/perigos/rotas, inspeção visual, guia e nova build candidata | Concluído tecnicamente; 0.2.0-rc2 exportada, onze suítes aprovadas |
 
 Entrega C1: coleção inventariada em [ART_ANALYSIS.md](ART_ANALYSIS.md); sprites dos quatro monstros existentes configurados, com cópias de produção e recursos reproduzíveis. Quadros isolados de efeitos foram excluídos das animações de corpo do cacto/cientista. Dez suítes passaram; escala, avisos e silhuetas inspecionados em capturas renderizadas. Os pacotes de jogador, HUD, armas e tiles são referências e precisam de preparação adicional. A música adicionada pela equipe foi preservada.
 
@@ -26,6 +26,13 @@ Entrega C2:
 - Cientista: 35 de vida, aproximação a 55 px/s, marca um círculo de raio 42 px próximo à posição do jogador. A posição fica fixa; aviso de 1 s e área ativa por 1,2 s, com no máximo um acerto de 10 por mistura. Recuperação de 2,2 s. Marca limitada à arena, respeita invulnerabilidade e desaparece na morte da fonte/transições.
 - Quatro pisos visuais reutilizados dos cenários individuais, com brilho reduzido e sem móveis decorativos usados como obstáculos falsos. Colisões e espaço seguro da entrada foram preservados.
 - Onze suítes aprovadas: inclui a rota completa, avisos/esquiva, espinhos, área ativa, pausa, morte, reset e limpeza. Capturas do menu, dicas, quatro ambientes, ataques e escala em 960×540/1280×720 inspecionadas. Os testes de progressão eliminam inimigos por código; não medem dificuldade humana.
+
+Entrega C3:
+
+- Candidata 0.2.0-rc2 exportada em Godot 4.7.2, com sprites, cenários, músicas e catálogo embutidos. Inicialização standalone headless terminou com código 0; onze suítes passaram sem erros ou avisos. Registro local: `builds/validation-0.2.0-rc2.log`.
+- Pacote Windows: `builds/SchoolRush-MVP-0.2.0-rc2-windows-x64.zip`, com executável, guia, roteiro de playtest, análise da arte, avisos do Godot e identificação do commit. Originais em `art/` não são necessários para executar a build.
+- Guia e roteiro atualizados para as duas rotas. A clássica soma 425 de vida inimiga/44 golpes mínimos em alvo único sem bônus; a científica soma 435/46. Esses cálculos não substituem medição de dificuldade ou duração.
+- Sprites do jogador, HUD, armas e efeitos permanecem pendentes de preparação das folhas de referência. Não houve playtest humano, revisão pedagógica nem validação em outro computador nesta entrega.
 
 ### Expansão 0.2 — blocos de execução
 
@@ -87,7 +94,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa:** executar o roteiro com jogadores, revisar questões e integrar os sprites quando estiverem disponíveis no projeto. Corrigir os problemas observados e então promover a candidata para 0.2.0 final; não ampliar o escopo antes desses resultados.
+**Próxima etapa após C3:** testar as duas rotas com jogadores, revisar questões e preparar frames limpos de Matheus/Alice. O jogador, armas, HUD e efeitos ainda usam visuais provisórios; os pacotes dessas categorias são referências, conforme a análise. Promover a candidata à versão final somente após os aceites humanos. Novas expansões dependerão da direção dada pelo usuário e dos resultados do playtest.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -97,19 +104,19 @@ Na revisão inicial foram adicionados corrida com Shift, proteção contra regis
 
 ## Escopo da base e atualização da expansão
 
-A tabela registra o recorte atual. B2 amplia as disciplinas da base 0.1.0; B3 e B4 serão as próximas ampliações de inimigos e encontros, sem adicionar salas ou sistemas de loja.
+A tabela registra o recorte atual. B2 ampliou as disciplinas; B3/B4 adicionaram inimigos e encontros; C1/C2 integraram arte e uma rota opcional. Cada partida continua com quatro salas, sem sistemas de loja.
 
 | Incluído no MVP | Adiado para depois da validação |
 | --- | --- |
-| Uma partida com três salas comuns e uma sala de chefe | Múltiplos andares e geração procedural |
-| Uma sala de aula reutilizada e ginásio do chefe | Biblioteca, laboratório e pátio |
+| Duas rotas à escolha, cada uma com três salas comuns e um chefe | Múltiplos andares e geração procedural |
+| Pisos de sala de aula, pátio, laboratório e ginásio | Biblioteca e cenários completos com objetos/colisões próprios |
 | Movimento, corrida sem stamina e régua de plástico | Lapiseira, níveis de arma, poderes e inventário |
-| Dado por contato, nuvem com projétil e centurião com golpe frontal | Outros inimigos, NPC vendedor e loja |
+| Dado, nuvem, centurião, cacto e cientista | Babuíno, NPC vendedor e loja |
 | Napoleão com um ataque telegrafado | Múltiplas fases e padrões do chefe |
 | Matemática, História, Ciências e Português, cinco questões por matéria | Outras matérias, puzzles e travessias especiais |
 | Vida, sala atual, resultado da pergunta e recompensa no HUD | Pontuação competitiva e metaprogressão |
 | Início, pausa, derrota, vitória e reinício | Save, narração e configurações avançadas |
-| Arte provisória legível e efeitos essenciais | Arte final completa e trilha específica do chefe |
+| Sprites de seis monstros, pisos selecionados e músicas adicionadas pela equipe | Sprites finais do jogador, armas, HUD e efeitos preparados |
 
 Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público definido: Ensino Médio. Igor deve revisar as vinte questões quanto à correção e adequação antes do aceite pedagógico.
 
@@ -271,3 +278,6 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `1b35dc4`: B3 — monstros com avisos, projéteis e cenas preparadas para sprites.
 - `6339c21`: B4 — encontros progressivos e dicas por sala.
 - B5: preparação da versão 0.2.0-rc1, roteiro de playtest e exportação (consultar `git log` para o hash desta entrega).
+- `8525cdf`: C1 — sprites de monstros, recursos reproduzíveis e análise dos pacotes de arte.
+- `be2482c`: C2 — expedição científica, cacto, cientista, quatro pisos e testes.
+- C3: versão 0.2.0-rc2, roteiro de duas rotas e pacote Windows (consultar `git log` para o hash desta entrega).

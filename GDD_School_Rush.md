@@ -10,6 +10,8 @@
 
 ## 1. Informações básicas
 
+> **Arte e conteúdo (22/10/2026, candidata 0.2.0-rc2):** seis monstros usam sprites da coleção fornecida. A expedição científica acrescenta cacto, cientista e pisos de pátio/laboratório; a rota clássica permanece disponível. [ART_ANALYSIS.md](ART_ANALYSIS.md) distingue recursos prontos de folhas de referência que exigem preparação. Os novos blocos foram autorizados pelo usuário; o aceite humano continua pendente.
+
 - **Nome do jogo:** School Rush
 - **Gênero:** Roguelike, em fases, ação
 - **Plataforma:** PC

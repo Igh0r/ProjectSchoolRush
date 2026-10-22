@@ -1,10 +1,10 @@
-# School Rush — validação da versão 0.2.0-rc1
+# School Rush — validação da versão 0.2.0-rc2
 
-Preparado em 21/10/2026. **Ainda não preenchido:** este documento é um roteiro, não um relatório de testes humanos concluídos. Público: Ensino Médio. Build Windows x64; não precisa do editor Godot.
+Atualizado em 22/10/2026. **Ainda não preenchido:** este documento é um roteiro, não um relatório de testes humanos concluídos. Público: Ensino Médio. Build Windows x64; não precisa do editor Godot.
 
 ## Sessão com jogadores
 
-Convidar cinco pessoas externas à equipe para duas partidas cada. Usar identificadores P1–P5 e registrar a versão da build e o PC utilizado. Na primeira partida, deixar a pessoa ler o menu e tentar entender o jogo sem explicação verbal; anotar se precisou de ajuda. Na segunda, observar se reconhece melhor os avisos e consegue usar as recompensas.
+Convidar cinco pessoas externas à equipe para duas partidas cada: primeira na rota clássica, segunda na expedição científica. Usar identificadores P1–P5 e registrar a versão da build e o PC utilizado. Na primeira partida, deixar a pessoa ler o menu e tentar entender o jogo sem explicação verbal; anotar se precisou de ajuda. Na segunda, observar uso das recompensas e compreensão dos novos avisos. As rotas têm inimigos diferentes; não comparar diretamente seus tempos como medida de aprendizado.
 
 Cronometrar do início da primeira escolha até vitória ou derrota. Registrar a duração mesmo em derrotas. Não interpretar a média de partidas encerradas cedo como duração de uma partida completa; o alvo de 5–8 minutos ainda precisa ser avaliado nas partidas concluídas.
 
@@ -32,6 +32,12 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 - [ ] DISPARO anuncia direção fixa; o tiro permite esquiva e para nas paredes.
 - [ ] GOLPE anuncia o setor antes do dano; sair do setor evita o golpe; a recuperação permite contra-atacar.
 - [ ] Sala 3 permite distinguir dados, nuvem, centurião e projéteis sem sobreposição confusa.
+- [ ] Os seis monstros são reconhecíveis; sprites não cobrem avisos nem barras de vida nos quatro pisos.
+- [ ] Os dois botões do menu iniciam a rota correspondente; reinício mantém a escolha e voltar ao menu permite trocar.
+- [ ] No pátio, as três linhas de ESPINHOS permitem prever e evitar o disparo.
+- [ ] No laboratório, o círculo de MISTURA permanece fixo; sair dele antes da ativação evita dano.
+- [ ] A mistura ativa expira, respeita invulnerabilidade e não causa vários acertos na mesma área.
+- [ ] Pausa congela animações, misturas e espinhos; matar a fonte ou encerrar combate remove seus perigos.
 - [ ] Esc congela avisos e tiros; retomar, reiniciar e voltar ao menu funcionam.
 - [ ] Limpar a sala remove tiros; a porta só permite avançar sem inimigos vivos.
 - [ ] Vitória e derrota bloqueiam ataques; três reinícios não mantêm atributos ou inimigos antigos.
@@ -60,7 +66,9 @@ Igor deve revisar enunciado, quatro alternativas, resposta e explicação de cad
 
 A base tinha 420 de vida total e exigia 42 golpes nas mesmas condições. O aumento é pequeno, mas novos padrões podem elevar muito a dificuldade; esses números não medem a duração real. A régua pode acertar mais de um inimigo no mesmo golpe. Os bônus de Matemática também reduzem a quantidade de golpes.
 
-Mantivemos no máximo uma nuvem e um centurião por sala. A nuvem avisa por 0,8 s e se recupera por 1,2 s; o centurião avisa por 0,75 s e se recupera por 1,1 s após o golpe. A primeira sala e Napoleão preservam os parâmetros anteriores. Não aumentar inimigos antes de observar os jogadores.
+Na expedição científica, os totais por sala são 60, 90, 135 e 150 de vida: **435 no total**, com **46 golpes** nas mesmas condições. O cacto tem 35 de vida e dispara três espinhos de 8 de dano após 0,95 s; o cientista tem 35 de vida e marca uma mistura de raio 42, com aviso de 1 s, duração ativa de 1,2 s e no máximo um acerto de 10. A posição da mistura fica limitada à arena. Avaliar separadamente a pressão desses ataques na segunda rota.
+
+Mantivemos no máximo uma nuvem e um centurião por sala; a nova rota acrescenta um cacto no pátio e um cientista no laboratório, substituindo outros inimigos. A nuvem avisa por 0,8 s e se recupera por 1,2 s; o centurião avisa por 0,75 s e se recupera por 1,1 s após o golpe. A primeira sala e Napoleão preservam os parâmetros anteriores. Não aumentar a quantidade simultânea antes de observar os jogadores.
 
 Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se reconhecer o aviso, mas não conseguir escapar, revisar duração e alcance. Se o combate ficar longo mesmo com esquivas e ataques consistentes, revisar vida e tempo de recuperação. Alterar um parâmetro por vez, registrar o motivo e repetir o teste afetado.
 

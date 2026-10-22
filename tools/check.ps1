@@ -28,6 +28,7 @@ if ($Export) {
     Invoke-GodotCheck -Arguments @('--script', 'res://tools/write_notices.gd')
     Copy-Item -LiteralPath (Join-Path $projectRoot 'COMO_JOGAR.md') -Destination (Join-Path $buildRoot 'windows/COMO_JOGAR.md')
     Copy-Item -LiteralPath (Join-Path $projectRoot 'PLAYTEST.md') -Destination (Join-Path $buildRoot 'windows/PLAYTEST.md')
+    Copy-Item -LiteralPath (Join-Path $projectRoot 'ART_ANALYSIS.md') -Destination (Join-Path $buildRoot 'windows/ART_ANALYSIS.md')
     $smokeLog = Join-Path $buildRoot 'standalone-smoke.log'
     $smokeErrors = Join-Path $buildRoot 'standalone-smoke-errors.log'
     $gameProcess = Start-Process -FilePath (Join-Path $buildRoot 'windows/SchoolRush.exe') -ArgumentList @('--headless', '--quit-after', '120') -WorkingDirectory (Join-Path $buildRoot 'windows') -WindowStyle Hidden -RedirectStandardOutput $smokeLog -RedirectStandardError $smokeErrors -PassThru

@@ -37,6 +37,6 @@ O sorteio prioriza disciplinas menos oferecidas e nunca repete uma matéria na m
 
 O carregador exige pelo menos duas disciplinas e duas questões por disciplina. Mantenha as quatro disciplinas com cinco questões para preservar o escopo atual e a cobertura dos testes. Alterações de quantidade exigem rever os testes e a disponibilidade para quatro salas.
 
-Execute `tools/check.ps1` com o caminho do Godot indicado em `COMO_JOGAR.md`. As nove suítes incluem erros de catálogo, distribuição em 50 sequências, quatro recompensas, limite de velocidade, movimento real, consumo único, reset, monstros e encontros. Rode também as capturas para conferir textos longos.
+Execute `tools/check.ps1` com o caminho do Godot indicado em `COMO_JOGAR.md`. As onze suítes incluem erros de catálogo, distribuição em 50 sequências, quatro recompensas, limite de velocidade, movimento real, consumo único, reset, monstros, encontros, arte e rota científica. Rode também as capturas para conferir textos longos.
 
 O preset Windows inclui `data/*.json`. Após editar, exporte novamente: o executável contém uma cópia embutida do catálogo e não usa o JSON externo.

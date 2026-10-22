@@ -1,4 +1,4 @@
-# School Rush — MVP 0.2.0-rc1
+# School Rush — MVP 0.2.0-rc2
 
 ## Jogar
 
@@ -13,6 +13,8 @@ No Windows 64 bits, abra `SchoolRush.exe` na pasta da build. Não é necessário
 | Esc | Pausar ou continuar durante combate/saída |
 | M | Ligar/desligar efeitos sonoros |
 | Mouse ou Tab + Enter | Selecionar opções nos menus |
+
+No menu, escolha **Rota clássica** ou **Expedição científica**. Cada uma tem quatro salas e o mesmo sistema de perguntas/recompensas. Reiniciar mantém a rota escolhida; volte ao início para trocar.
 
 Escolha uma das duas perguntas e responda. O banco contém 20 questões de revisão introdutória para Ensino Médio, cinco por matéria. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida.
 
@@ -38,9 +40,22 @@ Vença três salas e Napoleão no ginásio. O golpe da régua atinge um cone na 
 
 A nuvem e o centurião param de mirar ao iniciar o aviso. Tiros desaparecem nas paredes, ao atingir o jogador ou quando a nuvem morre. A pausa congela monstros e projéteis.
 
+Na **Expedição científica**, os encontros mudam:
+
+| Sala | Ambiente e inimigos | Nova ameaça |
+| --- | --- | --- |
+| 1 | Sala de aula: dois dados | Aquecimento com os controles |
+| 2 | Pátio: dado, cacto e nuvem | ESPINHOS: o cacto fica parado e marca três direções antes de atirar |
+| 3 | Laboratório: dado, centurião, cientista e nuvem | MISTURA: saia do círculo marcado antes de ficar verde; a área ativa dura 1,2 s |
+| 4 | Ginásio: Napoleão | Mesmo chefe da rota clássica |
+
+Cada mistura causa no máximo um acerto. Derrotar o cientista remove suas misturas; derrotar o cacto remove seus espinhos. Pausa, derrota, saída e reinício também controlam esses perigos.
+
 ## Estado da versão
 
-Versão candidata da expansão, com formas e sons provisórios. O conteúdo educacional ainda precisa da revisão da equipe, e o balanceamento precisa de playtest. As verificações automatizadas não substituem uma partida manual nem o teste em outro computador. O roteiro e a ficha de registro estão em `PLAYTEST.md`, incluído na distribuição.
+Versão candidata com sprites animados em seis tipos de monstros e quatro pisos derivados da arte fornecida. O jogador e parte da interface/efeitos continuam provisórios: os respectivos pacotes são referências que ainda precisam de preparação. As músicas adicionadas pela equipe foram preservadas; M alterna os efeitos sonoros e não a música de fundo.
+
+O conteúdo educacional ainda precisa da revisão da equipe, e o balanceamento das duas rotas precisa de playtest. As verificações automatizadas não substituem uma partida manual nem o teste em outro computador. O roteiro e a ficha de registro estão em `PLAYTEST.md`, incluído na distribuição; `ART_ANALYSIS.md` registra a seleção de arte.
 
 ## Validar e exportar o projeto
 
@@ -53,7 +68,7 @@ No PowerShell, na pasta do projeto:
 .\tools\check.ps1 -Godot 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' -Export
 ```
 
-O segundo comando executa as nove suítes (catálogo, combate, progressão, partida, movimento, vida, recompensas, monstros e encontros) e exporta `builds/windows/SchoolRush.exe`, com os recursos e o catálogo JSON embutidos. Distribua a pasta `windows` junto com `GODOT_NOTICES.txt`, este guia e `PLAYTEST.md`. Builds, capturas e caches não entram no Git.
+O segundo comando executa as onze suítes (catálogo, combate, progressão, partida, movimento, vida, recompensas, monstros, encontros, arte e rota científica) e exporta `builds/windows/SchoolRush.exe`, com os recursos e o catálogo JSON embutidos. Distribua a pasta `windows` junto com `GODOT_NOTICES.txt`, este guia, `PLAYTEST.md` e `ART_ANALYSIS.md`. Builds, capturas e caches não entram no Git.
 
 Para revisar questões ou ajustar recompensas, siga [data/README.md](data/README.md) no projeto-fonte e gere uma nova build.
 
@@ -64,6 +79,7 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 ```powershell
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_preview.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_enemies.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_expansion.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.
