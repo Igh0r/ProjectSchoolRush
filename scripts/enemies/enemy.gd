@@ -44,6 +44,9 @@ func has_sprite() -> bool:
 	var sprite := get_node_or_null("Visual/AnimatedSprite2D") as AnimatedSprite2D
 	return sprite != null and sprite.visible
 
+func projectile_settings() -> Dictionary:
+	return {}
+
 func draw_health_bar(width: float, y: float) -> void:
 	draw_rect(Rect2(-width / 2.0, y, width, 4), Color("172537"))
 	draw_rect(Rect2(-width / 2.0, y, width * float(health) / max_health, 4), Color("54d6a8"))

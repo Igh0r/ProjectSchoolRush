@@ -13,10 +13,19 @@ O usuário solicitou continuar a expansão e disponibilizou os pacotes em `art/`
 | Bloco | Escopo | Situação |
 | --- | --- | --- |
 | C1 — arte selecionada | Analisar os pacotes, integrar sprites dos monstros existentes e registrar o que exige preparação | Concluído; dez suítes e inspeção visual aprovadas |
-| C2 — conteúdo | Cacto e cientista, nova rota de encontros e cenários visuais a partir do material disponível | Em execução |
-| C3 — entrega | Testes de arte/perigos/rotas, inspeção visual, guia e nova build candidata | Planejado |
+| C2 — conteúdo | Cacto e cientista, nova rota de encontros e cenários visuais a partir do material disponível | Concluído; onze suítes e capturas aprovadas |
+| C3 — entrega | Testes de arte/perigos/rotas, inspeção visual, guia e nova build candidata | Em execução |
 
 Entrega C1: coleção inventariada em [ART_ANALYSIS.md](ART_ANALYSIS.md); sprites dos quatro monstros existentes configurados, com cópias de produção e recursos reproduzíveis. Quadros isolados de efeitos foram excluídos das animações de corpo do cacto/cientista. Dez suítes passaram; escala, avisos e silhuetas inspecionados em capturas renderizadas. Os pacotes de jogador, HUD, armas e tiles são referências e precisam de preparação adicional. A música adicionada pela equipe foi preservada.
+
+Entrega C2:
+
+- Menu oferece a rota clássica e a expedição científica. Ambas preservam quatro salas, perguntas e recompensas; reinício mantém a rota escolhida e limpa os atributos. O menu permite trocar de rota.
+- Expedição: dois dados na sala de aula; dado, cacto e nuvem no pátio; dado, centurião, cientista e nuvem no laboratório; Napoleão no ginásio. Nunca há mais de quatro inimigos simultâneos.
+- Cacto: 35 de vida, imóvel, três espinhos a ±0,28 rad, aviso fixo de 0,95 s e recuperação de 1,6 s. Espinhos causam 8 de dano, viajam a 170 px/s por até 2,5 s e somem em colisão ou morte da fonte.
+- Cientista: 35 de vida, aproximação a 55 px/s, marca um círculo de raio 42 px próximo à posição do jogador. A posição fica fixa; aviso de 1 s e área ativa por 1,2 s, com no máximo um acerto de 10 por mistura. Recuperação de 2,2 s. Marca limitada à arena, respeita invulnerabilidade e desaparece na morte da fonte/transições.
+- Quatro pisos visuais reutilizados dos cenários individuais, com brilho reduzido e sem móveis decorativos usados como obstáculos falsos. Colisões e espaço seguro da entrada foram preservados.
+- Onze suítes aprovadas: inclui a rota completa, avisos/esquiva, espinhos, área ativa, pausa, morte, reset e limpeza. Capturas do menu, dicas, quatro ambientes, ataques e escala em 960×540/1280×720 inspecionadas. Os testes de progressão eliminam inimigos por código; não medem dificuldade humana.
 
 ### Expansão 0.2 — blocos de execução
 

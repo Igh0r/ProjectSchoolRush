@@ -7,7 +7,7 @@ Foram inventariados os onze ZIPs e a pasta de inimigos extraída em `art/`. A an
 | Inimigos HD corrigidos | PNG RGBA transparente; células reais de 384×384 para comuns e 512×512 para Napoleão | Integrar dado, centurião, nuvem e Napoleão; preparar cientista e cacto para a nova rota |
 | Babuíno | Arte disponível; comportamento ainda não implementado | Reservar para outra expansão, sem criar um inimigo apenas com aparência diferente |
 | ZIP antigo dos inimigos | Outra versão da mesma coleção, com enquadramento diferente | Usar a revisão HD já extraída para evitar mistura de escalas e recortes |
-| Cenários individuais HD | Vinte imagens completas de ambientes, quatro variações de cinco locais | Reaproveitar regiões de piso e cabeceira; não tratar a imagem como mapa de colisão |
+| Cenários individuais HD | Vinte imagens completas de ambientes, quatro variações de cinco locais | Reaproveitar regiões de piso; não tratar a imagem como mapa de colisão |
 | Cenários “arte aprovada” | Composição e recortes de referência | Consulta visual; preferir as imagens individuais na integração |
 | Matheus e Alice | Folhas com títulos, fundo opaco e quadros de tamanhos irregulares | Precisam de separação/limpeza antes de substituir o jogador; não são sprites 32×32 prontos |
 | Armas | Recortes de uma prancha com fundo, rótulos e diferentes vistas | Referência para régua/lapiseira; preparar PNGs transparentes antes de uso direto |
@@ -27,6 +27,8 @@ Nos comuns, os recortes são células de 384×384. Em Napoleão, a região fixa 
 Os sprites são imagens com uma vista predominante, não animações completas em quatro direções. Centurião e Napoleão podem espelhar horizontalmente; a direção real de ataque é indicada pelos avisos. O golpe visual do centurião começa no estado de ataque, depois do aviso, sem antecipar dano.
 
 ## Organização
+
+Sala de aula, pátio, laboratório e ginásio usam a variação 01 de `Cenarios_2D_Individuais_HD.zip`, copiada para `assets/rooms/` pelo mesmo preparador. `room.gd` desenha somente regiões abertas de piso, com redução de brilho para destacar atores e avisos. Móveis, portas decorativas e paredes pintadas na imagem não são usados como obstáculos falsos. As paredes físicas e a saída continuam explícitas no jogo.
 
 `art/` guarda os originais locais e tem `.gdignore`, evitando a importação indiscriminada de pranchas e duplicatas. Os pacotes brutos ficam fora do Git; os recursos usados em `assets/` e seus arquivos `.import` são versionados. A build usa somente as cópias de produção e não depende da presença dos ZIPs.
 

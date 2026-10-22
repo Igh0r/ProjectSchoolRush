@@ -1,6 +1,8 @@
 param([string]$ArtRoot = (Join-Path (Split-Path -Parent $PSScriptRoot) 'art'))
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+New-Item -ItemType Directory -Path (Join-Path $projectRoot 'builds') -Force | Out-Null
+New-Item -ItemType File -Path (Join-Path $projectRoot 'builds/.gdignore') -Force | Out-Null
 $sourceRoot = Join-Path $ArtRoot 'inimigos trabalho/Inimigos_2D_PixelArt_Unity_HD_CORRIGIDOS_DE_VERDADE'
 $assetRoot = Join-Path $projectRoot 'assets/monsters'
 $utf8 = [System.Text.UTF8Encoding]::new($false)
@@ -52,5 +54,21 @@ foreach ($spec in $specs) {
     $resources.Add('animations = [' + ($animations -join ",`n") + ']')
     [System.IO.File]::WriteAllText((Join-Path $destRoot 'frames.tres'), ($resources -join "`n`n") + "`n", $utf8)
 }
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$roomsRoot = Join-Path $projectRoot 'assets/rooms'
+New-Item -ItemType Directory -Path $roomsRoot -Force | Out-Null
+$zipPath = Join-Path $ArtRoot 'cenario/Cenarios_2D_Individuais_HD.zip'
+$backgrounds = @{classroom='Sala_de_Aula/Sala_de_Aula_Variacao_01_HD.png'; courtyard='Patio/Patio_Variacao_01_HD.png'; laboratory='Laboratorio_de_Ciencias/Laboratorio_de_Ciencias_Variacao_01_HD.png'; gym='Ginasio_Boss/Ginasio_Boss_Variacao_01_HD.png'}
+$archive = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
+try {
+    foreach ($background in $backgrounds.GetEnumerator()) {
+        $entryName = 'Cenarios_2D_Individuais_HD/' + $background.Value
+        $entry = $archive.GetEntry($entryName)
+        if ($null -eq $entry) { throw "Cenário não encontrado: $entryName" }
+        $destination = Join-Path $roomsRoot ($background.Key + '.png')
+        [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destination, $true)
+        $manifest += "rooms/$($background.Key).png`t$((Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash)`t$zipPath::$entryName"
+    }
+} finally { $archive.Dispose() }
 $manifest | Set-Content -LiteralPath (Join-Path $projectRoot 'builds/art-source-hashes.txt') -Encoding UTF8
 Write-Output 'Sprites copiados sem alterar pixels; AtlasTexture e SpriteFrames gerados.'

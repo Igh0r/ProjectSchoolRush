@@ -21,7 +21,7 @@ func run_tests() -> void:
 				check(atlas.atlas.get_image().get_pixel(0, 0).a == 0.0, "Fundo dos monstros deve ter transparência real")
 		if kind in ["scientist", "cactus"]:
 			check(frames.get_frame_count("attack") == 3, "Frame isolado de efeito não pode substituir o personagem")
-	for kind in ["dice", "cloud", "centurion", "boss"]:
+	for kind in ["dice", "cloud", "centurion", "boss", "cactus", "scientist"]:
 		var enemy = load("res://scenes/enemies/%s.tscn" % kind).instantiate()
 		root.add_child(enemy)
 		check(enemy.has_sprite(), "Cena deve ativar sprite: " + kind)

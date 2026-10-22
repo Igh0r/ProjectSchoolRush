@@ -77,12 +77,14 @@ func show_menu() -> void:
 		push_error("Catálogo inválido: " + "; ".join(questions.validation_errors))
 		ui.show_panel("Conteúdo indisponível", "Não foi possível carregar as perguntas. A partida estará disponível após corrigir o banco de questões.", [])
 		return
-	ui.show_panel("School Rush", "Preso em um livro, você precisa vencer os desafios para voltar para casa.\n\nEscolha uma pergunta. Acerte para reservar uma melhoria e vença a sala para recebê-la. Errar não impede o avanço.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: ligar/desligar som", [{"text": "Iniciar partida", "action": start_run}])
+	ui.show_panel("School Rush", "Acerte perguntas e vença o combate para receber melhorias.\nCada rota tem quatro salas e termina contra Napoleão.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: efeitos sonoros", [{"text": "Rota clássica • Dados, nuvem e centurião", "action": start_run.bind(0)}, {"text": "Expedição científica • Pátio, cacto e cientista", "action": start_run.bind(1)}])
 	_update_hud()
 
-func start_run() -> void:
+func start_run(route: int = -1) -> void:
 	if not questions.validation_errors.is_empty():
 		return
+	if route >= 0:
+		room.route_index = clampi(route, 0, 1)
 	play_music(QUEST_BGM, true)
 	get_tree().paused = false
 	run_epoch += 1
@@ -101,6 +103,7 @@ func _prepare_question() -> void:
 	player.active = false
 	player.position = room.ENTRY
 	room.set_combat(false)
+	room.set_room_theme(room_index)
 	room.door_open = false
 	room.queue_redraw()
 	var choices: Array = []
@@ -111,7 +114,7 @@ func _prepare_question() -> void:
 	for i in range(offered.size()):
 		var question: Dictionary = offered[i]
 		choices.append({"text": "%s • %s\nRecompensa: %s" % [questions.subject_name(question.subject), question.prompt, questions.reward_description(question.subject)], "action": choose_question.bind(i)})
-	ui.show_panel("Sala %d • Escolha seu desafio" % (room_index + 1), "%s • Acerte e vença o combate para receber o bônus." % questions.audience, choices)
+	ui.show_panel("Sala %d • Escolha seu desafio" % (room_index + 1), "%s • %s\nAcerte e vença o combate para receber o bônus." % [questions.audience, room.route_name()], choices)
 	_update_hud()
 
 func choose_question(index: int) -> void:

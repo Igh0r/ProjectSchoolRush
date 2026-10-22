@@ -6,6 +6,9 @@ var source: Node
 var direction := Vector2.LEFT
 var active: bool = true
 var lifetime: float = 3.5
+var speed: float = 230.0
+var damage: int = 12
+var thorn: bool = false
 
 func _ready() -> void:
 	collision_layer = 8
@@ -35,13 +38,19 @@ func _physics_process(delta: float) -> void:
 	if lifetime <= 0.0:
 		cancel()
 		return
-	var collision := move_and_collide(direction * 230.0 * delta)
+	var collision := move_and_collide(direction * speed * delta)
 	if collision != null:
 		if collision.get_collider() == target:
-			target.take_damage(12)
+			target.take_damage(damage)
 		cancel()
 
 func _draw() -> void:
+	if thorn:
+		var points := PackedVector2Array([direction * 9.0, direction.rotated(2.4) * 6.0, direction.rotated(-2.4) * 6.0])
+		draw_colored_polygon(points, Color("b5eb74"))
+		points.append(points[0])
+		draw_polyline(points, Color("153724"), 2.0)
+		return
 	draw_circle(Vector2.ZERO, 6.0, Color("b7eeff"))
 	draw_circle(Vector2.ZERO, 6.0, Color("172537"), false, 2.0)
 	draw_line(-direction * 7.0, -direction * 16.0, Color("b7eeff"), 3.0)
