@@ -1,6 +1,7 @@
 extends RefCounted
 
 const PATH := "res://data/curriculum.json"
+const DIFFICULTIES := ["basic", "intermediate", "challenge"]
 var data: Dictionary = {}
 var errors := PackedStringArray()
 
@@ -71,6 +72,8 @@ static func validate_data(value: Variant) -> PackedStringArray:
 		if ids.has(question.id):
 			issues.append("Questão duplicada: " + question.id)
 		ids[question.id] = true
+		if not question.get("difficulty") is String or not question.difficulty in DIFFICULTIES:
+			issues.append("Dificuldade inválida (basic, intermediate ou challenge): " + question.id)
 		if not subjects.has(question.subject):
 			issues.append("Disciplina desconhecida: " + question.id)
 		else:

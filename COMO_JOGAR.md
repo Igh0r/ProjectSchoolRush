@@ -1,4 +1,6 @@
-# School Rush — MVP 0.2.0-rc2
+# School Rush — desenvolvimento 0.3.0-dev1
+
+O projeto-fonte inclui o bloco D1, com oitenta questões. A última distribuição Windows continua sendo a 0.2.0-rc2, com vinte questões; seu executável não é atualizado ao editar o projeto. Para experimentar o conteúdo novo agora, execute o projeto no Godot. A próxima candidata Windows está prevista no bloco D5.
 
 ## Jogar
 
@@ -16,7 +18,7 @@ No Windows 64 bits, abra `SchoolRush.exe` na pasta da build. Não é necessário
 
 No menu, escolha **Rota clássica** ou **Expedição científica**. Cada uma tem quatro salas e o mesmo sistema de perguntas/recompensas. Reiniciar mantém a rota escolhida; volte ao início para trocar.
 
-Escolha uma das duas perguntas e responda. O banco contém 20 questões de revisão introdutória para Ensino Médio, cinco por matéria. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida.
+Escolha uma das duas perguntas e responda. O banco contém 80 questões para Ensino Médio, vinte por matéria, com temas de revisão, aplicação e interpretação. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida. Reiniciar ainda repõe todo o banco; a redução de repetições entre partidas e a progressão de dificuldade serão entregues no D2.
 
 | Matéria | Bônus por acerto, recebido após vencer a sala |
 | --- | --- |
@@ -55,7 +57,7 @@ Cada mistura causa no máximo um acerto. Derrotar o cientista remove suas mistur
 
 Versão candidata com sprites animados em seis tipos de monstros e quatro pisos derivados da arte fornecida. O jogador e parte da interface/efeitos continuam provisórios: os respectivos pacotes são referências que ainda precisam de preparação. As músicas adicionadas pela equipe foram preservadas; M alterna os efeitos sonoros e não a música de fundo.
 
-O conteúdo educacional ainda precisa da revisão da equipe, e o balanceamento das duas rotas precisa de playtest. As verificações automatizadas não substituem uma partida manual nem o teste em outro computador. O roteiro e a ficha de registro estão em `PLAYTEST.md`, incluído na distribuição; `ART_ANALYSIS.md` registra a seleção de arte.
+O usuário e Igor aprovaram o playtest interno da base em 23/10/2026. O conteúdo ampliado precisa de revisão pedagógica, acompanhada por ID em `data/REVISAO_PEDAGOGICA.md`, e a fase nova terá outra rodada de playtest. As verificações automatizadas não substituem essa avaliação nem o teste em outro computador. O registro e roteiro estão em `PLAYTEST.md`; `ART_ANALYSIS.md` registra a seleção de arte.
 
 ## Validar e exportar o projeto
 

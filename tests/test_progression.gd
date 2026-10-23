@@ -20,7 +20,7 @@ func select_subject(game: Node, subject_id: String) -> void:
 func run_tests() -> void:
 	var manager = load("res://scripts/systems/question_manager.gd").new()
 	check(manager.validation_errors.is_empty(), "Banco deve passar na validação")
-	check(manager.bank.size() == 20 and manager.subjects.size() == 4, "Banco deve conter vinte questões e quatro matérias")
+	check(manager.bank.size() == 80 and manager.subjects.size() == 4, "Banco ampliado deve conter oitenta questões e quatro matérias")
 	check(manager.audience == "Ensino Médio", "Público deve ser Ensino Médio")
 	for seed_value in range(50):
 		manager.rng.seed = seed_value
@@ -46,11 +46,17 @@ func run_tests() -> void:
 		for count in counts.values():
 			check(count == 2, "Cada matéria deve ser oferecida duas vezes por partida")
 	manager.reset()
-	for i in range(10):
-		check(manager.offer().size() == 2, "Banco deve sustentar dez ofertas sem repetição")
+	var exhausted_ids: Dictionary = {}
+	for i in range(manager.bank.size() / 2):
+		var offer = manager.offer()
+		check(offer.size() == 2, "Banco deve sustentar ofertas até esgotar")
+		for question in offer:
+			check(not exhausted_ids.has(question.id), "Não deve repetir questão antes de esgotar o banco")
+			exhausted_ids[question.id] = true
 	check(manager.offer().is_empty(), "Banco esgotado deve retornar oferta vazia")
+	check(exhausted_ids.size() == manager.bank.size(), "Todas as questões devem ser alcançáveis")
 	manager.reset()
-	check(manager.remaining.size() == 20 and manager.pending_reward.is_empty(), "Reset deve repor todo o banco")
+	check(manager.remaining.size() == manager.bank.size() and manager.pending_reward.is_empty(), "Reset deve repor todo o banco")
 
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)

@@ -1,6 +1,8 @@
-# School Rush — validação da versão 0.2.0-rc2
+# School Rush — playtest aprovado e acompanhamento da fase 0.3
 
 Atualizado em 23/10/2026. **Playtest interno aprovado pelo usuário e Igor.** Público: Ensino Médio. Build de referência disponível: 0.2.0-rc2, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
+
+**D1 disponível no projeto 0.3.0-dev1:** oitenta questões, vinte por matéria, classificadas por tema e dificuldade. Onze suítes aprovadas e capturas de textos extensos conferidas. Executar pelo Godot; a distribuição 0.2.0-rc2 continua com o catálogo anterior. Histórico entre partidas, embaralhamento e uso da dificuldade estão previstos para D2; combate novo, para D3/D4. Não houve novo playtest humano desse conteúdo nesta entrega.
 
 ## Resultado informado em 23/10/2026
 
@@ -71,12 +73,12 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 
 Igor deve revisar enunciado, quatro alternativas, resposta e explicação de cada questão em `data/curriculum.json` no projeto-fonte. Marcar somente depois de confirmar correção e adequação ao Ensino Médio; registrar qualquer ajuste por ID.
 
-O aceite geral do playtest não foi registrado como revisão individual das questões. Os IDs abaixo representam o banco atual de vinte questões. Em D1, ampliar o registro para cada lote novo, incluindo tema, dificuldade, revisor e resultado; meta planejada de oitenta questões, vinte por disciplina.
+O aceite geral do playtest não foi registrado como revisão individual das questões. O banco D1 possui oitenta questões; a ficha completa está em [data/REVISAO_PEDAGOGICA.md](data/REVISAO_PEDAGOGICA.md), com tema, dificuldade, gabarito, revisor/data e resultado por ID. Os grupos abaixo são resumos para preenchimento somente após revisar todos os IDs correspondentes.
 
-- [ ] Matemática: mat1, mat2, mat3, mat4, mat5.
-- [ ] História: his1, his2, his3, his4, his5.
-- [ ] Ciências: cie1, cie2, cie3, cie4, cie5.
-- [ ] Português: por1, por2, por3, por4, por5.
+- [ ] Matemática: mat1–mat20.
+- [ ] História: his1–his20.
+- [ ] Ciências: cie1–cie20.
+- [ ] Português: por1–por20.
 
 ## Parâmetros iniciais e decisões após o teste
 

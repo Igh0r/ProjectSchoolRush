@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (23/10/2026):** playtest interno aprovado pelo usuário e Igor; base aceita para evolução. B1–B4 e C1–C3 concluídos: seis monstros com sprites, duas rotas de quatro salas, quatro pisos e vinte questões para **Ensino Médio**. Build de referência disponível: **0.2.0-rc2**. A nova fase prioriza variedade das perguntas e melhoria do combate, conforme os blocos D1–D5 abaixo. Revisão pedagógica por questão e execução em outro PC não foram confirmadas pelo relato. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (23/10/2026):** playtest interno aprovado pelo usuário e Igor; base aceita para evolução. B1–B4 e C1–C3 concluídos. **D1 entregue tecnicamente no projeto 0.3.0-dev1: oitenta questões para Ensino Médio**, com tema e dificuldade. Permanecem seis monstros com sprites, duas rotas de quatro salas e quatro pisos. Última build Windows: **0.2.0-rc2**, ainda com vinte questões; nova candidata prevista em D5. Próximo bloco: D2, seleção variada. Revisão pedagógica por questão e execução em outro PC não foram confirmadas pelo relato. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -10,21 +10,32 @@ Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
 O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e solicitaram mais variedade de perguntas e melhorias no combate dos inimigos. Esse aceite permite prosseguir; a proposta anterior de cinco participantes externos passa a ser uma rodada complementar, sem bloquear esta fase. Não foram informados tempos, contagem de partidas ou resultados por item do roteiro.
 
-**Objetivo:** tornar as partidas repetidas mais interessantes, com perguntas de temas e raciocínios diferentes e inimigos que exijam decisões de posicionamento, esquiva e contra-ataque. Preservar as duas rotas, quatro salas, quatro disciplinas, recompensas e controles já aprovados. Os números e comportamentos abaixo são metas propostas para implementação e ajuste, não funcionalidades já entregues.
+**Objetivo:** tornar as partidas repetidas mais interessantes, com perguntas de temas e raciocínios diferentes e inimigos que exijam decisões de posicionamento, esquiva e contra-ataque. Preservar as duas rotas, quatro salas, quatro disciplinas, recompensas e controles já aprovados. As metas abaixo orientam a implementação; a coluna de situação distingue entregas e trabalho futuro.
 
 | Bloco | Entrega planejada | Critério de aceite | Situação |
 | --- | --- | --- | --- |
-| D1 — ampliar o conteúdo | Crescer de 20 para 80 questões, em dois lotes: 40 e depois 80; chegar a 20 por disciplina, com tema e dificuldade identificados | Quatro alternativas distintas, uma resposta correta, explicação útil e variedade real de temas; catálogo validado e revisão por ID registrada | Planejado — próximo bloco |
-| D2 — variar a seleção | Priorizar questões ainda não vistas na sessão, variar temas e embaralhar alternativas; introduzir progressão suave de dificuldade | Sem repetição na mesma partida; reiniciar não repete imediatamente as mesmas ofertas quando há opções disponíveis; resposta correta acompanha o embaralhamento | Planejado — após D1 |
+| D1 — ampliar o conteúdo | Crescer de 20 para 80 questões, em dois lotes: 40 e depois 80; chegar a 20 por disciplina, com tema e dificuldade identificados | Quatro alternativas distintas, uma resposta correta, explicação útil e variedade real de temas; catálogo validado e revisão por ID registrada | Entregue tecnicamente; onze suítes aprovadas; revisão de Igor pendente por ID |
+| D2 — variar a seleção | Priorizar questões ainda não vistas na sessão, variar temas e embaralhar alternativas; introduzir progressão suave de dificuldade | Sem repetição na mesma partida; reiniciar não repete imediatamente as mesmas ofertas quando há opções disponíveis; resposta correta acompanha o embaralhamento | Planejado — próximo bloco |
 | D3 — melhorar os inimigos | Ajustar posicionamento, separação e recuperação dos cinco inimigos comuns, mantendo avisos legíveis | Cada inimigo tem papel reconhecível; há oportunidade de esquiva e contra-ataque; paredes, pausa, morte e limpeza continuam corretas | Planejado — após D2 |
 | D4 — ritmo dos encontros e chefe | Coordenar ataques perigosos nas salas mistas e acrescentar um segundo padrão anunciado ao Napoleão | Ataques sobrepostos preservam espaço de fuga; chefe alterna padrões reconhecíveis; ambas as rotas continuam concluíveis sem bônus | Planejado — após D3 |
 | D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Planejado — após D4 |
 
 #### D1 e D2 — perguntas para Ensino Médio
 
+**Entrega D1 (23/10/2026, 0.3.0-dev1):**
+
+- Primeiro lote de quarenta questões validado no Godot; segundo lote completou oitenta, preservando os vinte IDs originais e todas as recompensas. Vinte questões por disciplina, distribuídas em oito básicas, oito intermediárias e quatro desafios. Exemplos incluem probabilidade condicional, interpretação de fontes, genética, circuitos elétricos, ambiguidades e análise de argumentos.
+- Campo obrigatório `difficulty` com valores `basic`, `intermediate` e `challenge`. Carregador rejeita ausência, tipos e valores inválidos. Tema já existente preservado. Dificuldade ainda não influencia sorteio nem aparece como progressão na partida; essa integração pertence ao D2.
+- Onze suítes passaram sem falhas. Cobertura ampliada para validação de dificuldade, cobertura temática, enunciados duplicados, acesso às oitenta questões até esgotar o banco e reset completo. As cinquenta sequências de ofertas continuam preservando o equilíbrio das matérias e ausência de repetição dentro da partida.
+- Capturas de ofertas, respostas e explicações extensas geradas em 960×540 e 1280×720, com inspeção de amostras. A rolagem existente atende perguntas mais longas; a captura verifica acesso à última alternativa quando necessário. Arquivos locais em `builds/previews/d1/`; reprodução em `tests/capture_catalog.gd`.
+- [data/README.md](data/README.md) documenta o esquema e os critérios editoriais. [data/REVISAO_PEDAGOGICA.md](data/REVISAO_PEDAGOGICA.md) acompanha os oitenta IDs com tema, dificuldade, gabarito e campos de resultado/revisor. Todos os aceites pedagógicos continuam pendentes; não foram inferidos a partir do playtest geral.
+- Projeto identificado como 0.3.0-dev1; a build Windows 0.2.0-rc2 foi preservada. Testar este bloco pelo projeto no Godot; exportação candidata prevista no D5. O combate continua na base aprovada até D3/D4.
+
+Regras para a continuidade de D1/D2:
+
 - Manter Matemática, História, Ciências e Português. Meta por disciplina: ao menos quatro temas, com questões conceituais, aplicação e interpretação; trocar apenas números ou palavras não conta como variedade suficiente. Ciências deve contemplar Biologia, Física e Química.
 - Proposta de distribuição por disciplina: oito questões básicas de revisão, oito intermediárias e quatro de desafio. A classificação deve refletir o raciocínio necessário e ser revisada por Igor; não vincular dificuldade somente ao tamanho do enunciado.
-- Acrescentar dificuldade ao catálogo, preservando IDs estáveis e o campo de tema existente. Atualizar validação e `data/README.md` junto com a implementação. Registrar revisão de enunciado, alternativas, gabarito e explicação por ID, inclusive das vinte questões atuais.
+- Dificuldade acrescentada no D1, preservando IDs estáveis e o campo de tema existente; validação e `data/README.md` atualizados. Registrar revisão de enunciado, alternativas, gabarito e explicação por ID, inclusive das vinte questões originais.
 - Priorizar questões não apresentadas em partidas anteriores da mesma sessão, contando também as ofertas não escolhidas. Ao esgotar as opções, reutilizar as menos recentes, sempre excluindo as já apresentadas na partida atual. Fechar o jogo encerra esse histórico; save permanente fica fora desta fase.
 - Preservar duas matérias diferentes por sala, todas as quatro matérias nas duas primeiras salas e duas aparições de cada matéria por partida. A seleção começa por revisão básica e amplia a presença de questões intermediárias/desafio nas últimas salas, sem travar quando um grupo se esgota.
 - Embaralhar alternativas sem alterar o catálogo original, remapeando a resposta correta e o feedback. Prioridade da seleção: regras da partida e disponibilidade, novidade na sessão, variedade de tema e dificuldade desejada; flexibilizar tema/dificuldade antes de reutilizar questões recentes.
@@ -50,7 +61,7 @@ Para as salas mistas, propor um coordenador simples de ataques: iniciar com no m
 - Executar as onze suítes existentes e ampliar a cobertura somente para regras novas: seleção e histórico, embaralhamento, movimento, padrões e coordenação de ataques. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
 - Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
 - Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
-- Atualizar este plano e o roteiro a cada bloco, registrando o que foi entregue, testes e pendências. Fazer commits e pushes por etapa validada. Preparar a candidata 0.3.0-rc1 ao concluir a fase; esta revisão documental mantém a versão executável 0.2.0-rc2.
+- Atualizar este plano e o roteiro a cada bloco, registrando o que foi entregue, testes e pendências. Fazer commits e pushes por etapa validada. O desenvolvimento começa em 0.3.0-dev1; preparar a candidata 0.3.0-rc1 ao concluir a fase. A última distribuição permanece 0.2.0-rc2 até uma nova exportação.
 
 Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
 
@@ -146,7 +157,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa após o playtest:** executar D1, começando pelo lote de quarenta questões e pela classificação de tema/dificuldade. Seguir D2 → D3 → D4 → D5, atualizando este documento a cada entrega. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
+**Próxima etapa após D1:** executar D2 — histórico da sessão, variedade temática, embaralhamento e progressão suave de dificuldade. Seguir D3 → D4 → D5, atualizando este documento a cada entrega. A revisão de Igor acompanha os lotes de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -165,12 +176,12 @@ A tabela registra o recorte atual. B2 ampliou as disciplinas; B3/B4 adicionaram 
 | Movimento, corrida sem stamina e régua de plástico | Lapiseira, níveis de arma, poderes e inventário |
 | Dado, nuvem, centurião, cacto e cientista | Babuíno, NPC vendedor e loja |
 | Napoleão com um ataque telegrafado | Múltiplas fases e padrões do chefe |
-| Matemática, História, Ciências e Português, cinco questões por matéria | Outras matérias, puzzles e travessias especiais |
+| Matemática, História, Ciências e Português, vinte questões por matéria no projeto D1 | Outras matérias, puzzles e travessias especiais |
 | Vida, sala atual, resultado da pergunta e recompensa no HUD | Pontuação competitiva e metaprogressão |
 | Início, pausa, derrota, vitória e reinício | Save, narração e configurações avançadas |
 | Sprites de seis monstros, pisos selecionados e músicas adicionadas pela equipe | Sprites finais do jogador, armas, HUD e efeitos preparados |
 
-Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público definido: Ensino Médio. Igor deve revisar as vinte questões quanto à correção e adequação antes do aceite pedagógico.
+Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público definido: Ensino Médio. Igor deve revisar as oitenta questões quanto à correção e adequação antes do aceite pedagógico, usando a ficha por ID.
 
 ## Regras que removem as ambiguidades do GDD
 
@@ -179,7 +190,7 @@ Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público de
 3. Acerto reserva uma recompensa; ela só é aplicada após eliminar todos os inimigos da sala. Matemática concede +2 de dano da régua; História recupera 20 de vida, limitada ao máximo; Ciências amplia o máximo em 10 e recupera 10; Português soma 5% da velocidade inicial, com limite acumulado de 20%. Exibir os valores na interface.
 4. Erro mostra a resposta correta e não reserva bônus. O jogador ainda pode concluir a sala e avançar. Não retirar vida nem repetir a pergunta como punição.
 5. A porta permanece fechada durante o combate. Ao limpar a sala, aplicar o bônus uma vez e permitir avançar com E perto da porta. Avançar abre a escolha da próxima sala; não usar transição automática por contato.
-6. Repetir o fluxo antes das quatro salas, incluindo o chefe. Uma questão apresentada sai do conjunto da partida mesmo se não for escolhida: quatro salas consomem oito das vinte questões. Reiniciar repõe o banco e todos os atributos.
+6. Repetir o fluxo antes das quatro salas, incluindo o chefe. Uma questão apresentada sai do conjunto da partida mesmo se não for escolhida: quatro salas consomem oito das oitenta questões no projeto D1. Reiniciar ainda repõe o banco e todos os atributos; histórico entre partidas será introduzido no D2.
 7. Vida zero encerra imediatamente a partida; não há reinício só da sala. Matar o chefe e permanecer vivo encerra com vitória. Se ambos morrerem no mesmo passo de simulação, derrota tem precedência.
 8. Esc pausa apenas durante combate ou sala liberada. Retomar preserva o estado anterior. Telas finais oferecem reiniciar e voltar ao início.
 
@@ -259,7 +270,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 ## Riscos e decisões de corte
 
 - Escopo: seis inimigos, quatro cenários, duas armas e loja comprometem a entrega. Manter apenas o conjunto incluído neste documento.
-- Conteúdo: o ciclo recebeu aceite interno; cinco questões por matéria oferecem pouca variedade entre partidas. Ampliar em lotes no D1 e revisar correção, temas e dificuldade, evitando volume baseado em questões quase idênticas.
+- Conteúdo: D1 ampliou para vinte questões por matéria. Revisar correção e dificuldade e implementar D2 para reduzir repetição entre partidas; quantidade sozinha não garante variedade percebida.
 - Integração: arte pode atrasar programação. Usar formas provisórias até o ciclo completo funcionar; substituir sem alterar colisões sem revisão.
 - Balanceamento: dano cumulativo pode simplificar o chefe. Medir partidas com zero e quatro acertos; ajustar bônus e chefe juntos.
 - Prazo: se atrasar, reduzir as salas comuns de três para duas e simplificar arte/áudio. Preservar perguntas, combate, recompensa, chefe e telas finais.
@@ -335,4 +346,5 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `8525cdf`: C1 — sprites de monstros, recursos reproduzíveis e análise dos pacotes de arte.
 - `be2482c`: C2 — expedição científica, cacto, cientista, quatro pisos e testes.
 - `f87f4d4`: C3 — versão 0.2.0-rc2, roteiro de duas rotas e pacote Windows.
-- 23/10/2026: aceite interno registrado e fase D1–D5 planejada; revisão documental (consultar `git log` para o hash).
+- `ca8e59b`: aceite interno registrado e fase D1–D5 planejada.
+- D1: oitenta questões, dificuldade, revisão por ID, testes e capturas; projeto 0.3.0-dev1 (consultar `git log` para o hash).
