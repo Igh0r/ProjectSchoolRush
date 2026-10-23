@@ -18,7 +18,7 @@ No Windows 64 bits, abra `SchoolRush.exe` na pasta da build. Não é necessário
 
 No menu, escolha **Rota clássica** ou **Expedição científica**. Cada uma tem quatro salas e o mesmo sistema de perguntas/recompensas. Reiniciar mantém a rota escolhida; volte ao início para trocar.
 
-Escolha uma das duas perguntas e responda. O banco contém 80 questões para Ensino Médio, vinte por matéria, com temas de revisão, aplicação e interpretação. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida. Reiniciar ainda repõe todo o banco; a redução de repetições entre partidas e a progressão de dificuldade serão entregues no D2.
+Escolha uma das duas perguntas e responda. O banco contém 80 questões para Ensino Médio, vinte por matéria, com temas de revisão, aplicação e interpretação. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida. Ao reiniciar ou voltar ao menu, o jogo prioriza questões ainda não vistas na sessão; depois de esgotá-las, reutiliza as menos recentes. Fechar o jogo limpa esse histórico. Alternativas mudam de posição, e as salas passam a preferir revisão, aplicação e desafio, conforme o conteúdo disponível.
 
 | Matéria | Bônus por acerto, recebido após vencer a sala |
 | --- | --- |

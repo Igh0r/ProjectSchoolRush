@@ -19,7 +19,7 @@ Cada item de `questions` contém:
 
 Mantenha o JSON em UTF-8 e sem comentários. Revise correção, clareza, dificuldade e legibilidade antes de distribuir. A validação automática verifica a estrutura, não a correção pedagógica.
 
-`basic` identifica revisão de conceitos ou aplicação direta; `intermediate`, aplicação contextualizada, comparação ou inferência; `challenge`, combinação de etapas, condições ou leitura crítica. São categorias editoriais provisórias, não medidas de desempenho dos jogadores. O D1 registra a dificuldade; seleção progressiva e embaralhamento de alternativas entram no D2.
+`basic` identifica revisão de conceitos ou aplicação direta; `intermediate`, aplicação contextualizada, comparação ou inferência; `challenge`, combinação de etapas, condições ou leitura crítica. São categorias editoriais provisórias, não medidas de desempenho dos jogadores. D2 usa essas preferências e apresenta os rótulos Revisão, Aplicação e Desafio na resposta.
 
 Matemática inclui funções, probabilidade, geometria, estatística, progressões e finanças. História combina conceitos, processos sociais e análise de fontes. Ciências reúne Biologia, Física e Química. Português inclui interpretação, argumentação, gramática em contexto, variação linguística e literatura. Exemplos de textos e situações são autorais, não transcrições de documentos históricos ou obras literárias.
 
@@ -38,7 +38,7 @@ O bônus exige acerto e conclusão da sala; é consumido uma única vez, cancela
 
 ## Ofertas e validação
 
-O sorteio prioriza disciplinas menos oferecidas e nunca repete uma matéria na mesma oferta. Cada questão apresentada é removida da partida, mesmo sem ser escolhida. Com as quatro matérias atuais, cada uma aparece duas vezes nas quatro salas; as primeiras duas salas apresentam todas as matérias. O banco reinicia a cada partida.
+O sorteio prioriza disciplinas menos oferecidas e nunca repete uma matéria na mesma oferta. Cada questão apresentada é removida da partida, mesmo sem ser escolhida. Com as quatro matérias atuais, cada uma aparece duas vezes nas quatro salas; as primeiras duas salas apresentam todas as matérias. D2 mantém o histórico de ofertas ao reiniciar e voltar ao menu: usa inéditas antes de reutilizar as menos recentes. Fechar o jogo encerra o histórico. Entre inéditas, prefere temas menos apresentados e depois a dificuldade de cada sala (básica, intermediária, intermediária, desafio); a disponibilidade tem precedência. As alternativas são embaralhadas em cópias, com gabarito remapeado. Nenhuma questão se repete dentro da partida.
 
 O carregador exige pelo menos duas disciplinas e duas questões por disciplina, além de dificuldade válida em cada item. A quantidade de oitenta questões e a distribuição 8/8/4 por matéria são metas de conteúdo verificadas nos testes, não limites fixos do carregador. Alterações de quantidade exigem rever a cobertura e a disponibilidade para quatro salas.
 

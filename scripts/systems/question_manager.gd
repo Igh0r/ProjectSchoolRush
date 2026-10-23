@@ -11,6 +11,11 @@ var selected: Dictionary = {}
 var answered: bool = false
 var pending_reward: String = ""
 var exposure: Dictionary = {}
+var last_seen: Dictionary = {}
+var last_topic: Dictionary = {}
+var topic_exposure: Dictionary = {}
+var offer_number: int = 0
+var session_order: int = 0
 var rng := RandomNumberGenerator.new()
 
 func _init() -> void:
@@ -31,6 +36,8 @@ func reset() -> void:
 	answered = false
 	pending_reward = ""
 	exposure.clear()
+	topic_exposure.clear()
+	offer_number = 0
 	for subject_id in subjects:
 		exposure[subject_id] = 0
 
@@ -63,10 +70,51 @@ func offer() -> Array[Dictionary]:
 		for question in remaining:
 			if question.subject == chosen:
 				pool.append(question)
-		var picked: Dictionary = pool[rng.randi_range(0, pool.size() - 1)]
-		offered.append(picked)
+		var picked := _pick_question(pool)
 		remaining.erase(picked)
+		session_order += 1
+		last_seen[picked.id] = session_order
+		last_topic[chosen] = picked.topic
+		var topic_key: String = chosen + ":" + picked.topic
+		topic_exposure[topic_key] = topic_exposure.get(topic_key, 0) + 1
+		offered.append(_shuffle_options(picked))
+	offer_number += 1
 	return offered
+
+func _pick_question(pool: Array[Dictionary]) -> Dictionary:
+	# Inéditas primeiro; após esgotar, a menos recente. Nunca repõe a partida.
+	var oldest: int = 2147483647
+	for question in pool:
+		oldest = mini(oldest, int(last_seen.get(question.id, 0)))
+	var candidates: Array[Dictionary] = []
+	var best_score: int = 2147483647
+	var desired: String = ["basic", "intermediate", "intermediate", "challenge"][mini(offer_number, 3)]
+	for question in pool:
+		if int(last_seen.get(question.id, 0)) != oldest:
+			continue
+		var topic_key: String = question.subject + ":" + question.topic
+		var repeated_topic: int = int(topic_exposure.get(topic_key, 0)) + int(last_topic.get(question.subject, "") == question.topic)
+		var score: int = repeated_topic * 10 + absi(CATALOG.DIFFICULTIES.find(question.difficulty) - CATALOG.DIFFICULTIES.find(desired))
+		if score < best_score:
+			best_score = score
+			candidates.clear()
+		if score == best_score:
+			candidates.append(question)
+	return candidates[rng.randi_range(0, candidates.size() - 1)]
+
+func _shuffle_options(question: Dictionary) -> Dictionary:
+	var copy := question.duplicate(true)
+	var answer_text: String = copy.options[int(copy.correct)]
+	for i in range(copy.options.size() - 1, 0, -1):
+		var j := rng.randi_range(0, i)
+		var temporary: String = copy.options[i]
+		copy.options[i] = copy.options[j]
+		copy.options[j] = temporary
+	copy.correct = copy.options.find(answer_text)
+	return copy
+
+func difficulty_name(difficulty: String) -> String:
+	return {"basic": "Revisão", "intermediate": "Aplicação", "challenge": "Desafio"}.get(difficulty, "")
 
 func choose(index: int) -> bool:
 	if not selected.is_empty() or index < 0 or index >= offered.size():

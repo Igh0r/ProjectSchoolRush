@@ -124,7 +124,7 @@ func choose_question(index: int) -> void:
 	var choices: Array = []
 	for i in range(4):
 		choices.append({"text": "%s) %s" % [char(65 + i), questions.selected.options[i]], "action": answer_question.bind(i)})
-	ui.show_panel(questions.subject_name(questions.selected.subject), "%s\n%s" % [questions.selected.topic, questions.selected.prompt], choices)
+	ui.show_panel(questions.subject_name(questions.selected.subject), "%s • %s\n%s" % [questions.selected.topic, questions.difficulty_name(questions.selected.difficulty), questions.selected.prompt], choices)
 
 func answer_question(index: int) -> void:
 	if state != State.ANSWER or index < 0 or index > 3:
