@@ -94,6 +94,8 @@ func spawn_enemy(kind: String, point: Vector2, player: CharacterBody2D) -> Node:
 	var enemy = ENEMY_SCENES[kind].instantiate()
 	enemy.position = point
 	enemy.target = player
+	enemy.arena = self
+	enemy.formation_slot = enemies.size()
 	enemy.died.connect(_on_enemy_died)
 	if enemy.has_signal("shot_requested"):
 		enemy.shot_requested.connect(_spawn_projectile)

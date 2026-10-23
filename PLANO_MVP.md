@@ -16,7 +16,7 @@ O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e so
 | --- | --- | --- | --- |
 | D1 — ampliar o conteúdo | Crescer de 20 para 80 questões, em dois lotes: 40 e depois 80; chegar a 20 por disciplina, com tema e dificuldade identificados | Quatro alternativas distintas, uma resposta correta, explicação útil e variedade real de temas; catálogo validado e revisão por ID registrada | Entregue tecnicamente; onze suítes aprovadas; revisão de Igor pendente por ID |
 | D2 — variar a seleção | Priorizar questões ainda não vistas na sessão, variar temas e embaralhar alternativas; introduzir progressão suave de dificuldade | Sem repetição na mesma partida; reiniciar não repete imediatamente as mesmas ofertas quando há opções disponíveis; resposta correta acompanha o embaralhamento | Concluído tecnicamente; doze suítes aprovadas |
-| D3 — melhorar os inimigos | Ajustar posicionamento, separação e recuperação dos cinco inimigos comuns, mantendo avisos legíveis | Cada inimigo tem papel reconhecível; há oportunidade de esquiva e contra-ataque; paredes, pausa, morte e limpeza continuam corretas | Planejado — após D2 |
+| D3 — melhorar os inimigos | Ajustar posicionamento, separação e recuperação dos cinco inimigos comuns, mantendo avisos legíveis | Cada inimigo tem papel reconhecível; há oportunidade de esquiva e contra-ataque; paredes, pausa, morte e limpeza continuam corretas | Concluído tecnicamente; treze suítes aprovadas; sensação final em playtest |
 | D4 — ritmo dos encontros e chefe | Coordenar ataques perigosos nas salas mistas e acrescentar um segundo padrão anunciado ao Napoleão | Ataques sobrepostos preservam espaço de fuga; chefe alterna padrões reconhecíveis; ambas as rotas continuam concluíveis sem bônus | Planejado — após D3 |
 | D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Planejado — após D4 |
 
@@ -44,6 +44,8 @@ Regras para a continuidade de D1/D2:
 - Validar sequências com sementes reproduzíveis, esgotamento do banco, reinícios, equilíbrio das matérias e correspondência entre gabarito e alternativas. Inspecionar enunciados e explicações longos em 960×540.
 
 #### D3 e D4 — combate com decisões mais claras
+
+**Entrega D3 (23/10/2026):** dados e centurião usam separação ao aproximar; dados também alternam o lado da aproximação. Nuvem reposiciona a 45 px/s nos últimos 0,65 s da recuperação, buscando a faixa de 180–260 px; cientista reposiciona a 40 px/s nos últimos 1,2 s, buscando 150–230 px. A fuga é curta e mais lenta que o jogador; avisos mantêm origem/mira fixas. Centurião exibe anel e texto ABERTO na recuperação. Cacto alterna leques de ±0,28 e ±0,50 rad, sempre com três espinhos e linhas correspondentes ao padrão seguinte. Vida, dano e tempos de aviso preservados. Treze suítes aprovadas, incluindo movimento real, separação, paredes, recuperação e correspondência entre aviso e disparo. Capturas em 960×540/1280×720 geradas; amostra de leque/recuperação inspecionada. Próximo trabalho: D4, coordenação e segundo padrão do chefe.
 
 | Inimigo | Papel e melhoria proposta | Como verificar |
 | --- | --- | --- |

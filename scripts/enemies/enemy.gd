@@ -10,6 +10,40 @@ var active: bool = false
 var health: int = 30
 var contact_cooldown: float = 0.0
 var hit_flash: float = 0.0
+var arena: Node
+var formation_slot: int = 0
+
+func steered_velocity(destination: Vector2, speed: float) -> Vector2:
+	var desired := global_position.direction_to(destination) * speed
+	if is_instance_valid(arena):
+		for other in arena.enemies:
+			if other == self or not is_instance_valid(other) or other.health <= 0:
+				continue
+			var away: Vector2 = global_position - other.global_position
+			var spacing: float = body_radius + other.body_radius + 20.0
+			if away.length() < spacing:
+				var strength: float = 1.0 - away.length() / spacing
+				if away.length() < 0.1:
+					away = Vector2.UP if formation_slot < other.formation_slot else Vector2.DOWN
+				desired += away.normalized() * speed * 2.0 * strength
+	return desired.limit_length(speed)
+
+func reposition_velocity(speed: float, near_distance: float, far_distance: float) -> Vector2:
+	var offset := target.global_position - global_position
+	var direction := offset.normalized()
+	if offset.length() < near_distance:
+		direction = -direction
+	elif offset.length() <= far_distance:
+		direction = direction.orthogonal() * (1.0 if formation_slot % 2 == 0 else -1.0)
+	var destination := global_position + direction * 80.0
+	if is_instance_valid(arena):
+		# Pontos dentro da arena evitam insistir numa fuga para fora das paredes.
+		destination = arena.to_global(arena.to_local(destination).clamp(Vector2(48, 48), Vector2(752, 372)))
+	return steered_velocity(destination, speed)
+
+func draw_recovery() -> void:
+	draw_arc(Vector2.ZERO, body_radius + 9.0, 0, TAU, 32, Color("83e6ff"), 2.0)
+	draw_string(ThemeDB.fallback_font, Vector2(-29, -body_radius - 24), "ABERTO", HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color("83e6ff"))
 
 func _ready() -> void:
 	health = max_health
@@ -56,7 +90,10 @@ func _physics_process(delta: float) -> void:
 		return
 	contact_cooldown = maxf(0.0, contact_cooldown - delta)
 	hit_flash = maxf(0.0, hit_flash - delta)
-	velocity = global_position.direction_to(target.global_position) * 100.0
+	var destination := target.global_position
+	if global_position.distance_to(destination) > 75.0:
+		destination += global_position.direction_to(destination).orthogonal() * (26.0 if formation_slot % 2 == 0 else -26.0)
+	velocity = steered_velocity(destination, 100.0)
 	visual_direction = velocity
 	move_and_slide()
 	if global_position.distance_to(target.global_position) < 32.0 and contact_cooldown <= 0.0:

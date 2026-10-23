@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 	velocity = Vector2.ZERO
 	if phase == Phase.APPROACH:
 		if global_position.distance_to(target.global_position) > 95.0:
-			velocity = global_position.direction_to(target.global_position) * 85.0
+			velocity = steered_velocity(target.global_position, 85.0)
 			visual_direction = velocity
 		else:
 			attack_direction = global_position.direction_to(target.global_position)
@@ -51,6 +51,8 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if phase == Phase.RECOVERY:
+		draw_recovery()
 	if phase in [Phase.WARNING, Phase.STRIKE]:
 		var polygon := PackedVector2Array([Vector2.ZERO])
 		for i in range(17):
