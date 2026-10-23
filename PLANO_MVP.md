@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (23/10/2026):** playtest interno aprovado pelo usuário e Igor; base aceita para evolução. B1–B4 e C1–C3 concluídos. **D1 entregue tecnicamente no projeto 0.3.0-dev1: oitenta questões para Ensino Médio**, com tema e dificuldade. Permanecem seis monstros com sprites, duas rotas de quatro salas e quatro pisos. Última build Windows: **0.2.0-rc2**, ainda com vinte questões; nova candidata prevista em D5. Próximo bloco: D2, seleção variada. Revisão pedagógica por questão e execução em outro PC não foram confirmadas pelo relato. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (23/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 implementados e candidata Windows 0.3.0-rc1 preparada:** oitenta questões para Ensino Médio, histórico na sessão, alternativas embaralhadas, movimento inimigo aprimorado, coordenação de ataques e varredura do Napoleão. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Quatorze suítes aprovadas e inicialização standalone validada. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -18,7 +18,7 @@ O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e so
 | D2 — variar a seleção | Priorizar questões ainda não vistas na sessão, variar temas e embaralhar alternativas; introduzir progressão suave de dificuldade | Sem repetição na mesma partida; reiniciar não repete imediatamente as mesmas ofertas quando há opções disponíveis; resposta correta acompanha o embaralhamento | Concluído tecnicamente; doze suítes aprovadas |
 | D3 — melhorar os inimigos | Ajustar posicionamento, separação e recuperação dos cinco inimigos comuns, mantendo avisos legíveis | Cada inimigo tem papel reconhecível; há oportunidade de esquiva e contra-ataque; paredes, pausa, morte e limpeza continuam corretas | Concluído tecnicamente; treze suítes aprovadas; sensação final em playtest |
 | D4 — ritmo dos encontros e chefe | Coordenar ataques perigosos nas salas mistas e acrescentar um segundo padrão anunciado ao Napoleão | Ataques sobrepostos preservam espaço de fuga; chefe alterna padrões reconhecíveis; ambas as rotas continuam concluíveis sem bônus | Concluído tecnicamente; quatorze suítes aprovadas; dificuldade humana a confirmar |
-| D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Planejado — após D4 |
+| D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Entrega técnica preparada; playtest e revisão humana pendentes |
 
 #### D1 e D2 — perguntas para Ensino Médio
 
@@ -60,18 +60,28 @@ Começar pelo movimento e pelas janelas de ataque, mantendo vida e dano atuais c
 
 Para as salas mistas, propor um coordenador simples de ataques: iniciar com no máximo dois ataques especiais em preparação/execução, contando projéteis e áreas ainda ativos como pressão. Calibrar esse limite no playtest; o número sozinho não comprova uma rota de fuga. Inimigos que aguardam continuam se posicionando. Pausa congela a coordenação; morte, fim da sala e reinício liberam reservas para evitar bloqueios. Verificar visualmente os encontros mais carregados, especialmente perto das paredes.
 
-#### D5 — evidência e versionamento
-
 **Entrega D4 (23/10/2026):** no máximo dois ataques especiais por vez, incluindo fontes com tiros/misturas ainda ativos. Uma fila atende os atacantes que aguardam; sair do alcance, morrer, encerrar a sala ou reiniciar remove solicitações. Inimigos móveis continuam reposicionando enquanto aguardam. Pausa congela os ataques e impede concessão de vagas. O teto é por ataque/fonte: os três espinhos de um leque ocupam uma vaga até sumirem; dano de contato dos dados é independente.
 
 Napoleão preserva a investida e ganha VARREDURA: setor de 125 px e ±0,9 rad, mira fixa, aviso de 0,9 s, um acerto de 20, efeito de 0,2 s e recuperação de 1,2 s com ABERTO. Depois da investida, aproxima a 100 px/s por até 1,6 s para tentar varrer; se o jogador continuar distante, anuncia outra investida. Após varrer, volta à investida. Vida e dano anteriores preservados. Dicas e HUD explicam os dois avisos.
 
 Quatorze suítes passaram. A nova suíte verifica teto, espera até sumir o perigo, pausa, morte/limpeza, direção fixa, esquiva, dano único e transições do chefe. Uma simulação real de dez segundos com nuvem, cientista e centurião confirmou ataques recorrentes de todos sem ultrapassar o teto. Capturas dos dois avisos e recuperação do chefe inspecionadas em 960×540/1280×720. Isso não mede diversão nem garante esquiva de todas as combinações; pressão perto das paredes é foco da próxima rodada humana.
 
-- Executar as onze suítes existentes e ampliar a cobertura somente para regras novas: seleção e histórico, embaralhamento, movimento, padrões e coordenação de ataques. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
+#### D5 — evidência e versionamento
+
+**Preparação técnica (23/10/2026, 0.3.0-rc1):**
+
+- Quatorze suítes aprovadas sem falhas; exportação Windows x64 e inicialização standalone aprovadas. Registro local em `builds/validation-0.3.0-rc1.log`.
+- Pacote: `builds/SchoolRush-MVP-0.3.0-rc1-windows-x64.zip`. Inclui executável com conteúdo embutido, guia, plano, roteiro, avisos do Godot, referências de arte e a ficha/cópia do catálogo para revisão. O JSON ao lado do executável é uma referência; alterações nele não modificam o jogo exportado.
+- Capturas de textos com os novos rótulos, dicas, leques, varredura, investida e recuperação inspecionadas em 960×540/1280×720. Encontro misto junto à parede capturado com avisos e perigos ativos; ainda precisa da avaliação humana de pressão e esquiva.
+- Mantidas as quantidades, vida e dano dos inimigos anteriores. Não houve medição humana de duração, taxa de vitória ou dificuldade desta candidata; os testes de fluxo que eliminam inimigos por código não comprovam balanceamento. O alvo de 5–8 minutos continua em avaliação.
+- Commits separados para D2, D3 e D4, com pushes. A candidata encerra a entrega técnica desta rodada, sem declarar D5 ou a revisão pedagógica concluídos.
+
+Continuidade de D5:
+
+- Manter as quatorze suítes e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
 - Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
 - Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
-- Atualizar este plano e o roteiro a cada bloco, registrando o que foi entregue, testes e pendências. Fazer commits e pushes por etapa validada. O desenvolvimento começa em 0.3.0-dev1; preparar a candidata 0.3.0-rc1 ao concluir a fase. A última distribuição permanece 0.2.0-rc2 até uma nova exportação.
+- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc1 é a candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
 
 Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
 
@@ -167,7 +177,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa após D1:** executar D2 — histórico da sessão, variedade temática, embaralhamento e progressão suave de dificuldade. Seguir D3 → D4 → D5, atualizando este documento a cada entrega. A revisão de Igor acompanha os lotes de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
+**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc1 e ajustar os encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -185,7 +195,7 @@ A tabela registra o recorte atual. B2 ampliou as disciplinas; B3/B4 adicionaram 
 | Pisos de sala de aula, pátio, laboratório e ginásio | Biblioteca e cenários completos com objetos/colisões próprios |
 | Movimento, corrida sem stamina e régua de plástico | Lapiseira, níveis de arma, poderes e inventário |
 | Dado, nuvem, centurião, cacto e cientista | Babuíno, NPC vendedor e loja |
-| Napoleão com um ataque telegrafado | Múltiplas fases e padrões do chefe |
+| Napoleão com investida e varredura anunciadas | Fases adicionais, invocações e novos chefes |
 | Matemática, História, Ciências e Português, vinte questões por matéria no projeto D1 | Outras matérias, puzzles e travessias especiais |
 | Vida, sala atual, resultado da pergunta e recompensa no HUD | Pontuação competitiva e metaprogressão |
 | Início, pausa, derrota, vitória e reinício | Save, narração e configurações avançadas |
@@ -200,7 +210,7 @@ Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público de
 3. Acerto reserva uma recompensa; ela só é aplicada após eliminar todos os inimigos da sala. Matemática concede +2 de dano da régua; História recupera 20 de vida, limitada ao máximo; Ciências amplia o máximo em 10 e recupera 10; Português soma 5% da velocidade inicial, com limite acumulado de 20%. Exibir os valores na interface.
 4. Erro mostra a resposta correta e não reserva bônus. O jogador ainda pode concluir a sala e avançar. Não retirar vida nem repetir a pergunta como punição.
 5. A porta permanece fechada durante o combate. Ao limpar a sala, aplicar o bônus uma vez e permitir avançar com E perto da porta. Avançar abre a escolha da próxima sala; não usar transição automática por contato.
-6. Repetir o fluxo antes das quatro salas, incluindo o chefe. Uma questão apresentada sai do conjunto da partida mesmo se não for escolhida: quatro salas consomem oito das oitenta questões no projeto D1. Reiniciar ainda repõe o banco e todos os atributos; histórico entre partidas será introduzido no D2.
+6. Repetir o fluxo antes das quatro salas, incluindo o chefe. Uma questão apresentada sai do conjunto da partida mesmo se não for escolhida: quatro salas consomem oito das oitenta questões. Reiniciar restaura os atributos e a disponibilidade da partida, preservando o histórico da sessão para priorizar inéditas; só fechar o jogo limpa esse histórico. Embaralhar alternativas preserva resposta correta e explicação.
 7. Vida zero encerra imediatamente a partida; não há reinício só da sala. Matar o chefe e permanecer vivo encerra com vitória. Se ambos morrerem no mesmo passo de simulação, derrota tem precedência.
 8. Esc pausa apenas durante combate ou sala liberada. Retomar preserva o estado anterior. Telas finais oferecem reiniciar e voltar ao início.
 
@@ -269,7 +279,7 @@ Checklist manual obrigatório da entrega:
 - Acerto aplica um bônus após a sala; erro aplica zero; cura não excede o máximo atual; morte antes de limpar cancela bônus. Ciências amplia o limite e Português respeita o teto de velocidade.
 - A porta só abre sem inimigos; interagir repetidamente não pula salas; chefe só aparece na quarta sala.
 - Pausar interrompe movimento, dano e temporizadores; retomar não deixa o jogo congelado.
-- Vitória/derrota bloqueiam combate; reiniciar três vezes não mantém bônus, perguntas consumidas ou inimigos anteriores.
+- Vitória/derrota bloqueiam combate; reiniciar três vezes não mantém bônus ou inimigos anteriores. Histórico de perguntas persiste intencionalmente na sessão, sem impedir novas ofertas.
 - Redimensionar a janela preserva HUD e alternativas; texto é legível; feedback de acerto/erro usa texto além de cor.
 - Build Windows abre numa máquina sem Godot e completa uma partida sem erro bloqueante.
 
@@ -280,7 +290,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 ## Riscos e decisões de corte
 
 - Escopo: seis inimigos, quatro cenários, duas armas e loja comprometem a entrega. Manter apenas o conjunto incluído neste documento.
-- Conteúdo: D1 ampliou para vinte questões por matéria. Revisar correção e dificuldade e implementar D2 para reduzir repetição entre partidas; quantidade sozinha não garante variedade percebida.
+- Conteúdo: D1 ampliou para vinte questões por matéria e D2 reduz repetição entre partidas. Revisar correção, dificuldade e variedade percebida no próximo playtest.
 - Integração: arte pode atrasar programação. Usar formas provisórias até o ciclo completo funcionar; substituir sem alterar colisões sem revisão.
 - Balanceamento: dano cumulativo pode simplificar o chefe. Medir partidas com zero e quatro acertos; ajustar bônus e chefe juntos.
 - Prazo: se atrasar, reduzir as salas comuns de três para duas e simplificar arte/áudio. Preservar perguntas, combate, recompensa, chefe e telas finais.
@@ -337,7 +347,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 | Testar a pasta exportada em outro PC sem Godot | Equipe | Execução externa não confirmada; verificar vitória, derrota e reinício na próxima entrega |
 | Ampliar avaliação com participantes externos | Equipe | Rodada complementar opcional, conforme disponibilidade |
 
-O aceite interno autoriza a evolução planejada. A promoção de uma candidata a versão final deve registrar revisão pedagógica e validação de distribuição, sem presumir que o relato geral confirmou cada item. Esta atualização não gera nova build.
+O aceite interno da base autorizou a evolução. A 0.3.0-rc1 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
 
 ### Histórico de versionamento
 
@@ -357,4 +367,8 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `be2482c`: C2 — expedição científica, cacto, cientista, quatro pisos e testes.
 - `f87f4d4`: C3 — versão 0.2.0-rc2, roteiro de duas rotas e pacote Windows.
 - `ca8e59b`: aceite interno registrado e fase D1–D5 planejada.
-- D1: oitenta questões, dificuldade, revisão por ID, testes e capturas; projeto 0.3.0-dev1 (consultar `git log` para o hash).
+- `08caf92`: D1 — oitenta questões, dificuldade, revisão por ID, testes e capturas; projeto 0.3.0-dev1.
+- `bc8daed`: D2 — histórico na sessão, preferências de tema/dificuldade e alternativas embaralhadas.
+- `9925a60`: D3 — separação, reposicionamento, recuperação visível e leques do cacto.
+- `8c14cf9`: D4 — coordenação de ataques especiais e varredura do Napoleão.
+- D5 técnico: candidata 0.3.0-rc1, guia, roteiro e pacote para a próxima rodada (consultar `git log` para o hash).

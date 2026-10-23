@@ -1,6 +1,6 @@
-# School Rush — desenvolvimento 0.3.0-dev1
+# School Rush — MVP 0.3.0-rc1
 
-O projeto-fonte inclui o bloco D1, com oitenta questões. A última distribuição Windows continua sendo a 0.2.0-rc2, com vinte questões; seu executável não é atualizado ao editar o projeto. Para experimentar o conteúdo novo agora, execute o projeto no Godot. A próxima candidata Windows está prevista no bloco D5.
+A candidata 0.3.0-rc1 reúne oitenta questões, histórico durante a sessão, alternativas embaralhadas, novos movimentos dos inimigos e dois ataques do Napoleão. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
 
 ## Jogar
 
@@ -38,16 +38,20 @@ Vença três salas e Napoleão no ginásio. O golpe da régua atinge um cone na 
 | 1 | Dois dados | Eles perseguem e causam dano por contato; golpeie e recue |
 | 2 | Dois dados e uma nuvem | O aviso DISPARO e a linha marcam a mira fixa; desvie para o lado e aproxime-se entre tiros |
 | 3 | Dois dados, uma nuvem e um centurião | O setor marcado GOLPE anuncia o ataque frontal; saia do setor e ataque na recuperação |
-| 4 | Napoleão | Desvie da linha amarela e aproveite a recuperação entre investidas |
+| 4 | Napoleão | Saia da linha de INVESTIDA ou do setor de VARREDURA; ataque quando aparecer ABERTO |
 
 A nuvem e o centurião param de mirar ao iniciar o aviso. Tiros desaparecem nas paredes, ao atingir o jogador ou quando a nuvem morre. A pausa congela monstros e projéteis.
+
+Dados se aproximam por lados diferentes e procuram se separar. Nuvem e cientista se movem entre ataques; o centurião sinaliza a recuperação com um anel azul e ABERTO. Nas salas mistas, até dois ataques especiais ficam em andamento, incluindo tiros e áreas ainda ativos. Os dados continuam causando dano por contato.
+
+Napoleão tenta se aproximar após a investida para usar a varredura. O setor amarelo fica fixo por 0,9 s antes de causar dano: afaste-se ou passe para trás dele. Ambos os golpes abrem 1,2 s de recuperação.
 
 Na **Expedição científica**, os encontros mudam:
 
 | Sala | Ambiente e inimigos | Nova ameaça |
 | --- | --- | --- |
 | 1 | Sala de aula: dois dados | Aquecimento com os controles |
-| 2 | Pátio: dado, cacto e nuvem | ESPINHOS: o cacto fica parado e marca três direções antes de atirar |
+| 2 | Pátio: dado, cacto e nuvem | ESPINHOS: o cacto alterna leques estreitos/largos; as três linhas mostram o próximo disparo |
 | 3 | Laboratório: dado, centurião, cientista e nuvem | MISTURA: saia do círculo marcado antes de ficar verde; a área ativa dura 1,2 s |
 | 4 | Ginásio: Napoleão | Mesmo chefe da rota clássica |
 
@@ -70,7 +74,7 @@ No PowerShell, na pasta do projeto:
 .\tools\check.ps1 -Godot 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' -Export
 ```
 
-O segundo comando executa as onze suítes (catálogo, combate, progressão, partida, movimento, vida, recompensas, monstros, encontros, arte e rota científica) e exporta `builds/windows/SchoolRush.exe`, com os recursos e o catálogo JSON embutidos. Distribua a pasta `windows` junto com `GODOT_NOTICES.txt`, este guia, `PLAYTEST.md` e `ART_ANALYSIS.md`. Builds, capturas e caches não entram no Git.
+O segundo comando executa as quatorze suítes, incluindo variedade de questões, movimento inimigo e coordenação dos ataques, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
 
 Para revisar questões ou ajustar recompensas, siga [data/README.md](data/README.md) no projeto-fonte e gere uma nova build.
 
@@ -82,6 +86,8 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_preview.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_enemies.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_expansion.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_catalog.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_combat_phase.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.

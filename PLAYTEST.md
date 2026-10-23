@@ -1,8 +1,8 @@
 # School Rush — playtest aprovado e acompanhamento da fase 0.3
 
-Atualizado em 23/10/2026. **Playtest interno aprovado pelo usuário e Igor.** Público: Ensino Médio. Build de referência disponível: 0.2.0-rc2, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
+Atualizado em 23/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc1**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
 
-**D1 disponível no projeto 0.3.0-dev1:** oitenta questões, vinte por matéria, classificadas por tema e dificuldade. Onze suítes aprovadas e capturas de textos extensos conferidas. Executar pelo Godot; a distribuição 0.2.0-rc2 continua com o catálogo anterior. Histórico entre partidas, embaralhamento e uso da dificuldade estão previstos para D2; combate novo, para D3/D4. Não houve novo playtest humano desse conteúdo nesta entrega.
+**D1–D4 implementados:** oitenta questões, histórico na sessão, preferências de tema/dificuldade e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques e varredura do chefe. Quatorze suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
 
 ## Resultado informado em 23/10/2026
 
@@ -24,7 +24,7 @@ Comparar a base aprovada com a candidata resultante da fase D. Usuário e Igor a
 | Encontros e chefe | Sobreposição de perigos, espaço de fuga e distinção dos dois padrões previstos | Sala, posição e combinação de ataques |
 | Balanceamento | Duração e dificuldade com e sem recompensas | Tempo, acertos, sala final e causa da derrota |
 
-Os comportamentos da fase D ainda são planejados. Preencher os itens correspondentes quando estiverem disponíveis; manter abaixo o roteiro de regressão da base.
+Os comportamentos D1–D4 estão disponíveis na candidata. Jogar duas partidas seguidas sem fechar o jogo para avaliar variedade; repetir as rotas e registrar em qual sala/padrão ocorreram ataques difíceis de evitar. Como houve mudança no combate, registrar o retorno desta rodada separadamente do aceite anterior.
 
 ## Sessão complementar com jogadores
 
@@ -52,6 +52,13 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 - [ ] Movimento, diagonal, corrida, régua e paredes respondem bem no teclado.
 - [ ] A barra acompanha dano, cura e aumento da vida máxima; vida baixa fica clara.
 - [ ] As quatro matérias aparecem; escolher/responder rapidamente não duplica ações.
+- [ ] Reiniciar e voltar ao menu preservam prioridade de perguntas inéditas; fechar o jogo inicia novo histórico.
+- [ ] Alternativas mudam de posição e o feedback continua indicando a resposta correta.
+- [ ] Dados se separam, nuvem/cientista reposicionam entre ataques e continuam alcançáveis.
+- [ ] ABERTO comunica a oportunidade de contra-ataque do centurião e do chefe.
+- [ ] Os leques estreitos/largos do cacto correspondem às linhas de aviso.
+- [ ] Na sala mista, observar sobreposição de perigos e saída possível perto das paredes.
+- [ ] INVESTIDA e VARREDURA são distinguíveis; sair do setor fixo evita o golpe do chefe.
 - [ ] Acerto só premia após o combate; erro permite seguir; morte cancela o bônus.
 - [ ] DISPARO anuncia direção fixa; o tiro permite esquiva e para nas paredes.
 - [ ] GOLPE anuncia o setor antes do dano; sair do setor evita o golpe; a recuperação permite contra-atacar.
@@ -94,7 +101,9 @@ A base tinha 420 de vida total e exigia 42 golpes nas mesmas condições. O aume
 
 Na expedição científica, os totais por sala são 60, 90, 135 e 150 de vida: **435 no total**, com **46 golpes** nas mesmas condições. O cacto tem 35 de vida e dispara três espinhos de 8 de dano após 0,95 s; o cientista tem 35 de vida e marca uma mistura de raio 42, com aviso de 1 s, duração ativa de 1,2 s e no máximo um acerto de 10. A posição da mistura fica limitada à arena. Avaliar separadamente a pressão desses ataques na segunda rota.
 
-Mantivemos no máximo uma nuvem e um centurião por sala; a nova rota acrescenta um cacto no pátio e um cientista no laboratório, substituindo outros inimigos. A nuvem avisa por 0,8 s e se recupera por 1,2 s; o centurião avisa por 0,75 s e se recupera por 1,1 s após o golpe. A primeira sala e Napoleão preservam os parâmetros anteriores. Não aumentar a quantidade simultânea antes de observar os jogadores.
+Mantivemos no máximo uma nuvem e um centurião por sala; a rota científica acrescenta cacto no pátio e cientista no laboratório, substituindo outros inimigos. Nuvem avisa por 0,8 s e recupera por 1,2 s; centurião avisa por 0,75 s e recupera por 1,1 s. O novo coordenador limita a dois ataques especiais/fonte em andamento, contando tiros/áreas ainda ativos. Um leque de três espinhos ocupa uma vaga. Dados não usam vagas de ataques especiais.
+
+Napoleão mantém 150 de vida e investida de 20 de dano. A nova varredura também causa 20, uma única vez, em um setor de 125 px e ±0,9 rad após aviso fixo de 0,9 s; efeito de 0,2 s e recuperação de 1,2 s. A aproximação antes da varredura dura até 1,6 s a 100 px/s. Se o jogador estiver distante, o chefe anuncia outra investida. Comparar a pressão desses comportamentos com a base aprovada, mantendo as quantidades e a vida dos inimigos como referência.
 
 Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se reconhecer o aviso, mas não conseguir escapar, revisar duração e alcance. Se o combate ficar longo mesmo com esquivas e ataques consistentes, revisar vida e tempo de recuperação. Alterar um parâmetro por vez, registrar o motivo e repetir o teste afetado.
 
@@ -107,4 +116,4 @@ Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se recon
 - Duração de partidas concluídas avaliada contra o alvo de 5–8 minutos; registrar decisão caso o alvo seja revisto.
 - Sensação dos controles/áudio e execução em outro PC aprovadas pela equipe.
 
-Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base já recebeu aceite interno para evolução; estes critérios orientam a próxima entrega. A fase D prevê 0.3.0-rc1, sem promoção automática da build atual para versão final.
+Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc1, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.

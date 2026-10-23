@@ -46,6 +46,32 @@ func capture() -> void:
 	root.size = Vector2i(1280, 720)
 	boss._physics_process(1.21)
 	await save_preview("47-boss-charge-warning")
+	root.size = Vector2i(960, 540)
+	game.start_run(1)
+	game.room_index = 2
+	game.choose_question(0)
+	game.answer_question(0)
+	game.begin_combat()
+	game.room.clear_enemies()
+	game.room.set_combat(true)
+	game.player.position = Vector2(65, 65)
+	var cloud = game.room.spawn_enemy("cloud", Vector2(250, 65), game.player)
+	var scientist = game.room.spawn_enemy("scientist", Vector2(250, 150), game.player)
+	guard = game.room.spawn_enemy("centurion", Vector2(150, 65), game.player)
+	for enemy in game.room.enemies:
+		enemy.set_physics_process(false)
+	cloud._physics_process(0.01)
+	scientist._physics_process(0.01)
+	guard._physics_process(0.01)
+	var mixture = game.room.mixtures[0]
+	mixture.set_physics_process(false)
+	await save_preview("48-mixed-corner-warning")
+	game.player.position = Vector2(65, 230)
+	cloud._physics_process(0.81)
+	mixture._physics_process(1.01)
+	for shot in game.room.projectiles:
+		shot.set_physics_process(false)
+	await save_preview("49-mixed-corner-hazards")
 	await process_frame
 	game.queue_free()
 	await process_frame
