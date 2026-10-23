@@ -2,9 +2,61 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (22/10/2026):** base jogável, B1–B4 e C1–C3 concluídos. Seis monstros com sprites, duas rotas de quatro salas, quatro pisos e vinte questões para **Ensino Médio**. Candidata Windows disponível: **0.2.0-rc2**. B5/M5 permanecem abertos para playtest humano, revisão pedagógica e validação em outro PC. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e roteiro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (23/10/2026):** playtest interno aprovado pelo usuário e Igor; base aceita para evolução. B1–B4 e C1–C3 concluídos: seis monstros com sprites, duas rotas de quatro salas, quatro pisos e vinte questões para **Ensino Médio**. Build de referência disponível: **0.2.0-rc2**. A nova fase prioriza variedade das perguntas e melhoria do combate, conforme os blocos D1–D5 abaixo. Revisão pedagógica por questão e execução em outro PC não foram confirmadas pelo relato. Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
+
+### Nova fase — variedade e combate (23/10/2026)
+
+O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e solicitaram mais variedade de perguntas e melhorias no combate dos inimigos. Esse aceite permite prosseguir; a proposta anterior de cinco participantes externos passa a ser uma rodada complementar, sem bloquear esta fase. Não foram informados tempos, contagem de partidas ou resultados por item do roteiro.
+
+**Objetivo:** tornar as partidas repetidas mais interessantes, com perguntas de temas e raciocínios diferentes e inimigos que exijam decisões de posicionamento, esquiva e contra-ataque. Preservar as duas rotas, quatro salas, quatro disciplinas, recompensas e controles já aprovados. Os números e comportamentos abaixo são metas propostas para implementação e ajuste, não funcionalidades já entregues.
+
+| Bloco | Entrega planejada | Critério de aceite | Situação |
+| --- | --- | --- | --- |
+| D1 — ampliar o conteúdo | Crescer de 20 para 80 questões, em dois lotes: 40 e depois 80; chegar a 20 por disciplina, com tema e dificuldade identificados | Quatro alternativas distintas, uma resposta correta, explicação útil e variedade real de temas; catálogo validado e revisão por ID registrada | Planejado — próximo bloco |
+| D2 — variar a seleção | Priorizar questões ainda não vistas na sessão, variar temas e embaralhar alternativas; introduzir progressão suave de dificuldade | Sem repetição na mesma partida; reiniciar não repete imediatamente as mesmas ofertas quando há opções disponíveis; resposta correta acompanha o embaralhamento | Planejado — após D1 |
+| D3 — melhorar os inimigos | Ajustar posicionamento, separação e recuperação dos cinco inimigos comuns, mantendo avisos legíveis | Cada inimigo tem papel reconhecível; há oportunidade de esquiva e contra-ataque; paredes, pausa, morte e limpeza continuam corretas | Planejado — após D2 |
+| D4 — ritmo dos encontros e chefe | Coordenar ataques perigosos nas salas mistas e acrescentar um segundo padrão anunciado ao Napoleão | Ataques sobrepostos preservam espaço de fuga; chefe alterna padrões reconhecíveis; ambas as rotas continuam concluíveis sem bônus | Planejado — após D3 |
+| D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Planejado — após D4 |
+
+#### D1 e D2 — perguntas para Ensino Médio
+
+- Manter Matemática, História, Ciências e Português. Meta por disciplina: ao menos quatro temas, com questões conceituais, aplicação e interpretação; trocar apenas números ou palavras não conta como variedade suficiente. Ciências deve contemplar Biologia, Física e Química.
+- Proposta de distribuição por disciplina: oito questões básicas de revisão, oito intermediárias e quatro de desafio. A classificação deve refletir o raciocínio necessário e ser revisada por Igor; não vincular dificuldade somente ao tamanho do enunciado.
+- Acrescentar dificuldade ao catálogo, preservando IDs estáveis e o campo de tema existente. Atualizar validação e `data/README.md` junto com a implementação. Registrar revisão de enunciado, alternativas, gabarito e explicação por ID, inclusive das vinte questões atuais.
+- Priorizar questões não apresentadas em partidas anteriores da mesma sessão, contando também as ofertas não escolhidas. Ao esgotar as opções, reutilizar as menos recentes, sempre excluindo as já apresentadas na partida atual. Fechar o jogo encerra esse histórico; save permanente fica fora desta fase.
+- Preservar duas matérias diferentes por sala, todas as quatro matérias nas duas primeiras salas e duas aparições de cada matéria por partida. A seleção começa por revisão básica e amplia a presença de questões intermediárias/desafio nas últimas salas, sem travar quando um grupo se esgota.
+- Embaralhar alternativas sem alterar o catálogo original, remapeando a resposta correta e o feedback. Prioridade da seleção: regras da partida e disponibilidade, novidade na sessão, variedade de tema e dificuldade desejada; flexibilizar tema/dificuldade antes de reutilizar questões recentes.
+- Validar sequências com sementes reproduzíveis, esgotamento do banco, reinícios, equilíbrio das matérias e correspondência entre gabarito e alternativas. Inspecionar enunciados e explicações longos em 960×540.
+
+#### D3 e D4 — combate com decisões mais claras
+
+| Inimigo | Papel e melhoria proposta | Como verificar |
+| --- | --- | --- |
+| Dado | Pressão próxima; reduzir amontoamento com separação e aproximações por posições diferentes | Dois dados não permanecem sobrepostos nem empurram o jogador através das paredes; dano por contato respeita os intervalos |
+| Nuvem | Ataque à distância; buscar uma faixa de distância e reposicionar entre disparos | Não foge indefinidamente; jogador consegue alcançar e contra-atacar; mira continua fixa durante o aviso |
+| Centurião | Ataque frontal forte; melhorar aproximação e tornar a recuperação após errar mais perceptível | Sair do setor evita dano e abre uma janela clara para atacar; golpe não acompanha o jogador durante o aviso |
+| Cacto | Controle de espaço; alternar duas aberturas de espinhos, anunciando as trajetórias reais | Ambos os padrões deixam brechas utilizáveis e não geram dano antes do fim do aviso |
+| Cientista | Área temporária; reposicionar entre misturas e coordenar sua ativação com outros perigos | Marca permanece fixa após o aviso começar; jogador consegue sair; mistura continua com no máximo um acerto |
+| Napoleão | Combinar a investida existente com um golpe frontal de curto alcance, cada um com aviso e recuperação próprios | Padrão é reconhecível antes do dano; não há troca de direção após travar a mira nem sequência sem recuperação |
+
+Começar pelo movimento e pelas janelas de ataque, mantendo vida e dano atuais como referência. Ajustar um comportamento por vez antes de alterar números. Preservar no máximo quatro inimigos simultâneos e entrada protegida; não adicionar novas espécies, ondas ou salas nesta fase.
+
+Para as salas mistas, propor um coordenador simples de ataques: iniciar com no máximo dois ataques especiais em preparação/execução, contando projéteis e áreas ainda ativos como pressão. Calibrar esse limite no playtest; o número sozinho não comprova uma rota de fuga. Inimigos que aguardam continuam se posicionando. Pausa congela a coordenação; morte, fim da sala e reinício liberam reservas para evitar bloqueios. Verificar visualmente os encontros mais carregados, especialmente perto das paredes.
+
+#### D5 — evidência e versionamento
+
+- Executar as onze suítes existentes e ampliar a cobertura somente para regras novas: seleção e histórico, embaralhamento, movimento, padrões e coordenação de ataques. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
+- Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
+- Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
+- Atualizar este plano e o roteiro a cada bloco, registrando o que foi entregue, testes e pendências. Fazer commits e pushes por etapa validada. Preparar a candidata 0.3.0-rc1 ao concluir a fase; esta revisão documental mantém a versão executável 0.2.0-rc2.
+
+Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
+
+### Histórico das expansões anteriores
+
+Os registros datados abaixo descrevem o estado de cada entrega. Referências a playtest pendente em 19–22/10 são históricas; o aceite interno de 23/10 está registrado acima.
 
 ### Expansão autorizada em 22/10/2026 — arte e conteúdo
 
@@ -44,7 +96,7 @@ A expansão será entregue em blocos, preservando o ciclo de quatro salas. Os ma
 | B2 — disciplinas | Ciências e Português, cinco questões por matéria, ofertas variadas e recompensas configuráveis | Concluído; vinte questões para Ensino Médio, sete suítes aprovadas |
 | B3 — monstros | Nuvem com ataque à distância e centurião com golpe frontal anunciado; cenas preparadas para sprites | Concluído; oito suítes aprovadas, integração dos encontros em B4 |
 | B4 — encontros | Apresentar inimigos gradualmente e misturar comportamentos nas salas | Concluído; nove suítes aprovadas |
-| B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Candidata 0.2.0-rc1 exportada e validada tecnicamente; aceite humano pendente |
+| B5 — validação | Balanceamento, playtest e nova build da versão 0.2 completa | Entrega técnica sucedida pela 0.2.0-rc2; playtest interno aprovado em 23/10; acompanhamento pedagógico e de distribuição abaixo |
 
 Aceite de B1: barra e texto devem acompanhar dano, cura e mudança da vida máxima; cura não ultrapassa o limite; vida baixa usa aviso textual; reinício restaura vida e limite iniciais sem exibir uma cura falsa. Este bloco não adiciona ainda novas recompensas ou disciplinas.
 
@@ -94,7 +146,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa após C3:** testar as duas rotas com jogadores, revisar questões e preparar frames limpos de Matheus/Alice. O jogador, armas, HUD e efeitos ainda usam visuais provisórios; os pacotes dessas categorias são referências, conforme a análise. Promover a candidata à versão final somente após os aceites humanos. Novas expansões dependerão da direção dada pelo usuário e dos resultados do playtest.
+**Próxima etapa após o playtest:** executar D1, começando pelo lote de quarenta questões e pela classificação de tema/dificuldade. Seguir D2 → D3 → D4 → D5, atualizando este documento a cada entrega. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -149,7 +201,7 @@ Valores de partida para experimentar, não metas finais.
 | Napoleão | 150 de vida; investida de 20 de dano |
 | Ciclo do chefe | Mira fixa com aviso de 0,8 s, investida de até 0,5 s a 420 px/s, recuperação de 1,2 s |
 
-A investida de Napoleão termina ao atingir parede; não reposiciona a mira durante o aviso. O chefe não invoca inimigos nem dispara projéteis; projéteis pertencem apenas à nuvem. Na sala liberada e nas interfaces não ocorre dano. Ataques de régua e centurião têm área frontal, para que posicionamento seja relevante. Validar duração e dificuldade em playtest antes de adicionar conteúdo.
+A investida de Napoleão termina ao atingir parede; não reposiciona a mira durante o aviso. Na versão atual, o chefe não invoca inimigos nem dispara projéteis; nuvem e cacto usam projéteis. Na sala liberada e nas interfaces não ocorre dano. Ataques de régua e centurião têm área frontal, para que posicionamento seja relevante. Na fase D, comparar duração e dificuldade com a base aprovada.
 
 ## Organização técnica proposta
 
@@ -182,7 +234,7 @@ Estimativa: seis semanas de trabalho parcial da equipe. Como a disponibilidade n
 | M4 — conclusão | Semana 5 | Moisés implementa chefe, início, pausa e telas finais; Matheus anima aviso de ataque; Eduardo prepara ginásio | Partida completa até vitória ou derrota; chefe comunica ataque antes do dano; reinício limpa todo o estado |
 | M5 — entrega | Semana 6 | Todos testam; Igor balanceia; Moisés exporta; arte/áudio essenciais entram sem expandir escopo | Build Windows executa sem editor, controles documentados e todos os casos críticos abaixo aprovados |
 
-Caminho crítico da base: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Na expansão, seguir B3 → B4 → B5, mantendo aberto o playtest da versão atual. Não começar pela loja ou arte definitiva.
+Caminho crítico da base: movimento → combate → perguntas/recompensas → salas → chefe/finais → exportação. Caminho atual: D1 → D2 → D3 → D4 → D5, com o playtest interno da base aprovado em 23/10. As janelas M0–M5 acima pertencem ao planejamento inicial; a nova fase será acompanhada por entregas, sem novas datas prometidas.
 
 ## Verificação e definição de pronto
 
@@ -202,12 +254,12 @@ Checklist manual obrigatório da entrega:
 
 Automatizar, quando esses sistemas existirem, os testes de consumo único de recompensa, seleção sem repetição e reset de partida. Evitar testes que apenas reproduzam os valores escritos no código.
 
-Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo, salas alcançadas, mortes, acertos e dúvidas em uma planilha simples, sem telemetria obrigatória. Meta: pelo menos quatro entendem a relação pergunta → combate → bônus sem explicação verbal. Investigar derrotas recorrentes antes da segunda sala e ataques do chefe percebidos como inevitáveis. Não exigir que todos vençam na primeira tentativa.
+Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registrar tempo, salas alcançadas, mortes, acertos e dúvidas, sem telemetria obrigatória. Meta de observação: pelo menos quatro entendem a relação pergunta → combate → bônus sem explicação verbal. Esse protocolo não invalida o aceite interno nem bloqueia a fase D. Investigar derrotas recorrentes antes da segunda sala e ataques percebidos como inevitáveis; não exigir que todos vençam na primeira tentativa.
 
 ## Riscos e decisões de corte
 
 - Escopo: seis inimigos, quatro cenários, duas armas e loja comprometem a entrega. Manter apenas o conjunto incluído neste documento.
-- Conteúdo: cinco questões por matéria sustentam quatro salas, mas têm pouca rejogabilidade. Expandir o banco só após validar o ciclo; revisar correção e dificuldade antes de testar com público.
+- Conteúdo: o ciclo recebeu aceite interno; cinco questões por matéria oferecem pouca variedade entre partidas. Ampliar em lotes no D1 e revisar correção, temas e dificuldade, evitando volume baseado em questões quase idênticas.
 - Integração: arte pode atrasar programação. Usar formas provisórias até o ciclo completo funcionar; substituir sem alterar colisões sem revisão.
 - Balanceamento: dano cumulativo pode simplificar o chefe. Medir partidas com zero e quatro acertos; ajustar bônus e chefe juntos.
 - Prazo: se atrasar, reduzir as salas comuns de três para duas e simplificar arte/áudio. Preservar perguntas, combate, recompensa, chefe e telas finais.
@@ -252,17 +304,19 @@ Playtest: cinco pessoas externas à equipe, duas partidas cada. Registrar tempo,
 - Um teste externo via `--script` não foi executado pelo template release; o processo foi encerrado. Os testes de lógica foram executados pelo editor headless; a build release passou pelos testes de inicialização descritos acima.
 - Guia `COMO_JOGAR.md` e pacote local `builds/SchoolRush-MVP-0.1.0-windows-x64.zip` preparados para a equipe. Binários e capturas ficam fora do Git.
 
-### Pendências para aprovar o MVP
+### Aceites e acompanhamento após o playtest de 23/10/2026
 
-| Pendência | Responsável | Evidência esperada |
+| Item | Responsável | Situação / evidência esperada |
 | --- | --- | --- |
-| Revisar as vinte questões para Ensino Médio | Igor | Questões corretas e adequadas ao público confirmado |
-| Executar cinco playtests de duas partidas | Equipe | Tempo, mortes, acertos e dúvidas; quatro pessoas entendem o ciclo sem orientação |
-| Ajustar combate, duração e dificuldade a partir dos testes | Moisés + Igor | Partida compreensível e alvo de 5–8 minutos avaliado |
-| Validar áudio e sensação dos controles | Matheus + equipe | Feedback perceptível e volume confortável |
-| Testar a pasta exportada em outro PC sem Godot | Equipe | Uma partida até vitória e outra até derrota, com reinício funcional |
+| Playtest interno da base | Usuário + Igor | Aprovado conforme relato do usuário em 23/10; base aceita para evolução |
+| Ampliar variedade e melhorar combate | Moisés + Igor | Solicitado no retorno do playtest; entregas e critérios D1–D5 |
+| Revisar questões atuais e novas para Ensino Médio | Igor | Revisão por ID ainda não confirmada; acompanhar os lotes do D1 |
+| Medir duração, repetições e dificuldade | Equipe | Coletar na próxima rodada; relato atual não contém métricas |
+| Detalhar avaliação de áudio e controles | Matheus + equipe | Registrar na próxima rodada; não houve resultado individual por item |
+| Testar a pasta exportada em outro PC sem Godot | Equipe | Execução externa não confirmada; verificar vitória, derrota e reinício na próxima entrega |
+| Ampliar avaliação com participantes externos | Equipe | Rodada complementar opcional, conforme disponibilidade |
 
-Não declarar o MVP finalizado antes desses aceites. A exclusão local preexistente de `README.md` foi mantida fora dos commits.
+O aceite interno autoriza a evolução planejada. A promoção de uma candidata a versão final deve registrar revisão pedagógica e validação de distribuição, sem presumir que o relato geral confirmou cada item. Esta atualização não gera nova build.
 
 ### Histórico de versionamento
 
@@ -280,4 +334,5 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - B5: preparação da versão 0.2.0-rc1, roteiro de playtest e exportação (consultar `git log` para o hash desta entrega).
 - `8525cdf`: C1 — sprites de monstros, recursos reproduzíveis e análise dos pacotes de arte.
 - `be2482c`: C2 — expedição científica, cacto, cientista, quatro pisos e testes.
-- C3: versão 0.2.0-rc2, roteiro de duas rotas e pacote Windows (consultar `git log` para o hash desta entrega).
+- `f87f4d4`: C3 — versão 0.2.0-rc2, roteiro de duas rotas e pacote Windows.
+- 23/10/2026: aceite interno registrado e fase D1–D5 planejada; revisão documental (consultar `git log` para o hash).
