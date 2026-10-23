@@ -42,6 +42,8 @@ O sorteio prioriza disciplinas menos oferecidas e nunca repete uma matéria na m
 
 O carregador exige pelo menos duas disciplinas e duas questões por disciplina, além de dificuldade válida em cada item. A quantidade de oitenta questões e a distribuição 8/8/4 por matéria são metas de conteúdo verificadas nos testes, não limites fixos do carregador. Alterações de quantidade exigem rever a cobertura e a disponibilidade para quatro salas.
 
-Execute `tools/check.ps1` com o caminho do Godot indicado em `COMO_JOGAR.md`. As quatorze suítes incluem catálogo/dificuldade, cobertura de temas, cem sementes com doze partidas cada para variedade, esgotamento completo das oitenta questões, recompensas, movimento, consumo único, reset, monstros, coordenação, encontros, arte e rota científica. `tests/capture_catalog.gd` gera capturas reproduzíveis dos textos extensos em 960×540 e 1280×720.
+Execute `tools/check.ps1` com o caminho do Godot indicado em `COMO_JOGAR.md`. As quinze suítes incluem catálogo/dificuldade, cobertura de temas, cem sementes com doze partidas cada para variedade, esgotamento completo das oitenta questões, recompensas, movimento, consumo único, reset, monstros, coordenação, encontros, arte, rota científica e resumo/revisão de partida. `tests/capture_catalog.gd` gera capturas reproduzíveis dos textos extensos em 960×540 e 1280×720.
+
+E1 registra no resumo apenas as questões respondidas, copiando textos após o embaralhamento. O relatório local opcional inclui ID, tema, dificuldade, resposta escolhida, gabarito e explicação para apoiar a revisão. Ele não altera este catálogo nem marca qualquer questão como pedagogicamente aprovada.
 
 O preset Windows inclui `data/*.json`. Após editar, exporte novamente: o executável contém uma cópia embutida do catálogo e não usa o JSON externo.

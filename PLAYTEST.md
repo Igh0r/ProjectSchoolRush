@@ -1,8 +1,8 @@
 # School Rush — playtest aprovado e acompanhamento da fase 0.3
 
-Atualizado em 23/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc1**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
+Atualizado em 23/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc2**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
 
-**D1–D4 implementados:** oitenta questões, histórico na sessão, preferências de tema/dificuldade e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques e varredura do chefe. Quatorze suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
+**D1–D4 e E1 implementados:** oitenta questões, histórico na sessão, preferências de tema/dificuldade e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques, varredura do chefe e resumo/revisão de partida com relatório local opcional. Quinze suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
 
 ## Resultado informado em 23/10/2026
 
@@ -30,9 +30,11 @@ Os comportamentos D1–D4 estão disponíveis na candidata. Jogar duas partidas 
 
 Como ampliação opcional, convidar cinco pessoas externas à equipe para duas partidas cada: primeira na rota clássica, segunda na expedição científica. Essa amostra não é condição para iniciar a fase D. Usar identificadores P1–P5 e registrar a versão da build e o PC utilizado. Na primeira partida, deixar a pessoa ler o menu e tentar entender o jogo sem explicação verbal; anotar se precisou de ajuda. Na segunda, observar uso das recompensas e compreensão dos novos avisos. As rotas têm inimigos diferentes; não comparar diretamente seus tempos como medida de aprendizado.
 
-Cronometrar do início da primeira escolha até vitória ou derrota. Registrar a duração mesmo em derrotas. Não interpretar a média de partidas encerradas cedo como duração de uma partida completa; o alvo de 5–8 minutos ainda precisa ser avaliado nas partidas concluídas.
+Usar o tempo exibido no resumo, contado do início da primeira escolha até vitória ou derrota, incluindo leitura/feedback e excluindo pausas. Menu e revisão final não contam. Registrar a duração mesmo em derrotas. Não interpretar a média de partidas encerradas cedo como duração de uma partida completa; o alvo de 5–8 minutos ainda precisa ser avaliado nas partidas concluídas.
 
-| Pessoa | Partida | Tempo | Sala final / resultado | Acertos / 4 | Causa da morte | Entendeu o bônus sem ajuda? | Dúvidas e avisos não percebidos |
+Antes de reiniciar, usar **Rever respostas** para anotar IDs confusos e, se desejado, **Salvar resumo neste computador**. O caminho aparece na tela; os arquivos ficam na pasta `reports` dos dados locais do jogo (detalhes em `COMO_JOGAR.md`). Associar manualmente cada arquivo a P1/P2 etc. na ficha; o jogo não registra nome, causa da morte nem percepção dos avisos. Esses itens dependem da observação da equipe. O JSON contém apenas as questões respondidas; para estudar repetição das ofertas não escolhidas, anotar também seus IDs durante a sessão.
+
+| Pessoa | Partida | Tempo | Sala final / resultado | Acertos / respondidas | Causa da morte | Entendeu o bônus sem ajuda? | Dúvidas e avisos não percebidos |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | P1 | 1 | | | | | | |
 | P1 | 2 | | | | | | |
@@ -72,6 +74,9 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 - [ ] Esc congela avisos e tiros; retomar, reiniciar e voltar ao menu funcionam.
 - [ ] Limpar a sala remove tiros; a porta só permite avançar sem inimigos vivos.
 - [ ] Vitória e derrota bloqueiam ataques; três reinícios não mantêm atributos ou inimigos antigos.
+- [ ] Resumo mostra rota, acertos/respondidas, salas concluídas e tempo sem pausas em vitória e derrota.
+- [ ] Revisão preserva a resposta escolhida, gabarito, explicação e estado do bônus; navegar não modifica atributos.
+- [ ] Salvar mostra um arquivo legível; Abrir pasta dos resumos permite encontrá-lo; segundo clique em salvar reutiliza o mesmo relatório; reinício inicia outro registro.
 - [ ] Textos longos, alternativas e botões são acessíveis em 960×540 e após redimensionar.
 - [ ] M alterna os efeitos sonoros; música, volume e efeitos são confortáveis.
 - [ ] Em outro PC sem Godot, extrair o ZIP e completar uma vitória, uma derrota e um reinício.
@@ -116,4 +121,4 @@ Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se recon
 - Duração de partidas concluídas avaliada contra o alvo de 5–8 minutos; registrar decisão caso o alvo seja revisto.
 - Sensação dos controles/áudio e execução em outro PC aprovadas pela equipe.
 
-Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc1, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.
+Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc2, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.

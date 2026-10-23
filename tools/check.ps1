@@ -17,7 +17,7 @@ function Invoke-GodotCheck {
 }
 
 Invoke-GodotCheck -Arguments @('--editor', '--import', '--quit')
-foreach ($suite in @('catalog', 'question_variety', 'combat', 'progression', 'run', 'movement', 'health', 'rewards', 'enemies', 'enemy_movement', 'attack_coordination', 'encounters', 'art', 'science_route')) {
+foreach ($suite in @('catalog', 'question_variety', 'combat', 'progression', 'run', 'run_report', 'movement', 'health', 'rewards', 'enemies', 'enemy_movement', 'attack_coordination', 'encounters', 'art', 'science_route')) {
     Invoke-GodotCheck -Arguments @('--script', "res://tests/test_$suite.gd")
 }
 if ($Export) {
@@ -46,7 +46,8 @@ if ($Export) {
         "Source base commit: $sourceCommit",
         "Source modified at export: $($sourceChanges.Count -gt 0)",
         '80 questions; session history; shuffled options; six enemy types; two routes.',
-        'Validation: 14 suites. See PLAYTEST.md for the pending human evaluation of this candidate.',
+        'Validation: 15 suites. Includes run summary, answer review and optional local report.',
+        'See PLAYTEST.md for the pending human evaluation of this candidate.',
         'data/curriculum.json is a review copy; the game loads the embedded catalog.'
     ) | Set-Content -LiteralPath (Join-Path $buildRoot 'windows/BUILD_INFO.txt') -Encoding UTF8
     $smokeLog = Join-Path $buildRoot 'standalone-smoke.log'

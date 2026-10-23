@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (23/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 implementados e candidata Windows 0.3.0-rc1 preparada:** oitenta questões para Ensino Médio, histórico na sessão, alternativas embaralhadas, movimento inimigo aprimorado, coordenação de ataques e varredura do Napoleão. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Quatorze suítes aprovadas e inicialização standalone validada. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (23/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1 implementados; candidata 0.3.0-rc2:** oitenta questões para Ensino Médio, histórico na sessão, alternativas embaralhadas, movimento inimigo aprimorado, coordenação de ataques, varredura do Napoleão e resumo/revisão de partida. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Quinze suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -19,6 +19,20 @@ O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e so
 | D3 — melhorar os inimigos | Ajustar posicionamento, separação e recuperação dos cinco inimigos comuns, mantendo avisos legíveis | Cada inimigo tem papel reconhecível; há oportunidade de esquiva e contra-ataque; paredes, pausa, morte e limpeza continuam corretas | Concluído tecnicamente; treze suítes aprovadas; sensação final em playtest |
 | D4 — ritmo dos encontros e chefe | Coordenar ataques perigosos nas salas mistas e acrescentar um segundo padrão anunciado ao Napoleão | Ataques sobrepostos preservam espaço de fuga; chefe alterna padrões reconhecíveis; ambas as rotas continuam concluíveis sem bônus | Concluído tecnicamente; quatorze suítes aprovadas; dificuldade humana a confirmar |
 | D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Entrega técnica preparada; playtest e revisão humana pendentes |
+| E1 — resumo e revisão antes do playtest | Mostrar resultado, tempo, salas e respostas; permitir salvar relatório local | Revisão fiel às alternativas embaralhadas, sem repetir recompensas; pausa e telas finais não contam tempo; exportação opcional sem sobrescrever outra partida | Implementado; quinze suítes aprovadas; candidata 0.3.0-rc2 |
+
+#### E1 — resumo, revisão e apoio ao playtest (23/10/2026)
+
+O usuário autorizou mais um bloco antes dos playtests. A entrega acrescenta valor educacional após a partida e facilita o registro da próxima rodada, sem alterar os parâmetros de combate.
+
+- Vitória e derrota mostram rota, salas concluídas, acertos sobre respostas efetivamente dadas, tempo sem pausas e atributos finais. O tempo inclui escolha, leitura, feedback, combate e caminhada à saída; exclui menu, pausa e telas finais/revisão. O relatório também separa tempo em combate. Reiniciar inicia nova contagem.
+- **Rever respostas** permite percorrer apenas as questões respondidas, com ID, matéria, tema, dificuldade, resposta escolhida, gabarito e explicação. Os textos vêm da alternativa apresentada após embaralhar. A revisão é somente leitura e não concede bônus. Recebimento, ausência de efeito no limite e cancelamento por derrota aparecem separadamente.
+- **Salvar resumo neste computador** grava um JSON opcional em `user://reports`, com caminho mostrado na tela. Inclui versão, data UTC, rota, tempos, resultado, atributos e respostas; não solicita nome nem envia dados pela rede. Um segundo clique reutiliza o arquivo, partidas no mesmo segundo recebem nomes diferentes e falhas permitem tentar novamente. Reiniciar/fechar descarta o resumo em memória; arquivos já salvos permanecem, sem funcionar como save ou histórico de perguntas.
+- Quinze suítes aprovadas, incluindo contagem sem duplicação, alternativas embaralhadas, pausa, revisão sem efeitos, reinício, derrota simultânea, bônus cancelado/sem efeito, cópia imutável do resultado, JSON e falha/retentativa de salvamento. Testes usam arquivos temporários em `builds`, sem escrever relatórios do jogador.
+- Capturas de vitória, derrota, confirmação de salvamento e revisão de texto extenso em 960×540/1280×720 em `builds/previews/e1-*.png`; reprodução em `tests/capture_run_report.gd`. Rolagem acompanha a navegação por teclado e cada painel começa no título.
+- Candidata Windows: `builds/SchoolRush-MVP-0.3.0-rc2-windows-x64.zip`. Registro técnico da exportação em `builds/validation-0.3.0-rc2.log`. A rc1 permanece como referência da etapa anterior. Este bloco não equivale a aceite humano de D5.
+
+**Próximo passo:** usar a rc2 nas duas rotas, salvar os resumos desejados e registrar dúvidas por ID e problemas de ataques por sala no `PLAYTEST.md`. Balancear a partir desse retorno; Igor continua com a revisão pedagógica dos oitenta IDs. Preparação de Matheus/Alice permanece no bloco futuro de arte.
 
 #### D1 e D2 — perguntas para Ensino Médio
 
@@ -78,10 +92,10 @@ Quatorze suítes passaram. A nova suíte verifica teto, espera até sumir o peri
 
 Continuidade de D5:
 
-- Manter as quatorze suítes e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
+- Manter as quinze suítes (incluindo E1) e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
 - Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
 - Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
-- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc1 é a candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
+- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc2 substitui a rc1 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
 
 Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
 
@@ -177,7 +191,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc1 e ajustar os encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
+**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc2 e ajustar os encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -347,7 +361,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 | Testar a pasta exportada em outro PC sem Godot | Equipe | Execução externa não confirmada; verificar vitória, derrota e reinício na próxima entrega |
 | Ampliar avaliação com participantes externos | Equipe | Rodada complementar opcional, conforme disponibilidade |
 
-O aceite interno da base autorizou a evolução. A 0.3.0-rc1 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
+O aceite interno da base autorizou a evolução. A 0.3.0-rc2 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
 
 ### Histórico de versionamento
 
@@ -372,3 +386,4 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `9925a60`: D3 — separação, reposicionamento, recuperação visível e leques do cacto.
 - `8c14cf9`: D4 — coordenação de ataques especiais e varredura do Napoleão.
 - D5 técnico: candidata 0.3.0-rc1, guia, roteiro e pacote para a próxima rodada (consultar `git log` para o hash).
+- E1: resumo, revisão de respostas e relatório local opcional; candidata 0.3.0-rc2 (consultar `git log` para o hash).

@@ -1,6 +1,6 @@
-# School Rush — MVP 0.3.0-rc1
+# School Rush — MVP 0.3.0-rc2
 
-A candidata 0.3.0-rc1 reúne oitenta questões, histórico durante a sessão, alternativas embaralhadas, novos movimentos dos inimigos e dois ataques do Napoleão. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
+A candidata 0.3.0-rc2 reúne oitenta questões, histórico durante a sessão, alternativas embaralhadas, novos movimentos dos inimigos, dois ataques do Napoleão e resumo/revisão de partida. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
 
 ## Jogar
 
@@ -57,6 +57,16 @@ Na **Expedição científica**, os encontros mudam:
 
 Cada mistura causa no máximo um acerto. Derrotar o cientista remove suas misturas; derrotar o cacto remove seus espinhos. Pausa, derrota, saída e reinício também controlam esses perigos.
 
+## Resumo e revisão da partida
+
+Ao vencer ou perder, veja os acertos, salas concluídas, tempo e atributos finais. O tempo começa na primeira escolha e inclui leitura, feedback, combate e deslocamento até a saída; pausa, menu e revisão não entram na contagem. Acertos usam como total as perguntas respondidas: uma derrota na primeira sala pode mostrar 1/1, mesmo com 0/4 salas concluídas.
+
+Em **Rever respostas**, percorra suas escolhas, gabaritos e explicações. A revisão indica se o bônus foi recebido, não teve efeito por atingir o limite ou foi cancelado pela derrota. Use a rolagem ou Tab para acessar os botões de textos longos; **Voltar ao resumo** retorna ao resultado.
+
+**Salvar resumo neste computador** guarda um arquivo JSON e mostra o caminho completo. Depois, use **Abrir pasta dos resumos** para localizá-lo no Explorador. No Windows, a pasta padrão é `%APPDATA%\Godot\app_userdata\School Rush\reports`. Você decide se deseja compartilhá-lo com a equipe; não há envio automático nem solicitação de nome. O arquivo contém versão, rota, data UTC, tempos, resultado, atributos e respostas com explicações. Clicar novamente em salvar reutiliza o mesmo arquivo.
+
+Salve antes de reiniciar ou sair se quiser conservar o registro. Partidas abandonadas pelo menu/reinício não geram relatório. O arquivo não permite retomar a partida nem restaura o histórico de questões ao reabrir o jogo.
+
 ## Estado da versão
 
 Versão candidata com sprites animados em seis tipos de monstros e quatro pisos derivados da arte fornecida. O jogador e parte da interface/efeitos continuam provisórios: os respectivos pacotes são referências que ainda precisam de preparação. As músicas adicionadas pela equipe foram preservadas; M alterna os efeitos sonoros e não a música de fundo.
@@ -74,7 +84,7 @@ No PowerShell, na pasta do projeto:
 .\tools\check.ps1 -Godot 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' -Export
 ```
 
-O segundo comando executa as quatorze suítes, incluindo variedade de questões, movimento inimigo e coordenação dos ataques, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
+O segundo comando executa as quinze suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques e resumo/revisão de partida, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
 
 Para revisar questões ou ajustar recompensas, siga [data/README.md](data/README.md) no projeto-fonte e gere uma nova build.
 
@@ -88,6 +98,7 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_expansion.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_catalog.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_combat_phase.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_run_report.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.

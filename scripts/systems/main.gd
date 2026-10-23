@@ -4,6 +4,7 @@ const PLAYER_SCENE = preload("res://scenes/player/player.tscn")
 const ROOM_SCENE = preload("res://scenes/room/room.tscn")
 const UI_SCRIPT = preload("res://scripts/ui/game_ui.gd")
 const QUESTIONS = preload("res://scripts/systems/question_manager.gd")
+const RUN_REPORT = preload("res://scripts/systems/run_report.gd")
 const SOUND_SCRIPT = preload("res://scripts/systems/sound_effects.gd")
 const QUEST_BGM = preload("res://bgm/Quest Loop.ogg")
 const BOSS_BGM = preload("res://bgm/Marche du Roi.ogg")
@@ -19,6 +20,8 @@ var questions = QUESTIONS.new()
 var room_index: int = 0
 var run_epoch: int = 0
 var last_reward: String = ""
+var run_report = RUN_REPORT.new()
+var report_notice: String = ""
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -91,6 +94,8 @@ func start_run(route: int = -1) -> void:
 	state = State.QUESTION
 	room_index = 0
 	last_reward = ""
+	run_report.reset(room.route_name())
+	report_notice = ""
 	room.clear_enemies()
 	player.active = false
 	ui.reset_health_feedback()
@@ -130,6 +135,7 @@ func answer_question(index: int) -> void:
 	if state != State.ANSWER or index < 0 or index > 3:
 		return
 	var correct: bool = questions.answer(index)
+	run_report.record_answer(questions.selected, index, room_index + 1, questions.subject_name(questions.selected.subject))
 	sounds.play_cue("correct" if correct else "wrong")
 	state = State.FEEDBACK
 	var result := "Acertou!" if correct else "Ainda dá para vencer!"
@@ -154,7 +160,7 @@ func _on_player_died() -> void:
 	state = State.DEFEAT
 	questions.consume_reward()
 	room.set_combat(false)
-	ui.show_panel("Fim da partida", "Você chegou à sala %d.\nAproxime-se, golpeie e recue entre os ataques." % (room_index + 1), [{"text": "Tentar novamente", "action": start_run}, {"text": "Início", "action": show_menu}])
+	_finish_report("defeat")
 	_update_hud()
 
 func _on_room_cleared() -> void:
@@ -167,13 +173,15 @@ func _resolve_room(epoch: int) -> void:
 	var reward: String = questions.consume_reward()
 	sounds.play_cue("clear")
 	last_reward = "Sem bônus nesta sala."
+	var changed: bool = false
 	if not reward.is_empty():
-		var changed: bool = player.apply_reward(questions.reward_config(reward))
+		changed = player.apply_reward(questions.reward_config(reward))
 		last_reward = "Recebido: %s." % questions.reward_description(reward) if changed else "Bônus sem efeito: atributo já no limite."
+	run_report.clear_room(room_index + 1, changed)
 	if room_index == 3:
 		state = State.VICTORY
 		player.active = false
-		ui.show_panel("Você voltou para casa!", "Napoleão foi derrotado e o livro se abriu.\nVocê concluiu as quatro salas de School Rush.\n\nVida: %d/%d • Régua: %d • Velocidade: +%s%%" % [player.health, player.max_health, player.damage, String.num(player.speed_bonus_percent, 1)], [{"text": "Nova partida", "action": start_run}, {"text": "Início", "action": show_menu}])
+		_finish_report("victory")
 		_update_hud()
 		return
 	state = State.CLEARED
@@ -208,8 +216,68 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("mute") and not event.is_echo():
 		sounds.toggle_mute()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if state in [State.QUESTION, State.ANSWER, State.FEEDBACK, State.COMBAT, State.CLEARED] and not get_tree().paused:
+		run_report.advance_time(delta, state == State.COMBAT)
 	_update_hud()
+
+func _finish_report(outcome: String) -> void:
+	run_report.finish(outcome, room_index + 1, {
+		"health": player.health, "max_health": player.max_health,
+		"damage": player.damage, "speed_bonus_percent": player.speed_bonus_percent,
+	})
+	show_run_summary()
+
+func show_run_summary() -> void:
+	if state not in [State.VICTORY, State.DEFEAT]:
+		return
+	var report: Dictionary = run_report.snapshot()
+	var won: bool = state == State.VICTORY
+	var description := "Napoleão foi derrotado e o livro se abriu." if won else "Você chegou à sala %d. Tente golpear e recuar entre ataques." % report.room_reached
+	description += "\n%s • Salas concluídas: %d/4\nAcertos: %d/%d • Tempo: %s (sem pausas)\nVida: %d/%d • Régua: %d • Velocidade: +%s%%" % [report.route, report.rooms_cleared, report.correct_answers, report.answered_questions, RUN_REPORT.format_duration(report.elapsed_seconds), report.final_attributes.health, report.final_attributes.max_health, report.final_attributes.damage, String.num(report.final_attributes.speed_bonus_percent, 1)]
+	if not report_notice.is_empty():
+		description += "\n\n" + report_notice
+	var choices: Array = [
+		{"text": "Rever respostas", "action": show_answer_review.bind(0)},
+		{"text": "Salvar resumo neste computador", "action": save_run_report},
+	]
+	if not run_report.saved_path.is_empty():
+		choices.append({"text": "Abrir pasta dos resumos", "action": open_report_folder})
+	choices.append_array([
+		{"text": "Nova partida" if won else "Tentar novamente", "action": start_run},
+		{"text": "Início", "action": show_menu},
+	])
+	ui.show_panel("Você voltou para casa!" if won else "Fim da partida", description, choices)
+
+func show_answer_review(index: int) -> void:
+	if state not in [State.VICTORY, State.DEFEAT]:
+		return
+	var report: Dictionary = run_report.snapshot()
+	if index < 0 or index >= report.answers.size():
+		return
+	var answer: Dictionary = report.answers[index]
+	var description := "Sala %d • %s • %s\n%s • %s\n\n%s\n\nSua resposta: %s\nResposta correta: %s\n\n%s\n\n%s" % [answer.room, answer.subject_name, answer.id, answer.topic, questions.difficulty_name(answer.difficulty), answer.prompt, answer.selected_answer, answer.correct_answer, answer.explanation, RUN_REPORT.reward_text(answer.reward_status)]
+	var choices: Array = []
+	if index > 0:
+		choices.append({"text": "Resposta anterior", "action": show_answer_review.bind(index - 1)})
+	if index + 1 < report.answers.size():
+		choices.append({"text": "Próxima resposta", "action": show_answer_review.bind(index + 1)})
+	choices.append({"text": "Voltar ao resumo", "action": show_run_summary})
+	ui.show_panel("Resposta %d/%d • %s" % [index + 1, report.answers.size(), "Acertou" if answer.correct else "Para revisar"], description, choices)
+
+func save_run_report(directory: String = "user://reports") -> void:
+	if state not in [State.VICTORY, State.DEFEAT]:
+		return
+	var saved: Dictionary = run_report.save_json(directory)
+	report_notice = "Resumo salvo em:\n%s\nVocê pode compartilhar esse arquivo com a equipe." % ProjectSettings.globalize_path(saved.path) if saved.error == OK else "Não foi possível salvar o resumo. Confira o espaço e a permissão da pasta e tente novamente."
+	show_run_summary()
+
+func open_report_folder() -> void:
+	if state not in [State.VICTORY, State.DEFEAT] or run_report.saved_path.is_empty():
+		return
+	if OS.shell_open(ProjectSettings.globalize_path(run_report.saved_path.get_base_dir())) != OK:
+		report_notice = "Não foi possível abrir a pasta. Localize o resumo em:\n" + ProjectSettings.globalize_path(run_report.saved_path)
+		show_run_summary()
 
 func _update_hud() -> void:
 	if ui == null:

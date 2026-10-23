@@ -51,6 +51,7 @@ func _ready() -> void:
 	panel.add_theme_stylebox_override("panel", style)
 	scroll = ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
 	panel.add_child(scroll)
 	content = VBoxContainer.new()
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -162,6 +163,8 @@ func show_panel(title: String, description: String, choices: Array) -> void:
 			first_button = button
 	if first_button != null:
 		first_button.grab_focus()
+	# Começa pelo título; navegação posterior por Tab acompanha o foco.
+	scroll.set_deferred("scroll_vertical", 0)
 
 func hide_panel() -> void:
 	overlay.hide()
