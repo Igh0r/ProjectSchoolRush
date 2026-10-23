@@ -24,15 +24,18 @@ func _physics_process(delta: float) -> void:
 	velocity = Vector2.ZERO
 	if phase == Phase.APPROACH:
 		if global_position.distance_to(target.global_position) > 95.0:
+			withdraw_attack_request()
 			velocity = steered_velocity(target.global_position, 85.0)
 			visual_direction = velocity
-		else:
+		elif request_special_attack():
 			attack_direction = global_position.direction_to(target.global_position)
 			if attack_direction == Vector2.ZERO:
 				attack_direction = Vector2.LEFT
 			visual_direction = attack_direction
 			phase = Phase.WARNING
 			phase_time = 0.75
+		else:
+			velocity = reposition_velocity(35.0, 65.0, 95.0)
 	else:
 		phase_time -= delta
 		if phase_time <= 0.0:
@@ -42,6 +45,7 @@ func _physics_process(delta: float) -> void:
 					phase_time = 0.18
 					_strike()
 				Phase.STRIKE:
+					finish_special_attack()
 					phase = Phase.RECOVERY
 					phase_time = 1.1
 				Phase.RECOVERY:

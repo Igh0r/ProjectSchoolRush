@@ -218,7 +218,7 @@ func _update_hud() -> void:
 	if state == State.COMBAT and not questions.pending_reward.is_empty():
 		message = "Bônus após a sala: %s   •   Espaço: régua" % questions.reward_description(questions.pending_reward)
 	if state == State.COMBAT and room_index == 3:
-		message = "NAPOLEÃO   •   Desvie da linha amarela e ataque na recuperação   •   Esc: pausa"
+		message = "NAPOLEÃO   •   Saia da linha ou setor amarelo; ataque quando ABERTO   •   Esc: pausa"
 	elif state == State.CLEARED:
 		message = "%s Vá à porta verde e pressione E." % last_reward
 	ui.update_hud(player.health, player.max_health, player.damage, room_index + 1, room.enemies.size(), message)

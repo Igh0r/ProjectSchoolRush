@@ -24,6 +24,28 @@ func capture() -> void:
 	await save_preview("41-cactus-wide")
 	root.size = Vector2i(1280, 720)
 	await save_preview("42-combat-resized")
+	root.size = Vector2i(960, 540)
+	game.start_run()
+	game.room_index = 3
+	game.choose_question(0)
+	game.answer_question(0)
+	await save_preview("43-boss-tip")
+	game.begin_combat()
+	var boss = game.room.enemies[0]
+	boss.set_physics_process(false)
+	game.player.position = Vector2(510, 210)
+	boss.phase = boss.Phase.APPROACH
+	boss.phase_time = 1.6
+	boss._physics_process(0.01)
+	await save_preview("44-boss-sweep-warning")
+	game.player.position = Vector2(510, 345)
+	boss._physics_process(0.91)
+	await save_preview("45-boss-sweep")
+	boss._physics_process(0.21)
+	await save_preview("46-boss-recovery")
+	root.size = Vector2i(1280, 720)
+	boss._physics_process(1.21)
+	await save_preview("47-boss-charge-warning")
 	await process_frame
 	game.queue_free()
 	await process_frame

@@ -15,11 +15,11 @@ const ENCOUNTERS := [
 	{"kinds": ["dice", "dice"], "tip": "Dados perseguem e machucam por contato. Aproxime-se, golpeie e recue."},
 	{"kinds": ["dice", "dice", "cloud"], "tip": "Nova ameaça: nuvem. A linha e o aviso DISPARO indicam a mira fixa. Saia da linha e aproxime-se entre os tiros."},
 	{"kinds": ["dice", "dice", "cloud", "centurion"], "tip": "Nova ameaça: centurião. Saia do setor marcado GOLPE e ataque durante a recuperação. Cuidado também com a nuvem!"},
-	{"kinds": ["boss"], "tip": "Napoleão espera no ginásio! A linha amarela avisa a direção da investida. Saia da linha e ataque durante a recuperação."},
+	{"kinds": ["boss"], "tip": "Napoleão usa INVESTIDA em linha e VARREDURA frontal. Saia da linha ou do setor amarelo. Quando aparecer ABERTO, aproxime-se e ataque!"},
 ]
 const SCIENCE_ENCOUNTERS := [
 	{"kinds": ["dice", "dice"], "tip": "A expedição começa na sala de aula. Dados perseguem e machucam por contato."},
-	{"kinds": ["dice", "cactus", "cloud"], "tip": "No pátio, o cacto fica parado e anuncia três ESPINHOS. Saia das linhas; também há uma nuvem."},
+	{"kinds": ["dice", "cactus", "cloud"], "tip": "O cacto alterna leques estreitos e largos de três ESPINHOS. As linhas mostram o próximo disparo. A nuvem se move entre tiros; aproxime-se após o aviso."},
 	{"kinds": ["dice", "centurion", "scientist", "cloud"], "tip": "No laboratório, o cientista marca uma MISTURA no chão. Saia do círculo antes de ficar verde; evite também o setor do centurião."},
 	ENCOUNTERS[3],
 ]
@@ -39,6 +39,44 @@ var theme_index: int = 0
 var door_open: bool = false
 var combat_active: bool = false
 var boss_room: bool = false
+const MAX_SPECIAL_ATTACKS := 2
+var attack_reservations: Dictionary = {}
+var attack_queue: Array[Node] = []
+
+func _has_hazards(source: Node) -> bool:
+	for hazard in projectiles + mixtures:
+		if is_instance_valid(hazard) and hazard.active and hazard.source == source:
+			return true
+	return false
+
+func _prune_attacks() -> void:
+	for source in attack_reservations.keys():
+		if not is_instance_valid(source) or not enemies.has(source) or source.health <= 0:
+			attack_reservations.erase(source)
+		elif not attack_reservations[source] and not _has_hazards(source):
+			attack_reservations.erase(source)
+	for source in attack_queue.duplicate():
+		if not is_instance_valid(source) or not enemies.has(source) or source.health <= 0:
+			attack_queue.erase(source)
+
+func request_attack(source: Node) -> bool:
+	if not combat_active or get_tree().paused or not enemies.has(source) or source.health <= 0:
+		return false
+	_prune_attacks()
+	if attack_reservations.has(source):
+		return attack_reservations[source]
+	if not attack_queue.has(source):
+		attack_queue.append(source)
+	if attack_reservations.size() >= MAX_SPECIAL_ATTACKS or attack_queue[0] != source:
+		return false
+	attack_queue.pop_front()
+	attack_reservations[source] = true
+	return true
+
+func finish_attack(source: Node) -> void:
+	if attack_reservations.has(source):
+		attack_reservations[source] = false
+	_prune_attacks()
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -55,6 +93,8 @@ func _ready() -> void:
 		add_child(body)
 
 func clear_enemies() -> void:
+	attack_queue.clear()
+	attack_reservations.clear()
 	clear_projectiles()
 	clear_mixtures()
 	for enemy in enemies:
@@ -147,6 +187,8 @@ func clear_projectiles(source: Node = null) -> void:
 func set_combat(enabled: bool) -> void:
 	combat_active = enabled
 	if not enabled:
+		attack_queue.clear()
+		attack_reservations.clear()
 		clear_projectiles()
 		clear_mixtures()
 	for enemy in enemies:
@@ -161,6 +203,8 @@ func strike(origin: Vector2, direction: Vector2, damage: int) -> void:
 			enemy.take_damage(damage)
 
 func _on_enemy_died(enemy: Node) -> void:
+	attack_queue.erase(enemy)
+	attack_reservations.erase(enemy)
 	clear_projectiles(enemy)
 	clear_mixtures(enemy)
 	enemies.erase(enemy)

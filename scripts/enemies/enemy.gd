@@ -13,6 +13,17 @@ var hit_flash: float = 0.0
 var arena: Node
 var formation_slot: int = 0
 
+func request_special_attack() -> bool:
+	return arena.request_attack(self) if is_instance_valid(arena) else true
+
+func finish_special_attack() -> void:
+	if is_instance_valid(arena):
+		arena.finish_attack(self)
+
+func withdraw_attack_request() -> void:
+	if is_instance_valid(arena):
+		arena.attack_queue.erase(self)
+
 func steered_velocity(destination: Vector2, speed: float) -> Vector2:
 	var desired := global_position.direction_to(destination) * speed
 	if is_instance_valid(arena):

@@ -1,7 +1,7 @@
 extends "res://scripts/enemies/enemy.gd"
 
 signal shot_requested(source: Node, origin: Vector2, direction: Vector2)
-enum Phase { WARNING, RECOVERY }
+enum Phase { WARNING, RECOVERY, WAIT }
 const SPREAD := 0.28
 var spread: float = SPREAD
 var phase: Phase = Phase.WARNING
@@ -26,16 +26,30 @@ func _physics_process(delta: float) -> void:
 	if not active or health <= 0 or not is_instance_valid(target):
 		return
 	hit_flash = maxf(0.0, hit_flash - delta)
+	if phase == Phase.WAIT:
+		if request_special_attack():
+			phase = Phase.WARNING
+			phase_time = 0.95
+			_lock_direction()
+		_update_visual("idle")
+		queue_redraw()
+		return
+	if phase == Phase.WARNING and not request_special_attack():
+		phase = Phase.WAIT
+		_update_visual("idle")
+		queue_redraw()
+		return
 	phase_time -= delta
 	if phase_time <= 0.0:
 		if phase == Phase.WARNING:
 			for angle in [-spread, 0.0, spread]:
 				var direction := shot_direction.rotated(angle)
 				shot_requested.emit(self, global_position + direction * 24.0, direction)
+			finish_special_attack()
 			phase = Phase.RECOVERY
 			phase_time = 1.6
 		else:
-			phase = Phase.WARNING
+			phase = Phase.WARNING if request_special_attack() else Phase.WAIT
 			phase_time = 0.95
 			spread = 0.50 if is_equal_approx(spread, SPREAD) else SPREAD
 			_lock_direction()
