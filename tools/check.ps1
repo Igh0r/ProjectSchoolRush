@@ -17,7 +17,7 @@ function Invoke-GodotCheck {
 }
 
 Invoke-GodotCheck -Arguments @('--editor', '--import', '--quit')
-foreach ($suite in @('catalog', 'question_variety', 'combat', 'progression', 'run', 'run_report', 'audio', 'movement', 'health', 'rewards', 'enemies', 'enemy_movement', 'attack_coordination', 'encounters', 'art', 'science_route')) {
+foreach ($suite in @('catalog', 'question_variety', 'combat', 'progression', 'run', 'run_report', 'audio', 'training', 'movement', 'health', 'rewards', 'enemies', 'enemy_movement', 'attack_coordination', 'encounters', 'art', 'science_route')) {
     Invoke-GodotCheck -Arguments @('--script', "res://tests/test_$suite.gd")
 }
 if ($Export) {
@@ -47,7 +47,7 @@ if ($Export) {
         "Source modified at export: $($sourceChanges.Count -gt 0)",
         '80 questions; session history; shuffled options; six enemy types; two routes.',
         'Room difficulty: basic, intermediate, intermediate, challenge. Results grouped by difficulty.',
-        'Validation: 16 suites. Includes run review, optional reports and saved audio preferences.',
+        'Validation: 17 suites. Includes run review, optional reports, saved audio preferences and control training.',
         'See PLAYTEST.md for the pending human evaluation of this candidate.',
         'data/curriculum.json is a review copy; the game loads the embedded catalog.'
     ) | Set-Content -LiteralPath (Join-Path $buildRoot 'windows/BUILD_INFO.txt') -Encoding UTF8

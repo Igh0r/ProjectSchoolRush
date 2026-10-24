@@ -7,9 +7,10 @@ const QUESTIONS = preload("res://scripts/systems/question_manager.gd")
 const RUN_REPORT = preload("res://scripts/systems/run_report.gd")
 const SOUND_SCRIPT = preload("res://scripts/systems/sound_effects.gd")
 const AUDIO_PREFERENCES = preload("res://scripts/systems/audio_preferences.gd")
+const CONTROL_TRAINING = preload("res://scripts/systems/control_training.gd")
 const QUEST_BGM = preload("res://bgm/Quest Loop.ogg")
 const BOSS_BGM = preload("res://bgm/Marche du Roi.ogg")
-enum State { MENU, QUESTION, ANSWER, FEEDBACK, COMBAT, CLEARED, DEFEAT, VICTORY, PAUSED }
+enum State { MENU, QUESTION, ANSWER, FEEDBACK, COMBAT, CLEARED, DEFEAT, VICTORY, PAUSED, TRAINING, TRAINING_COMPLETE }
 var state: State = State.MENU
 var previous_state: State = State.COMBAT
 var player
@@ -17,6 +18,7 @@ var room
 var ui
 var music: AudioStreamPlayer
 var sounds
+var training
 var questions = QUESTIONS.new()
 var room_index: int = 0
 var run_epoch: int = 0
@@ -57,6 +59,8 @@ func _ready() -> void:
 	player.died.connect(_on_player_died)
 	player.health_changed.connect(func(_value: int, _maximum: int): _update_hud())
 	room.cleared.connect(_on_room_cleared)
+	training = CONTROL_TRAINING.new()
+	add_child(training)
 	ui = UI_SCRIPT.new()
 	add_child(ui)
 	show_menu()
@@ -79,6 +83,7 @@ func _register_controls() -> void:
 
 func show_menu() -> void:
 	audio_settings_open = false
+	training.stop()
 	get_tree().paused = false
 	run_epoch += 1
 	state = State.MENU
@@ -89,11 +94,12 @@ func show_menu() -> void:
 		push_error("Catálogo inválido: " + "; ".join(questions.validation_errors))
 		ui.show_panel("Conteúdo indisponível", "Não foi possível carregar as perguntas. A partida estará disponível após corrigir o banco de questões.", [])
 		return
-	ui.show_panel("School Rush", "Acerte perguntas e vença o combate para receber melhorias.\nCada rota tem quatro salas e termina contra Napoleão.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: efeitos sonoros", [{"text": "Rota clássica • Dados, nuvem e centurião", "action": start_run.bind(0)}, {"text": "Expedição científica • Pátio, cacto e cientista", "action": start_run.bind(1)}, {"text": "Áudio", "action": show_audio_settings}])
+	ui.show_panel("School Rush", "Acerte perguntas e vença o combate para receber melhorias.\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: efeitos sonoros", [{"text": "Rota clássica • Dados, nuvem e centurião", "action": start_run.bind(0)}, {"text": "Expedição científica • Pátio, cacto e cientista", "action": start_run.bind(1)}, {"text": "Áudio", "action": show_audio_settings}, {"text": "Treinar controles • Área segura", "action": start_training}])
 	_update_hud()
 
 func start_run(route: int = -1) -> void:
 	audio_settings_open = false
+	training.stop()
 	if not questions.validation_errors.is_empty():
 		return
 	if route >= 0:
@@ -112,6 +118,42 @@ func start_run(route: int = -1) -> void:
 	player.reset_run()
 	questions.reset()
 	_prepare_question()
+
+func start_training() -> void:
+	audio_settings_open = false
+	get_tree().paused = false
+	run_epoch += 1
+	state = State.TRAINING
+	room_index = 0
+	last_reward = ""
+	report_notice = ""
+	room.clear_enemies()
+	room.set_room_theme(0)
+	questions.reset()
+	run_report.reset("")
+	ui.reset_health_feedback()
+	player.reset_run()
+	player.position = room.ENTRY
+	player.active = true
+	training.start(player, room)
+	play_music(QUEST_BGM, true)
+	ui.hide_panel()
+	_update_hud()
+
+func finish_training() -> void:
+	if state != State.TRAINING or training.step != training.Step.EXIT or not room.can_exit(player.position):
+		return
+	training.finish()
+	state = State.TRAINING_COMPLETE
+	player.active = false
+	room.set_combat(false)
+	ui.show_panel("Treino concluído!", "Você praticou movimento, corrida, régua e saída.\nNa partida, acerte uma pergunta e vença a sala para receber o bônus.\nOs inimigos reais atacam: observe os avisos e recue entre golpes.", [
+		{"text": "Jogar rota clássica", "action": start_run.bind(0)},
+		{"text": "Jogar expedição científica", "action": start_run.bind(1)},
+		{"text": "Repetir treino", "action": start_training},
+		{"text": "Início", "action": show_menu},
+	])
+	_update_hud()
 
 func _prepare_question() -> void:
 	state = State.QUESTION
@@ -199,6 +241,9 @@ func _resolve_room(epoch: int) -> void:
 	_update_hud()
 
 func advance_room() -> void:
+	if state == State.TRAINING:
+		finish_training()
+		return
 	if state != State.CLEARED or not room.can_exit(player.position):
 		return
 	room_index += 1
@@ -214,13 +259,16 @@ func toggle_pause() -> void:
 		ui.hide_panel()
 		if state == State.COMBAT and room.enemies.is_empty():
 			_resolve_room(run_epoch)
-	elif state in [State.COMBAT, State.CLEARED]:
+	elif state in [State.COMBAT, State.CLEARED, State.TRAINING]:
 		previous_state = state
 		state = State.PAUSED
 		get_tree().paused = true
 		_show_pause_panel()
 
 func _show_pause_panel() -> void:
+	if previous_state == State.TRAINING:
+		ui.show_panel("Treino pausado", training.instruction() + "\nO treino não consome perguntas nem concede bônus.", [{"text": "Continuar treino", "action": toggle_pause}, {"text": "Áudio", "action": show_audio_settings}, {"text": "Recomeçar treino", "action": start_training}, {"text": "Voltar ao início", "action": show_menu}])
+		return
 	ui.show_panel("Pausa", "Vida: %d/%d • Régua: %d • Velocidade: +%s%%\n\nWASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar • M: efeitos sonoros" % [player.health, player.max_health, player.damage, String.num(player.speed_bonus_percent, 1)], [{"text": "Continuar", "action": toggle_pause}, {"text": "Áudio", "action": show_audio_settings}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
 
 func show_audio_settings(notice: String = "") -> void:
@@ -361,6 +409,10 @@ func open_report_folder() -> void:
 
 func _update_hud() -> void:
 	if ui == null:
+		return
+	if state in [State.TRAINING, State.TRAINING_COMPLETE] or (state == State.PAUSED and previous_state == State.TRAINING):
+		ui.update_hud(player.health, player.max_health, player.damage, 1, 0, training.instruction())
+		ui.header.text = "TREINO • Área segura • Régua %d" % player.damage
 		return
 	var message := "WASD / setas: mover   •   Shift: correr   •   Espaço: régua"
 	if state == State.COMBAT and not questions.pending_reward.is_empty():

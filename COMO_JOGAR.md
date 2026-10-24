@@ -1,6 +1,6 @@
-# School Rush — MVP 0.3.0-rc4
+# School Rush — MVP 0.3.0-rc5
 
-A candidata 0.3.0-rc4 acrescenta controles de áudio no menu e na pausa à progressão de dificuldade, oitenta questões, combate e revisão de partida existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
+A candidata 0.3.0-rc5 acrescenta um treino opcional dos controles à progressão de dificuldade, oitenta questões, combate, revisão de partida e ajustes de áudio existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
 
 ## Jogar
 
@@ -66,6 +66,17 @@ Na **Expedição científica**, os encontros mudam:
 
 Cada mistura causa no máximo um acerto. Derrotar o cientista remove suas misturas; derrotar o cacto remove seus espinhos. Pausa, derrota, saída e reinício também controlam esses perigos.
 
+## Treinar os controles
+
+No menu, escolha **Treinar controles • Área segura**. Não é obrigatório para jogar. Siga as instruções no rodapé:
+
+1. Use WASD ou setas para chegar ao círculo azul.
+2. Segure Shift enquanto se move até o círculo amarelo. O indicador acompanha a distância percorrida correndo; Shift parado não conta.
+3. Aproxime-se do dado, mova na direção dele para orientar a régua e use Espaço. O alvo fica parado e não ataca; precisa de três acertos. Você pode manter Espaço pressionado, respeitando a recarga normal.
+4. Vá à porta verde e pressione E. Escolha uma rota na conclusão ou repita o treino.
+
+Esc permite pausar, ajustar áudio, recomeçar ou voltar ao início. O treino não consome perguntas, não concede bônus e não gera relatório de partida. A partida real começa novamente com os atributos iniciais. Os inimigos reais atacam; o treino de controles não ensina todos os padrões de esquiva.
+
 ## Resumo e revisão da partida
 
 Ao vencer ou perder, veja os acertos, salas concluídas, tempo e atributos finais. O tempo começa na primeira escolha e inclui leitura, feedback, combate e deslocamento até a saída; pausa, menu e revisão não entram na contagem. Acertos usam como total as perguntas respondidas: uma derrota na primeira sala pode mostrar 1/1, mesmo com 0/4 salas concluídas.
@@ -103,7 +114,7 @@ No PowerShell, na pasta do projeto:
 .\tools\check.ps1 -Godot 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' -Export
 ```
 
-O segundo comando executa as dezesseis suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques, resumo/revisão de partida e áudio, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
+O segundo comando executa as dezessete suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques, resumo/revisão de partida, áudio e treino, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
 
 Para revisar questões ou ajustar recompensas, siga [data/README.md](data/README.md) no projeto-fonte e gere uma nova build.
 
@@ -120,6 +131,7 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_run_report.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_difficulty.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_audio.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_training.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.

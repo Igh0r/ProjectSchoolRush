@@ -55,9 +55,13 @@ func run_tests() -> void:
 	game.player.active = false
 	game.player.take_damage(10)
 	check(game.player.health == saved_health, "Jogador inativo não deve receber dano")
-	await process_frame # Processa a retomada do áudio antes de liberar a cena.
+	# Encerra os playbacks antes de liberar a cena; a thread de áudio termina de soltar os streams.
+	game.music.stop()
+	game.music.stream = null
+	game.sounds.set_preferences(0.0, true)
+	await process_frame
 	game.queue_free()
 	await process_frame
-	await create_timer(0.1).timeout
+	await create_timer(0.2).timeout
 	print("MOVEMENT TESTS: %d failure(s)" % failures)
 	quit(1 if failures else 0)

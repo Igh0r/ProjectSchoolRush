@@ -19,7 +19,7 @@ func run_tests() -> void:
 	var game = load("res://main.tscn").instantiate()
 	root.add_child(game)
 	var menu_buttons: Array = game.ui.content.get_children().filter(func(child: Node): return child is Button)
-	check(menu_buttons.size() == 3 and menu_buttons[2].text == "Áudio", "Menu deve oferecer duas rotas e ajustes de áudio")
+	check(menu_buttons.size() == 4 and menu_buttons[2].text == "Áudio" and menu_buttons[3].text.begins_with("Treinar controles"), "Menu deve oferecer duas rotas, áudio e treino")
 	menu_buttons[1].pressed.emit()
 	check(game.room.route_index == 1 and game.room.theme_index == 0, "Selecionar expedição deve iniciar pela sala de aula")
 	var expected := [["dice", "dice"], ["dice", "cactus", "cloud"], ["dice", "centurion", "scientist", "cloud"], ["boss"]]
