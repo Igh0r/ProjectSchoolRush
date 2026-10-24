@@ -118,8 +118,8 @@ func _prepare_question() -> void:
 		return
 	for i in range(offered.size()):
 		var question: Dictionary = offered[i]
-		choices.append({"text": "%s • %s\nRecompensa: %s" % [questions.subject_name(question.subject), question.prompt, questions.reward_description(question.subject)], "action": choose_question.bind(i)})
-	ui.show_panel("Sala %d • Escolha seu desafio" % (room_index + 1), "%s • %s\nAcerte e vença o combate para receber o bônus." % [questions.audience, room.route_name()], choices)
+		choices.append({"text": "%s • %s\n%s\nRecompensa: %s" % [questions.subject_name(question.subject), questions.difficulty_name(question.difficulty), question.prompt, questions.reward_description(question.subject)], "action": choose_question.bind(i)})
+	ui.show_panel("Sala %d • Escolha seu desafio" % (room_index + 1), "%s • %s\nProgressão: Fácil → Médio → Médio → Difícil\nAcerte e vença o combate para receber o bônus." % [questions.audience, room.route_name()], choices)
 	_update_hud()
 
 func choose_question(index: int) -> void:
@@ -258,6 +258,12 @@ func show_answer_review(index: int) -> void:
 	var answer: Dictionary = report.answers[index]
 	var description := "Sala %d • %s • %s\n%s • %s\n\n%s\n\nSua resposta: %s\nResposta correta: %s\n\n%s\n\n%s" % [answer.room, answer.subject_name, answer.id, answer.topic, questions.difficulty_name(answer.difficulty), answer.prompt, answer.selected_answer, answer.correct_answer, answer.explanation, RUN_REPORT.reward_text(answer.reward_status)]
 	var choices: Array = []
+	if index == 0:
+		var levels: Array[String] = []
+		for level in ["basic", "intermediate", "challenge"]:
+			var count: Dictionary = report.difficulty_breakdown[level]
+			levels.append("%s: %d/%d" % [questions.difficulty_name(level), count.correct, count.answered] if count.answered > 0 else "%s: não respondido" % questions.difficulty_name(level))
+		description = "Acertos por nível • " + " | ".join(levels) + "\n\n" + description
 	if index > 0:
 		choices.append({"text": "Resposta anterior", "action": show_answer_review.bind(index - 1)})
 	if index + 1 < report.answers.size():

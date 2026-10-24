@@ -1,6 +1,7 @@
 ﻿extends RefCounted
 
 const CATALOG = preload("res://scripts/systems/curriculum_catalog.gd")
+const ROOM_DIFFICULTIES = ["basic", "intermediate", "intermediate", "challenge"]
 var bank: Array[Dictionary] = []
 var subjects: Dictionary = {}
 var audience: String = ""
@@ -82,19 +83,30 @@ func offer() -> Array[Dictionary]:
 	return offered
 
 func _pick_question(pool: Array[Dictionary]) -> Dictionary:
-	# Inéditas primeiro; após esgotar, a menos recente. Nunca repõe a partida.
-	var oldest: int = 2147483647
+	# Nível da sala antes da novidade. Fallback mais próximo, preferindo o mais fácil no empate.
+	var desired: int = CATALOG.DIFFICULTIES.find(room_difficulty(offer_number))
+	var best_level_score: int = 2147483647
+	var eligible: Array[Dictionary] = []
 	for question in pool:
+		var level: int = CATALOG.DIFFICULTIES.find(question.difficulty)
+		var score: int = absi(level - desired) * 10 + level
+		if score < best_level_score:
+			best_level_score = score
+			eligible.clear()
+		if score == best_level_score:
+			eligible.append(question)
+	# Dentro do nível: inéditas, depois menos recentes. Nunca repõe a partida.
+	var oldest: int = 2147483647
+	for question in eligible:
 		oldest = mini(oldest, int(last_seen.get(question.id, 0)))
 	var candidates: Array[Dictionary] = []
 	var best_score: int = 2147483647
-	var desired: String = ["basic", "intermediate", "intermediate", "challenge"][mini(offer_number, 3)]
-	for question in pool:
+	for question in eligible:
 		if int(last_seen.get(question.id, 0)) != oldest:
 			continue
 		var topic_key: String = question.subject + ":" + question.topic
 		var repeated_topic: int = int(topic_exposure.get(topic_key, 0)) + int(last_topic.get(question.subject, "") == question.topic)
-		var score: int = repeated_topic * 10 + absi(CATALOG.DIFFICULTIES.find(question.difficulty) - CATALOG.DIFFICULTIES.find(desired))
+		var score: int = repeated_topic
 		if score < best_score:
 			best_score = score
 			candidates.clear()
@@ -113,8 +125,11 @@ func _shuffle_options(question: Dictionary) -> Dictionary:
 	copy.correct = copy.options.find(answer_text)
 	return copy
 
+func room_difficulty(index: int) -> String:
+	return ROOM_DIFFICULTIES[clampi(index, 0, ROOM_DIFFICULTIES.size() - 1)]
+
 func difficulty_name(difficulty: String) -> String:
-	return {"basic": "Revisão", "intermediate": "Aplicação", "challenge": "Desafio"}.get(difficulty, "")
+	return {"basic": "Fácil", "intermediate": "Médio", "challenge": "Difícil"}.get(difficulty, "")
 
 func choose(index: int) -> bool:
 	if not selected.is_empty() or index < 0 or index >= offered.size():

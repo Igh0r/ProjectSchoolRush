@@ -1,6 +1,6 @@
 # Revisão pedagógica — lote D1
 
-Atualizado em 23/10/2026. Banco de oitenta questões de Ensino Médio. Os vinte IDs originais foram preservados; IDs 6–10 de cada matéria formaram o lote de quarenta e IDs 11–20 completaram oitenta. Gabaritos abaixo indicam a ordem do JSON, antes de qualquer embaralhamento futuro.
+Atualizado em 24/10/2026. Banco de oitenta questões de Ensino Médio. Os vinte IDs originais foram preservados; IDs 6–10 de cada matéria formaram o lote de quarenta e IDs 11–20 completaram oitenta. Gabaritos abaixo indicam a ordem do JSON, antes do embaralhamento em cada oferta. E2 revisou cinco enunciados/alternativas/explicações, mantendo seus IDs, níveis e letras do gabarito; detalhes ao final.
 
 Responsável proposto: Igor. **Nenhuma linha representa aprovação pedagógica já recebida.** O playtest interno aprovou a base do jogo, sem confirmação de revisão individual. A validação técnica não mede adequação escolar nem substitui esta revisão.
 
@@ -103,4 +103,8 @@ As situações curtas são autorais. Estas fontes apoiam os fatos específicos i
 
 | ID | Problema / decisão | Alteração | Revisor / data |
 | --- | --- | --- | --- |
-| — | A preencher após revisão | — | — |
+| mat20 | Desafio exigia apenas multiplicação direta | Contagem com restrição, excluindo as duas ordens de uma dupla proibida | Ajuste de desenvolvimento, 24/10/2026; aceite de Igor pendente |
+| cie10 | Nível médio tinha divisão direta de distância por tempo | Dois trechos com tempos distintos, exigindo distância e tempo totais | Ajuste de desenvolvimento, 24/10/2026; aceite de Igor pendente |
+| por9 | Nível médio tinha apenas um referente explícito | Dois elementos de coesão retomam uma informação e um substantivo diferentes | Ajuste de desenvolvimento, 24/10/2026; aceite de Igor pendente |
+| por15 | Nível médio pedia apenas classificar primeira pessoa | Inferir limite do narrador e revisão de sua interpretação | Ajuste de desenvolvimento, 24/10/2026; aceite de Igor pendente |
+| por20 | Desafio pedia apenas reconhecer ironia | Relacionar ironia à mudança de sentido causada por omitir contexto | Ajuste de desenvolvimento, 24/10/2026; aceite de Igor pendente |

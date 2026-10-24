@@ -12,9 +12,18 @@ func save_preview(filename: String) -> void:
 		push_error("Falha ao salvar captura: " + filename)
 
 func start_with_question(game: Node, question_id: String) -> int:
+	var target_room: int = 0
+	for question in game.questions.bank:
+		if question.id == question_id:
+			target_room = {"basic": 0, "intermediate": 1, "challenge": 3}[question.difficulty]
 	for seed_value in range(200):
 		game.questions.rng.seed = seed_value
 		game.start_run()
+		if target_room > 0:
+			game.questions.reset()
+			game.room_index = target_room
+			game.questions.offer_number = target_room
+			game._prepare_question()
 		for i in range(game.questions.offered.size()):
 			if game.questions.offered[i].id == question_id:
 				return i

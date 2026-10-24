@@ -51,9 +51,16 @@ func finish(outcome: String, room_number: int, attributes: Dictionary) -> void:
 	if not result.is_empty():
 		return
 	var correct_count: int = 0
+	var by_difficulty := {
+		"basic": {"answered": 0, "correct": 0},
+		"intermediate": {"answered": 0, "correct": 0},
+		"challenge": {"answered": 0, "correct": 0},
+	}
 	for answer in answers:
+		by_difficulty[answer.difficulty].answered += 1
 		if answer.correct:
 			correct_count += 1
+			by_difficulty[answer.difficulty].correct += 1
 		if answer.reward_status == "reserved":
 			answer.reward_status = "cancelled"
 	result = {
@@ -62,6 +69,7 @@ func finish(outcome: String, room_number: int, attributes: Dictionary) -> void:
 		"outcome": outcome, "room_reached": room_number, "rooms_cleared": cleared_rooms.size(),
 		"elapsed_seconds": snappedf(elapsed_seconds, 0.01), "combat_seconds": snappedf(combat_seconds, 0.01),
 		"correct_answers": correct_count, "answered_questions": answers.size(),
+		"difficulty_breakdown": by_difficulty,
 		"answers": answers.duplicate(true), "final_attributes": attributes.duplicate(true),
 	}
 

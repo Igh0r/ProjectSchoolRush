@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (23/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1 implementados; candidata 0.3.0-rc2:** oitenta questões para Ensino Médio, histórico na sessão, alternativas embaralhadas, movimento inimigo aprimorado, coordenação de ataques, varredura do Napoleão e resumo/revisão de partida. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Quinze suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (24/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1–E3 implementados; candidata 0.3.0-rc3:** oitenta questões para Ensino Médio, progressão fácil → médio → médio → difícil, variedade dentro do nível, cinco questões revisadas, combate aprimorado e resumo/revisão com acertos por dificuldade. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Quinze suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -20,6 +20,23 @@ O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e so
 | D4 — ritmo dos encontros e chefe | Coordenar ataques perigosos nas salas mistas e acrescentar um segundo padrão anunciado ao Napoleão | Ataques sobrepostos preservam espaço de fuga; chefe alterna padrões reconhecíveis; ambas as rotas continuam concluíveis sem bônus | Concluído tecnicamente; quatorze suítes aprovadas; dificuldade humana a confirmar |
 | D5 — balanceamento e entrega | Comparar com a base aprovada, realizar novo playtest e preparar 0.3.0-rc1 | Regressões aprovadas, feedback da equipe registrado, textos/avisos inspecionados e pacote Windows validado | Entrega técnica preparada; playtest e revisão humana pendentes |
 | E1 — resumo e revisão antes do playtest | Mostrar resultado, tempo, salas e respostas; permitir salvar relatório local | Revisão fiel às alternativas embaralhadas, sem repetir recompensas; pausa e telas finais não contam tempo; exportação opcional sem sobrescrever outra partida | Implementado; quinze suítes aprovadas; candidata 0.3.0-rc2 |
+| E2 — balanceamento das perguntas | Garantir começo fácil e final difícil; alinhar questões ao esforço esperado | Ambas as opções seguem fácil/médio/médio/difícil, inclusive após reiniciar; novidade e tema não deslocam o nível | Implementado; 6.400 partidas simuladas e cinco questões revisadas |
+| E3 — comunicar e acompanhar a curva | Mostrar nível antes da escolha e acertos por dificuldade na revisão/relatório | Mesma classificação na oferta, resposta e revisão; nível não alcançado não conta como erro | Implementado; quinze suítes aprovadas; candidata 0.3.0-rc3 |
+
+#### E2 e E3 — progressão educacional (24/10/2026)
+
+O usuário solicitou perguntas mais fáceis no começo e mais difíceis no final, autorizando a continuidade dos blocos. A análise encontrou que D2 tratava dificuldade como preferência posterior à novidade e ao tema; isso permitia inverter a curva após reinícios ou em temas repetidos.
+
+- A sala agora determina primeiro o nível das duas opções: **sala 1 fácil; salas 2 e 3 médias; sala 4 difícil**, nas duas rotas. As salas centrais mantêm o mesmo patamar para consolidar conteúdo antes do chefe. Errar não impede progressão e não altera o nível das próximas salas.
+- Dentro de matéria/nível, a prioridade é inédita na sessão, depois menos recente; variedade de tema desempata candidatas inéditas. Reiniciar e voltar ao menu preservam o histórico. A exigência de consumir todas as oitenta antes de qualquer repetição global foi substituída por novidade dentro do nível: uma fácil pode repetir antes de um desafio inédito. As oito ofertas da partida continuam sem repetir IDs, e cada matéria aparece duas vezes.
+- Se um catálogo futuro não tiver o nível esperado disponível, o fallback usa o nível mais próximo, preferindo o mais fácil no empate. O banco atual de 8 fáceis, 8 médias e 4 difíceis por matéria tem estoque suficiente para garantir a curva. A classificação continua editorial; a percepção real depende do playtest.
+- Cinco questões ajustadas, preservando IDs, níveis e letras dos gabaritos: `mat20` acrescenta restrição à contagem; `cie10` combina dois trechos; `por9` relaciona dois referentes; `por15` exige inferir limite do narrador; `por20` combina ironia e descontextualização. Registro em `data/REVISAO_PEDAGOGICA.md`, sem marcar aceite de Igor.
+- A oferta mostra **Fácil/Médio/Difícil** antes da escolha, além da sequência das quatro salas. A primeira página de revisão mostra acertos/respondidas por nível; níveis não alcançados aparecem como não respondidos. O JSON acrescenta `difficulty_breakdown` com contagens por nível, preservando respostas e demais campos.
+- Quinze suítes aprovadas. A de variedade percorre cem sementes × 64 partidas (6.400), verificando a curva nas duas opções, novidade/menos recente dentro do nível, equilíbrio das matérias, ausência de repetição na partida, acesso às oitenta questões e embaralhamento correto. Cobertura inclui catálogo com nível ausente, empate de fallback, reinício, fluxo real, JSON e derrota antes dos níveis seguintes.
+- Capturas das quatro salas e resultados por nível em 960×540/1280×720: `tests/capture_difficulty.gd`, arquivos `builds/previews/e2-*` e `e3-*`. As cinco questões revisadas também foram capturadas por `tests/capture_catalog.gd`, com verificação de largura e acesso à última alternativa. Isso não substitui avaliação de dificuldade por estudantes.
+- Pacote Windows: `builds/SchoolRush-MVP-0.3.0-rc3-windows-x64.zip`; log técnico: `builds/validation-0.3.0-rc3.log`. Mantidos os pacotes anteriores como referência.
+
+**Próximos blocos:** D5 humano — jogar ambas as rotas, observar a curva e revisar os cinco IDs alterados junto ao restante do banco; registrar acertos por nível e separar dúvidas de conteúdo de dificuldades do combate. Ajustar textos/classificações/encontros com esse retorno. Preparar Matheus/Alice segue no backlog de arte; não acrescentar sistemas grandes antes de validar a curva.
 
 #### E1 — resumo, revisão e apoio ao playtest (23/10/2026)
 
@@ -32,7 +49,7 @@ O usuário autorizou mais um bloco antes dos playtests. A entrega acrescenta val
 - Capturas de vitória, derrota, confirmação de salvamento e revisão de texto extenso em 960×540/1280×720 em `builds/previews/e1-*.png`; reprodução em `tests/capture_run_report.gd`. Rolagem acompanha a navegação por teclado e cada painel começa no título.
 - Candidata Windows: `builds/SchoolRush-MVP-0.3.0-rc2-windows-x64.zip`. Registro técnico da exportação em `builds/validation-0.3.0-rc2.log`. A rc1 permanece como referência da etapa anterior. Este bloco não equivale a aceite humano de D5.
 
-**Próximo passo:** usar a rc2 nas duas rotas, salvar os resumos desejados e registrar dúvidas por ID e problemas de ataques por sala no `PLAYTEST.md`. Balancear a partir desse retorno; Igor continua com a revisão pedagógica dos oitenta IDs. Preparação de Matheus/Alice permanece no bloco futuro de arte.
+**Continuidade:** E2/E3 acima substituíram a candidata rc2 pela rc3. Usar a candidata atual nas duas rotas, salvar os resumos desejados e registrar dúvidas por ID e problemas de ataques por sala no `PLAYTEST.md`. Igor continua com a revisão pedagógica dos oitenta IDs.
 
 #### D1 e D2 — perguntas para Ensino Médio
 
@@ -54,7 +71,7 @@ Regras para a continuidade de D1/D2:
 - Dificuldade acrescentada no D1, preservando IDs estáveis e o campo de tema existente; validação e `data/README.md` atualizados. Registrar revisão de enunciado, alternativas, gabarito e explicação por ID, inclusive das vinte questões originais.
 - Priorizar questões não apresentadas em partidas anteriores da mesma sessão, contando também as ofertas não escolhidas. Ao esgotar as opções, reutilizar as menos recentes, sempre excluindo as já apresentadas na partida atual. Fechar o jogo encerra esse histórico; save permanente fica fora desta fase.
 - Preservar duas matérias diferentes por sala, todas as quatro matérias nas duas primeiras salas e duas aparições de cada matéria por partida. A seleção começa por revisão básica e amplia a presença de questões intermediárias/desafio nas últimas salas, sem travar quando um grupo se esgota.
-- Embaralhar alternativas sem alterar o catálogo original, remapeando a resposta correta e o feedback. Prioridade da seleção: regras da partida e disponibilidade, novidade na sessão, variedade de tema e dificuldade desejada; flexibilizar tema/dificuldade antes de reutilizar questões recentes.
+- Embaralhar alternativas sem alterar o catálogo original, remapeando a resposta correta e o feedback. **Regra atualizada em E2:** regras da partida e disponibilidade → nível da sala → novidade/menos recente dentro do nível → tema. A prioridade anterior de D2 é histórica e foi substituída para garantir o começo fácil e o final difícil.
 - Validar sequências com sementes reproduzíveis, esgotamento do banco, reinícios, equilíbrio das matérias e correspondência entre gabarito e alternativas. Inspecionar enunciados e explicações longos em 960×540.
 
 #### D3 e D4 — combate com decisões mais claras
@@ -95,7 +112,7 @@ Continuidade de D5:
 - Manter as quinze suítes (incluindo E1) e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
 - Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
 - Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
-- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc2 substitui a rc1 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
+- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc3 substitui a rc2 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
 
 Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
 
@@ -191,7 +208,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc2 e ajustar os encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
+**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc3 e ajustar questões e encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -361,7 +378,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 | Testar a pasta exportada em outro PC sem Godot | Equipe | Execução externa não confirmada; verificar vitória, derrota e reinício na próxima entrega |
 | Ampliar avaliação com participantes externos | Equipe | Rodada complementar opcional, conforme disponibilidade |
 
-O aceite interno da base autorizou a evolução. A 0.3.0-rc2 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
+O aceite interno da base autorizou a evolução. A 0.3.0-rc3 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
 
 ### Histórico de versionamento
 
@@ -387,3 +404,4 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - `8c14cf9`: D4 — coordenação de ataques especiais e varredura do Napoleão.
 - D5 técnico: candidata 0.3.0-rc1, guia, roteiro e pacote para a próxima rodada (consultar `git log` para o hash).
 - E1: resumo, revisão de respostas e relatório local opcional; candidata 0.3.0-rc2 (consultar `git log` para o hash).
+- E2/E3: dificuldade por sala, cinco questões revisadas e acertos por nível; candidata 0.3.0-rc3 (consultar `git log` para o hash).

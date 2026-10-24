@@ -1,8 +1,8 @@
 # School Rush — playtest aprovado e acompanhamento da fase 0.3
 
-Atualizado em 23/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc2**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
+Atualizado em 24/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc3**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
 
-**D1–D4 e E1 implementados:** oitenta questões, histórico na sessão, preferências de tema/dificuldade e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques, varredura do chefe e resumo/revisão de partida com relatório local opcional. Quinze suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
+**D1–D4 e E1–E3 implementados:** oitenta questões, progressão fácil → médio → médio → difícil nas duas opções, variedade dentro do nível, cinco questões revisadas e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques, varredura do chefe e resumo/revisão de partida com relatório local opcional e acertos por nível. Quinze suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
 
 ## Resultado informado em 23/10/2026
 
@@ -19,6 +19,7 @@ Comparar a base aprovada com a candidata resultante da fase D. Usuário e Igor a
 | --- | --- | --- |
 | Variedade | Temas e formas de raciocínio diferentes; repetição após reiniciar na mesma sessão | IDs vistos/repetidos e número de partidas |
 | Clareza das questões | Enunciados, alternativas e explicações corretos e legíveis | ID, dúvida e correção necessária |
+| Curva de dificuldade | Sala 1 acessível, salas 2/3 com aplicação e sala 4 com maior exigência; repetir após reiniciar | Acertos/respondidas por nível, IDs mal classificados e motivo percebido |
 | Movimento inimigo | Amontoamento, inimigos presos e perseguição/fuga excessiva | Rota, sala e inimigos envolvidos |
 | Ataques | Aviso percebido, possibilidade de escapar e janela de contra-ataque | Padrão e situação em que houve dificuldade |
 | Encontros e chefe | Sobreposição de perigos, espaço de fuga e distinção dos dois padrões previstos | Sala, posição e combinação de ataques |
@@ -54,7 +55,10 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 - [ ] Movimento, diagonal, corrida, régua e paredes respondem bem no teclado.
 - [ ] A barra acompanha dano, cura e aumento da vida máxima; vida baixa fica clara.
 - [ ] As quatro matérias aparecem; escolher/responder rapidamente não duplica ações.
-- [ ] Reiniciar e voltar ao menu preservam prioridade de perguntas inéditas; fechar o jogo inicia novo histórico.
+- [ ] Reiniciar e voltar ao menu preservam prioridade de perguntas inéditas dentro do nível; fechar o jogo inicia novo histórico.
+- [ ] As duas opções seguem Fácil, Médio, Médio e Difícil nas duas rotas, inclusive após três reinícios.
+- [ ] O nível aparece antes da escolha; a revisão e o JSON mostram acertos por nível sem contar etapas não alcançadas como erros.
+- [ ] Avaliar especialmente mat20, cie10, por9, por15 e por20, cujos textos e alternativas foram revisados em E2.
 - [ ] Alternativas mudam de posição e o feedback continua indicando a resposta correta.
 - [ ] Dados se separam, nuvem/cientista reposicionam entre ataques e continuam alcançáveis.
 - [ ] ABERTO comunica a oportunidade de contra-ataque do centurião e do chefe.
@@ -121,4 +125,4 @@ Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se recon
 - Duração de partidas concluídas avaliada contra o alvo de 5–8 minutos; registrar decisão caso o alvo seja revisto.
 - Sensação dos controles/áudio e execução em outro PC aprovadas pela equipe.
 
-Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc2, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.
+Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc3, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.

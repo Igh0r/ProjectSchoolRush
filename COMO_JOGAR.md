@@ -1,6 +1,6 @@
-# School Rush — MVP 0.3.0-rc2
+# School Rush — MVP 0.3.0-rc3
 
-A candidata 0.3.0-rc2 reúne oitenta questões, histórico durante a sessão, alternativas embaralhadas, novos movimentos dos inimigos, dois ataques do Napoleão e resumo/revisão de partida. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
+A candidata 0.3.0-rc3 acrescenta progressão de dificuldade garantida por sala, cinco questões revisadas e acertos por nível às oitenta questões, combate e revisão de partida existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
 
 ## Jogar
 
@@ -18,7 +18,16 @@ No Windows 64 bits, abra `SchoolRush.exe` na pasta da build. Não é necessário
 
 No menu, escolha **Rota clássica** ou **Expedição científica**. Cada uma tem quatro salas e o mesmo sistema de perguntas/recompensas. Reiniciar mantém a rota escolhida; volte ao início para trocar.
 
-Escolha uma das duas perguntas e responda. O banco contém 80 questões para Ensino Médio, vinte por matéria, com temas de revisão, aplicação e interpretação. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida. Ao reiniciar ou voltar ao menu, o jogo prioriza questões ainda não vistas na sessão; depois de esgotá-las, reutiliza as menos recentes. Fechar o jogo limpa esse histórico. Alternativas mudam de posição, e as salas passam a preferir revisão, aplicação e desafio, conforme o conteúdo disponível.
+Escolha uma das duas perguntas e responda. O banco contém 80 questões para Ensino Médio, vinte por matéria, com temas de revisão, aplicação e interpretação. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida.
+
+| Sala | Dificuldade das duas opções | Tipo de raciocínio |
+| --- | --- | --- |
+| 1 | Fácil | Conceitos e aplicação direta |
+| 2 | Médio | Aplicação contextualizada e interpretação |
+| 3 | Médio | Consolidação com outros temas e questões |
+| 4 | Difícil | Condições, múltiplas etapas e leitura crítica |
+
+Essa curva vale nas duas rotas e continua após reiniciar. O nível aparece antes de escolher a pergunta. Dentro do nível da sala, o jogo prioriza questões ainda não vistas na sessão e depois reutiliza as menos recentes. Uma fácil já vista pode voltar antes de uma difícil inédita para manter o começo acessível. Fechar o jogo limpa esse histórico. Alternativas continuam mudando de posição. As classificações serão refinadas com a revisão de Igor e os playtests.
 
 | Matéria | Bônus por acerto, recebido após vencer a sala |
 | --- | --- |
@@ -61,7 +70,7 @@ Cada mistura causa no máximo um acerto. Derrotar o cientista remove suas mistur
 
 Ao vencer ou perder, veja os acertos, salas concluídas, tempo e atributos finais. O tempo começa na primeira escolha e inclui leitura, feedback, combate e deslocamento até a saída; pausa, menu e revisão não entram na contagem. Acertos usam como total as perguntas respondidas: uma derrota na primeira sala pode mostrar 1/1, mesmo com 0/4 salas concluídas.
 
-Em **Rever respostas**, percorra suas escolhas, gabaritos e explicações. A revisão indica se o bônus foi recebido, não teve efeito por atingir o limite ou foi cancelado pela derrota. Use a rolagem ou Tab para acessar os botões de textos longos; **Voltar ao resumo** retorna ao resultado.
+Em **Rever respostas**, percorra suas escolhas, gabaritos e explicações. A primeira página mostra também os acertos por nível; níveis ainda não respondidos são identificados sem contar como erro. A revisão indica se o bônus foi recebido, não teve efeito por atingir o limite ou foi cancelado pela derrota. Use a rolagem ou Tab para acessar os botões de textos longos; **Voltar ao resumo** retorna ao resultado.
 
 **Salvar resumo neste computador** guarda um arquivo JSON e mostra o caminho completo. Depois, use **Abrir pasta dos resumos** para localizá-lo no Explorador. No Windows, a pasta padrão é `%APPDATA%\Godot\app_userdata\School Rush\reports`. Você decide se deseja compartilhá-lo com a equipe; não há envio automático nem solicitação de nome. O arquivo contém versão, rota, data UTC, tempos, resultado, atributos e respostas com explicações. Clicar novamente em salvar reutiliza o mesmo arquivo.
 
@@ -99,6 +108,7 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_catalog.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_combat_phase.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_run_report.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_difficulty.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.

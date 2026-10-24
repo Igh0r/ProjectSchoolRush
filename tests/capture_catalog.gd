@@ -38,10 +38,10 @@ func capture() -> void:
 		var choices: Array = []
 		for i in range(2):
 			var question: Dictionary = game.questions.offered[i]
-			choices.append({"text": "%s • %s\nRecompensa: %s" % [game.questions.subject_name(question.subject), question.prompt, game.questions.reward_description(question.subject)], "action": game.choose_question.bind(i)})
-		game.ui.show_panel("Sala 1 • Escolha seu desafio", "Ensino Médio • Rota clássica\nAcerte e vença o combate para receber o bônus.", choices)
+			choices.append({"text": "%s • %s\n%s\nRecompensa: %s" % [game.questions.subject_name(question.subject), game.questions.difficulty_name(question.difficulty), question.prompt, game.questions.reward_description(question.subject)], "action": game.choose_question.bind(i)})
+		game.ui.show_panel("Prévia de textos extensos", "Ensino Médio • Rota clássica\nProgressão: Fácil → Médio → Médio → Difícil\nAcerte e vença o combate para receber o bônus.", choices)
 		await save_preview(game, prefix + "choice")
-		for question_id in ["mat18", "his9", "his19", "cie15", "por19"]:
+		for question_id in ["mat18", "his9", "his19", "cie15", "por19", "mat20", "cie10", "por9", "por15", "por20"]:
 			game.start_run()
 			for question in game.questions.bank:
 				if question.id == question_id:

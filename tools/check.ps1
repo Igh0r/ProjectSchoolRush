@@ -46,6 +46,7 @@ if ($Export) {
         "Source base commit: $sourceCommit",
         "Source modified at export: $($sourceChanges.Count -gt 0)",
         '80 questions; session history; shuffled options; six enemy types; two routes.',
+        'Room difficulty: basic, intermediate, intermediate, challenge. Results grouped by difficulty.',
         'Validation: 15 suites. Includes run summary, answer review and optional local report.',
         'See PLAYTEST.md for the pending human evaluation of this candidate.',
         'data/curriculum.json is a review copy; the game loads the embedded catalog.'

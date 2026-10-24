@@ -21,6 +21,9 @@ func run_tests() -> void:
 	game.start_run(1)
 	var expected_answers: Array = []
 	for index in range(4):
+		for offered in game.questions.offered:
+			check(offered.difficulty == ["basic", "intermediate", "intermediate", "challenge"][index], "Fluxo real deve manter a progressão de dificuldade")
+		check(game.ui.content.get_child(2).text.contains(game.questions.difficulty_name(game.questions.offered[0].difficulty)), "Oferta deve mostrar o nível real antes da escolha")
 		game._process(2.0)
 		game.choose_question(0)
 		var question: Dictionary = game.questions.selected.duplicate(true)
@@ -46,6 +49,9 @@ func run_tests() -> void:
 	var result: Dictionary = game.run_report.snapshot()
 	check(result.outcome == "victory" and result.rooms_cleared == 4, "Vitória deve registrar quatro salas sem duplicar")
 	check(result.answered_questions == 4 and result.correct_answers == 3, "Contagem deve distinguir erro e acerto sem duplicar")
+	check(result.difficulty_breakdown.basic == {"answered": 1, "correct": 1}, "Resumo deve contar acerto fácil")
+	check(result.difficulty_breakdown.intermediate == {"answered": 2, "correct": 1}, "Resumo deve separar acertos médios")
+	check(result.difficulty_breakdown.challenge == {"answered": 1, "correct": 1}, "Resumo deve contar acerto difícil")
 	check(result.elapsed_seconds == 43.0 and result.combat_seconds == 16.0, "Tempo deve incluir leitura e excluir pausa")
 	check(result.route == game.room.route_name(), "Resumo deve registrar a rota escolhida")
 	for index in range(4):
@@ -71,6 +77,7 @@ func run_tests() -> void:
 	if saved.error == OK:
 		var decoded = JSON.parse_string(FileAccess.get_file_as_string(saved.path))
 		check(decoded.answers.size() == 4 and decoded.correct_answers == 3 and decoded.game_version == ProjectSettings.get_setting("application/config/version"), "JSON deve preservar respostas e versão")
+		check(decoded.difficulty_breakdown.intermediate.correct == 1 and decoded.difficulty_breakdown.intermediate.answered == 2, "JSON deve preservar acertos por nível")
 		check(game.run_report.save_json(directory).path == saved.path, "Salvar novamente deve reutilizar arquivo")
 		game.save_run_report(directory)
 		check(game.report_notice.contains(ProjectSettings.globalize_path(saved.path)), "Tela deve informar onde o resumo foi salvo")
@@ -100,6 +107,7 @@ func run_tests() -> void:
 	result = game.run_report.snapshot()
 	check(result.outcome == "defeat" and result.rooms_cleared == 0 and result.room_reached == 1, "Morte simultânea deve registrar derrota sem sala concluída")
 	check(result.correct_answers == 1 and result.answers[0].reward_status == "cancelled", "Derrota deve preservar acerto e cancelar bônus")
+	check(result.difficulty_breakdown.challenge == {"answered": 0, "correct": 0}, "Nível não alcançado não pode contar como erro")
 	game._on_player_died()
 	game._process(10.0)
 	check(game.run_report.snapshot() == result, "Resultado final deve ser estável")
