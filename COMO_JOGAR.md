@@ -1,6 +1,6 @@
-# School Rush — MVP 0.3.0-rc3
+# School Rush — MVP 0.3.0-rc4
 
-A candidata 0.3.0-rc3 acrescenta progressão de dificuldade garantida por sala, cinco questões revisadas e acertos por nível às oitenta questões, combate e revisão de partida existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
+A candidata 0.3.0-rc4 acrescenta controles de áudio no menu e na pausa à progressão de dificuldade, oitenta questões, combate e revisão de partida existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
 
 ## Jogar
 
@@ -76,6 +76,16 @@ Em **Rever respostas**, percorra suas escolhas, gabaritos e explicações. A pri
 
 Salve antes de reiniciar ou sair se quiser conservar o registro. Partidas abandonadas pelo menu/reinício não geram relatório. O arquivo não permite retomar a partida nem restaura o histórico de questões ao reabrir o jogo.
 
+## Ajustar o áudio
+
+Abra **Áudio** no menu inicial ou na pausa. Ajuste **Música** e **Efeitos** separadamente entre 0 e 100%; zero silencia o canal. Use mouse ou Tab e setas. O padrão de 100% corresponde aos volumes anteriores do jogo.
+
+**Silenciar efeitos (M)** interrompe os efeitos, preservando o volume escolhido. M continua controlando só os efeitos; para silenciar música, coloque Música em 0%. A música mantém a posição durante o silêncio. O menu inicial não inicia uma música apenas para testar o volume; os ajustes são ouvidos durante a partida ou pela pausa.
+
+As mudanças são imediatas. **Salvar e voltar** mantém as preferências ao reabrir o jogo; **Voltar sem salvar** ou Esc mantém as alterações só até fechar o jogo. **Restaurar padrão** aplica 100% e liga os efeitos; salve depois se quiser conservar esse padrão. Reiniciar uma partida preserva os ajustes da sessão. Ao abrir Áudio pela pausa, Esc retorna à pausa, sem retomar o combate.
+
+As preferências ficam em `%APPDATA%\Godot\app_userdata\School Rush\audio.cfg` no Windows. Se não for possível salvar, o jogo informa e mantém o ajuste durante a sessão, permitindo tentar novamente. Isso não salva progresso da partida.
+
 ## Estado da versão
 
 Versão candidata com sprites animados em seis tipos de monstros e quatro pisos derivados da arte fornecida. O jogador e parte da interface/efeitos continuam provisórios: os respectivos pacotes são referências que ainda precisam de preparação. As músicas adicionadas pela equipe foram preservadas; M alterna os efeitos sonoros e não a música de fundo.
@@ -93,7 +103,7 @@ No PowerShell, na pasta do projeto:
 .\tools\check.ps1 -Godot 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' -Export
 ```
 
-O segundo comando executa as quinze suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques e resumo/revisão de partida, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
+O segundo comando executa as dezesseis suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques, resumo/revisão de partida e áudio, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
 
 Para revisar questões ou ajustar recompensas, siga [data/README.md](data/README.md) no projeto-fonte e gere uma nova build.
 
@@ -109,6 +119,7 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_combat_phase.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_run_report.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_difficulty.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_audio.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.

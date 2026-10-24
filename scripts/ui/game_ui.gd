@@ -168,3 +168,56 @@ func show_panel(title: String, description: String, choices: Array) -> void:
 
 func hide_panel() -> void:
 	overlay.hide()
+
+func show_audio_settings(music_percent: float, effects_percent: float, muted: bool, actions: Dictionary, notice: String = "") -> void:
+	var description := "Ajustes aplicados na hora. Sem salvar, valem só nesta sessão.\nTab: navegar • Setas: ajustar • Esc: voltar"
+	if not notice.is_empty():
+		description += "\n" + notice
+	show_panel("Áudio", description, [
+		{"text": "Salvar e voltar", "action": actions.save},
+		{"text": "Restaurar padrão", "action": actions.reset},
+		{"text": "Voltar sem salvar", "action": actions.back},
+	])
+	var action_buttons: Array = content.get_children().filter(func(child): return child is Button)
+	var first_slider: HSlider
+	for item in [{"name": "Música", "value": music_percent, "action": actions.music}, {"name": "Efeitos", "value": effects_percent, "action": actions.effects}]:
+		var box := HBoxContainer.new()
+		var label := Label.new()
+		label.text = "%s: %d%%" % [item.name, item.value]
+		label.add_theme_font_size_override("font_size", 18)
+		label.custom_minimum_size.x = 165
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		box.add_child(label)
+		var slider := HSlider.new()
+		slider.name = item.name
+		slider.min_value = 0
+		slider.max_value = 100
+		slider.step = 5
+		slider.value = item.value
+		slider.custom_minimum_size.y = 36
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slider.focus_mode = Control.FOCUS_ALL
+		box.add_child(slider)
+		slider.value_changed.connect(func(value: float):
+			label.text = "%s: %d%%" % [item.name, value]
+			item.action.call(value)
+		)
+		content.add_child(box)
+		content.move_child(box, 2 if first_slider == null else 3)
+		if first_slider == null:
+			first_slider = slider
+	var checkbox := CheckButton.new()
+	checkbox.text = "Silenciar efeitos (M)"
+	checkbox.button_pressed = muted
+	checkbox.add_theme_font_size_override("font_size", 18)
+	checkbox.toggled.connect(actions.mute)
+	content.add_child(checkbox)
+	content.move_child(checkbox, 4)
+	var action_row := HBoxContainer.new()
+	action_row.add_theme_constant_override("separation", 12)
+	content.add_child(action_row)
+	for button in action_buttons:
+		button.reparent(action_row)
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	first_slider.grab_focus()
+	scroll.set_deferred("scroll_vertical", 0)

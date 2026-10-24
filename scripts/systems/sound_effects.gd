@@ -1,6 +1,7 @@
 extends Node
 
 var muted: bool = false
+var volume_percent: float = 100.0
 var clips: Dictionary = {}
 var channels: Array[AudioStreamPlayer] = []
 var next_channel: int = 0
@@ -23,17 +24,19 @@ func _ready() -> void:
 		channels.append(channel)
 
 func play_cue(cue: String) -> void:
-	if muted or not clips.has(cue):
+	if muted or volume_percent <= 0.0 or not clips.has(cue):
 		return
 	var channel := channels[next_channel]
 	next_channel = (next_channel + 1) % channels.size()
 	channel.stream = clips[cue]
 	channel.play()
 
-func toggle_mute() -> void:
-	muted = not muted
-	if muted:
-		for channel in channels:
+func set_preferences(percent: float, silence: bool) -> void:
+	volume_percent = clampf(percent, 0.0, 100.0)
+	muted = silence
+	for channel in channels:
+		channel.volume_linear = db_to_linear(-20.0) * volume_percent / 100.0
+		if muted or volume_percent <= 0.0:
 			channel.stop()
 
 func _tone(frequency: float, duration: float) -> AudioStreamWAV:

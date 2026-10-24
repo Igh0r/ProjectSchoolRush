@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (24/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1–E3 implementados; candidata 0.3.0-rc3:** oitenta questões para Ensino Médio, progressão fácil → médio → médio → difícil, variedade dentro do nível, cinco questões revisadas, combate aprimorado e resumo/revisão com acertos por dificuldade. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Quinze suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (24/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1–E4 implementados; candidata 0.3.0-rc4:** oitenta questões para Ensino Médio, progressão fácil → médio → médio → difícil, variedade dentro do nível, cinco questões revisadas, combate aprimorado, resumo/revisão com acertos por dificuldade e ajustes de áudio. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Dezesseis suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -22,6 +22,20 @@ O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e so
 | E1 — resumo e revisão antes do playtest | Mostrar resultado, tempo, salas e respostas; permitir salvar relatório local | Revisão fiel às alternativas embaralhadas, sem repetir recompensas; pausa e telas finais não contam tempo; exportação opcional sem sobrescrever outra partida | Implementado; quinze suítes aprovadas; candidata 0.3.0-rc2 |
 | E2 — balanceamento das perguntas | Garantir começo fácil e final difícil; alinhar questões ao esforço esperado | Ambas as opções seguem fácil/médio/médio/difícil, inclusive após reiniciar; novidade e tema não deslocam o nível | Implementado; 6.400 partidas simuladas e cinco questões revisadas |
 | E3 — comunicar e acompanhar a curva | Mostrar nível antes da escolha e acertos por dificuldade na revisão/relatório | Mesma classificação na oferta, resposta e revisão; nível não alcançado não conta como erro | Implementado; quinze suítes aprovadas; candidata 0.3.0-rc3 |
+| E4 — conforto de áudio | Ajustar música e efeitos pelo menu/pausa e salvar preferências | Volumes independentes, silêncio real em zero, pausa preservada e ajustes restaurados ao reabrir | Implementado; dezesseis suítes aprovadas; candidata 0.3.0-rc4 |
+
+#### E4 — ajustes de áudio (24/10/2026)
+
+Com a continuidade autorizada e sem novo retorno humano de D5, este bloco trata do conforto do áudio, item já previsto no roteiro. A música tinha volume fixo e M controlava somente os efeitos. Agora o menu inicial e a pausa oferecem **Áudio**, com volumes independentes de 0 a 100%, em passos de 5%, e opção de silenciar efeitos.
+
+- Ajustes aplicados na hora. Música em zero permanece na mesma faixa/posição sem som; efeitos em zero ou silenciados param os canais ativos e impedem novos sons. 100% corresponde aos volumes anteriores, sem ampliar o ganho original. M continua alternando somente os efeitos e sincroniza o controle quando a tela está aberta.
+- **Salvar e voltar** grava `user://audio.cfg`; a próxima abertura restaura volumes e silêncio. **Voltar sem salvar** ou Esc preserva os ajustes apenas nesta sessão. **Restaurar padrão** aplica 100% nos dois canais e remove o silêncio; salvar é necessário para conservar esse padrão ao reabrir. Reiniciar uma partida não reinicia preferências de áudio.
+- Na pausa, abrir, ajustar e fechar áudio mantém inimigos, perigos e cronômetro parados. Esc volta primeiro à pausa; Continuar/Esc retoma o jogo depois. Arquivo ausente usa o padrão; tipos inválidos/valores fora do intervalo são normalizados; falha de leitura ou salvamento recebe mensagem sem bloquear a partida. Arquivos de relatório e catálogo são independentes.
+- Dezesseis suítes aprovadas. A nova suíte usa configuração temporária em `builds`, verifica controles reais, canais independentes, zero/silêncio, M, limites/tipos, leitura/gravação, falha/retentativa, padrão, reinício e pausa sem avanço do tempo. Preferências do jogador não são alteradas pelos testes.
+- Capturas em 960×540/1280×720 de menu, áudio, pausa, controles ajustados e aviso de erro; reprodução em `tests/capture_audio.gd`, arquivos `builds/previews/e4-*.png`. Layout compacto oferece mouse, Tab e setas. Conforto auditivo continua dependendo da avaliação da equipe.
+- Candidata Windows: `builds/SchoolRush-MVP-0.3.0-rc4-windows-x64.zip`; log: `builds/validation-0.3.0-rc4.log`. As candidatas anteriores permanecem disponíveis.
+
+**Próximo passo:** playtest da candidata atual com as duas rotas, revisão pedagógica e avaliação dos volumes. Registrar ajustes de perguntas/encontros com evidência; a preparação de Matheus/Alice continua no backlog de arte.
 
 #### E2 e E3 — progressão educacional (24/10/2026)
 
@@ -109,10 +123,10 @@ Quatorze suítes passaram. A nova suíte verifica teto, espera até sumir o peri
 
 Continuidade de D5:
 
-- Manter as quinze suítes (incluindo E1) e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
+- Manter as dezesseis suítes (incluindo áudio) e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
 - Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
 - Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
-- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc3 substitui a rc2 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
+- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc4 substitui a rc3 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
 
 Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
 
@@ -208,7 +222,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc3 e ajustar questões e encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
+**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc4 e ajustar questões e encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. Preparar frames limpos de Matheus/Alice permanece no backlog; a prioridade definida pelo usuário é conteúdo educacional e combate.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -378,7 +392,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 | Testar a pasta exportada em outro PC sem Godot | Equipe | Execução externa não confirmada; verificar vitória, derrota e reinício na próxima entrega |
 | Ampliar avaliação com participantes externos | Equipe | Rodada complementar opcional, conforme disponibilidade |
 
-O aceite interno da base autorizou a evolução. A 0.3.0-rc3 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
+O aceite interno da base autorizou a evolução. A 0.3.0-rc4 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
 
 ### Histórico de versionamento
 
@@ -405,3 +419,4 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - D5 técnico: candidata 0.3.0-rc1, guia, roteiro e pacote para a próxima rodada (consultar `git log` para o hash).
 - E1: resumo, revisão de respostas e relatório local opcional; candidata 0.3.0-rc2 (consultar `git log` para o hash).
 - E2/E3: dificuldade por sala, cinco questões revisadas e acertos por nível; candidata 0.3.0-rc3 (consultar `git log` para o hash).
+- E4: volumes independentes no menu/pausa e preferências locais; candidata 0.3.0-rc4 (consultar `git log` para o hash).

@@ -6,6 +6,7 @@ const UI_SCRIPT = preload("res://scripts/ui/game_ui.gd")
 const QUESTIONS = preload("res://scripts/systems/question_manager.gd")
 const RUN_REPORT = preload("res://scripts/systems/run_report.gd")
 const SOUND_SCRIPT = preload("res://scripts/systems/sound_effects.gd")
+const AUDIO_PREFERENCES = preload("res://scripts/systems/audio_preferences.gd")
 const QUEST_BGM = preload("res://bgm/Quest Loop.ogg")
 const BOSS_BGM = preload("res://bgm/Marche du Roi.ogg")
 enum State { MENU, QUESTION, ANSWER, FEEDBACK, COMBAT, CLEARED, DEFEAT, VICTORY, PAUSED }
@@ -22,6 +23,10 @@ var run_epoch: int = 0
 var last_reward: String = ""
 var run_report = RUN_REPORT.new()
 var report_notice: String = ""
+var audio_preferences = AUDIO_PREFERENCES.new()
+var audio_settings_path: String = "user://audio.cfg"
+var audio_settings_open: bool = false
+var audio_load_failed: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -33,6 +38,9 @@ func _ready() -> void:
 	add_child(music)
 	sounds = SOUND_SCRIPT.new()
 	add_child(sounds)
+	var audio_error: Error = audio_preferences.load_from(audio_settings_path)
+	audio_load_failed = audio_error != OK and audio_error != ERR_FILE_NOT_FOUND
+	_apply_audio_preferences()
 	room = ROOM_SCENE.instantiate()
 	room.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(room)
@@ -70,6 +78,7 @@ func _register_controls() -> void:
 				InputMap.action_add_event(action, event)
 
 func show_menu() -> void:
+	audio_settings_open = false
 	get_tree().paused = false
 	run_epoch += 1
 	state = State.MENU
@@ -80,10 +89,11 @@ func show_menu() -> void:
 		push_error("Catálogo inválido: " + "; ".join(questions.validation_errors))
 		ui.show_panel("Conteúdo indisponível", "Não foi possível carregar as perguntas. A partida estará disponível após corrigir o banco de questões.", [])
 		return
-	ui.show_panel("School Rush", "Acerte perguntas e vença o combate para receber melhorias.\nCada rota tem quatro salas e termina contra Napoleão.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: efeitos sonoros", [{"text": "Rota clássica • Dados, nuvem e centurião", "action": start_run.bind(0)}, {"text": "Expedição científica • Pátio, cacto e cientista", "action": start_run.bind(1)}])
+	ui.show_panel("School Rush", "Acerte perguntas e vença o combate para receber melhorias.\nCada rota tem quatro salas e termina contra Napoleão.\n\nWASD / setas: mover • Shift: correr • Espaço: régua\nE: sair pela porta • Esc: pausar • M: efeitos sonoros", [{"text": "Rota clássica • Dados, nuvem e centurião", "action": start_run.bind(0)}, {"text": "Expedição científica • Pátio, cacto e cientista", "action": start_run.bind(1)}, {"text": "Áudio", "action": show_audio_settings}])
 	_update_hud()
 
 func start_run(route: int = -1) -> void:
+	audio_settings_open = false
 	if not questions.validation_errors.is_empty():
 		return
 	if route >= 0:
@@ -195,6 +205,9 @@ func advance_room() -> void:
 	_prepare_question()
 
 func toggle_pause() -> void:
+	if audio_settings_open:
+		close_audio_settings()
+		return
 	if state == State.PAUSED:
 		state = previous_state
 		get_tree().paused = false
@@ -205,7 +218,66 @@ func toggle_pause() -> void:
 		previous_state = state
 		state = State.PAUSED
 		get_tree().paused = true
-		ui.show_panel("Pausa", "Vida: %d/%d • Régua: %d • Velocidade: +%s%%\n\nWASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar • M: ligar/desligar som" % [player.health, player.max_health, player.damage, String.num(player.speed_bonus_percent, 1)], [{"text": "Continuar", "action": toggle_pause}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
+		_show_pause_panel()
+
+func _show_pause_panel() -> void:
+	ui.show_panel("Pausa", "Vida: %d/%d • Régua: %d • Velocidade: +%s%%\n\nWASD / setas: mover • Shift: correr\nEspaço: atacar • E: sair pela porta\nEsc: continuar • M: efeitos sonoros" % [player.health, player.max_health, player.damage, String.num(player.speed_bonus_percent, 1)], [{"text": "Continuar", "action": toggle_pause}, {"text": "Áudio", "action": show_audio_settings}, {"text": "Reiniciar partida", "action": start_run}, {"text": "Voltar ao início", "action": show_menu}])
+
+func show_audio_settings(notice: String = "") -> void:
+	if state not in [State.MENU, State.PAUSED]:
+		return
+	audio_settings_open = true
+	if audio_load_failed and notice.is_empty():
+		notice = "Não foi possível ler suas preferências. Usando o padrão; salve para tentar novamente."
+	ui.show_audio_settings(audio_preferences.music_percent, audio_preferences.effects_percent, audio_preferences.effects_muted, {
+		"music": set_music_volume, "effects": set_effects_volume, "mute": set_effects_muted,
+		"save": save_audio_settings, "reset": reset_audio_settings, "back": close_audio_settings,
+	}, notice)
+
+func _apply_audio_preferences() -> void:
+	music.volume_linear = db_to_linear(-8.0) * audio_preferences.music_percent / 100.0
+	sounds.set_preferences(audio_preferences.effects_percent, audio_preferences.effects_muted)
+
+func set_music_volume(value: float) -> void:
+	if not audio_settings_open:
+		return
+	audio_preferences.music_percent = clampf(value, 0.0, 100.0)
+	_apply_audio_preferences()
+
+func set_effects_volume(value: float) -> void:
+	if not audio_settings_open:
+		return
+	audio_preferences.effects_percent = clampf(value, 0.0, 100.0)
+	_apply_audio_preferences()
+
+func set_effects_muted(value: bool) -> void:
+	audio_preferences.effects_muted = value
+	_apply_audio_preferences()
+
+func reset_audio_settings() -> void:
+	if not audio_settings_open:
+		return
+	audio_preferences.reset()
+	_apply_audio_preferences()
+	show_audio_settings("Padrão aplicado. Salve para manter ao reabrir.")
+
+func save_audio_settings() -> void:
+	if not audio_settings_open:
+		return
+	if audio_preferences.save_to(audio_settings_path) != OK:
+		show_audio_settings("Não foi possível salvar. Os ajustes continuam nesta sessão; tente novamente.")
+		return
+	audio_load_failed = false
+	close_audio_settings()
+
+func close_audio_settings() -> void:
+	if not audio_settings_open:
+		return
+	audio_settings_open = false
+	if state == State.PAUSED:
+		_show_pause_panel()
+	elif state == State.MENU:
+		show_menu()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not event.is_echo():
@@ -214,7 +286,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("interact") and not event.is_echo():
 		advance_room()
 	elif event.is_action_pressed("mute") and not event.is_echo():
-		sounds.toggle_mute()
+		set_effects_muted(not audio_preferences.effects_muted)
+		if audio_settings_open:
+			show_audio_settings()
 
 func _process(delta: float) -> void:
 	if state in [State.QUESTION, State.ANSWER, State.FEEDBACK, State.COMBAT, State.CLEARED] and not get_tree().paused:

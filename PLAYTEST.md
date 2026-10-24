@@ -1,8 +1,8 @@
 # School Rush — playtest aprovado e acompanhamento da fase 0.3
 
-Atualizado em 24/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc3**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
+Atualizado em 24/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc4**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
 
-**D1–D4 e E1–E3 implementados:** oitenta questões, progressão fácil → médio → médio → difícil nas duas opções, variedade dentro do nível, cinco questões revisadas e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques, varredura do chefe e resumo/revisão de partida com relatório local opcional e acertos por nível. Quinze suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
+**D1–D4 e E1–E4 implementados:** oitenta questões, progressão fácil → médio → médio → difícil nas duas opções, variedade dentro do nível, cinco questões revisadas e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques, varredura do chefe, resumo/revisão de partida com relatório local opcional e acertos por nível, e preferências de áudio no menu/pausa. Dezesseis suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
 
 ## Resultado informado em 23/10/2026
 
@@ -83,6 +83,9 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 - [ ] Salvar mostra um arquivo legível; Abrir pasta dos resumos permite encontrá-lo; segundo clique em salvar reutiliza o mesmo relatório; reinício inicia outro registro.
 - [ ] Textos longos, alternativas e botões são acessíveis em 960×540 e após redimensionar.
 - [ ] M alterna os efeitos sonoros; música, volume e efeitos são confortáveis.
+- [ ] Áudio no menu e na pausa permite ajustar música e efeitos separadamente; 0% silencia; controles funcionam por mouse, Tab e setas.
+- [ ] Ajustar/fechar áudio na pausa não retoma o combate; Esc volta primeiro à pausa.
+- [ ] Salvar e reabrir restaura preferências; Voltar sem salvar mantém somente nesta sessão; Restaurar padrão pode ser salvo.
 - [ ] Em outro PC sem Godot, extrair o ZIP e completar uma vitória, uma derrota e um reinício.
 
 ## Revisão pedagógica
@@ -125,4 +128,4 @@ Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se recon
 - Duração de partidas concluídas avaliada contra o alvo de 5–8 minutos; registrar decisão caso o alvo seja revisto.
 - Sensação dos controles/áudio e execução em outro PC aprovadas pela equipe.
 
-Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc3, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.
+Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc4, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.
