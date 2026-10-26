@@ -1,0 +1,57 @@
+{
+  "image": "student_spritesheet.png",
+  "columns": 6,
+  "rows": 8,
+  "frame_width": 224,
+  "frame_height": 192,
+  "animations": {
+    "walk_down": {
+      "row": 0,
+      "frames": 6,
+      "fps": 10,
+      "loop": true
+    },
+    "walk_left": {
+      "row": 1,
+      "frames": 6,
+      "fps": 10,
+      "loop": true
+    },
+    "walk_right": {
+      "row": 2,
+      "frames": 6,
+      "fps": 10,
+      "loop": true
+    },
+    "walk_up": {
+      "row": 3,
+      "frames": 6,
+      "fps": 10,
+      "loop": true
+    },
+    "attack_down": {
+      "row": 4,
+      "frames": 6,
+      "fps": 12,
+      "loop": false
+    },
+    "attack_left": {
+      "row": 5,
+      "frames": 6,
+      "fps": 12,
+      "loop": false
+    },
+    "attack_right": {
+      "row": 6,
+      "frames": 6,
+      "fps": 12,
+      "loop": false
+    },
+    "attack_up": {
+      "row": 7,
+      "frames": 6,
+      "fps": 12,
+      "loop": false
+    }
+  }
+}

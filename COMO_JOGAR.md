@@ -1,6 +1,6 @@
-# School Rush — MVP 0.3.0-rc5
+# School Rush — MVP 0.3.0-rc6
 
-A candidata 0.3.0-rc5 acrescenta um treino opcional dos controles à progressão de dificuldade, oitenta questões, combate, revisão de partida e ajustes de áudio existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
+A candidata 0.3.0-rc6 integra o estudante sem nome próprio, com animações de caminhada e ataque com a régua, ao treino, às duas rotas, às oitenta questões e aos demais recursos existentes. O aceite da base anterior está registrado; esta fase precisa de um novo playtest.
 
 ## Jogar
 
@@ -17,6 +17,8 @@ No Windows 64 bits, abra `SchoolRush.exe` na pasta da build. Não é necessário
 | Mouse ou Tab + Enter | Selecionar opções nos menus |
 
 No menu, escolha **Rota clássica** ou **Expedição científica**. Cada uma tem quatro salas e o mesmo sistema de perguntas/recompensas. Reiniciar mantém a rota escolhida; volte ao início para trocar.
+
+Você controla um **estudante sem nome próprio**, com mochila e régua. Mover orienta o golpe; parado, ele mantém a última direção. A caminhada acelera ao correr. Nas diagonais, o pequeno indicador dourado mostra a direção exata mesmo quando o sprite usa uma vista frontal ou traseira. O arco dourado durante o ataque indica seu alcance real.
 
 Escolha uma das duas perguntas e responda. O banco contém 80 questões para Ensino Médio, vinte por matéria, com temas de revisão, aplicação e interpretação. Cada oferta apresenta duas matérias diferentes; as quatro aparecem nas duas primeiras salas e cada matéria é oferecida duas vezes por partida. As oito questões apresentadas não se repetem dentro da partida.
 
@@ -99,7 +101,7 @@ As preferências ficam em `%APPDATA%\Godot\app_userdata\School Rush\audio.cfg` n
 
 ## Estado da versão
 
-Versão candidata com sprites animados em seis tipos de monstros e quatro pisos derivados da arte fornecida. O jogador e parte da interface/efeitos continuam provisórios: os respectivos pacotes são referências que ainda precisam de preparação. As músicas adicionadas pela equipe foram preservadas; M alterna os efeitos sonoros e não a música de fundo.
+Versão candidata com estudante animado, seis tipos de monstros e quatro pisos derivados da arte fornecida. O estudante usa as animações de `school_rush_player`; não há escolha de personagens ou nomes próprios. Parte da interface e dos efeitos continua provisória. As músicas adicionadas pela equipe foram preservadas; M alterna os efeitos sonoros e não a música de fundo.
 
 O usuário e Igor aprovaram o playtest interno da base em 23/10/2026. O conteúdo ampliado precisa de revisão pedagógica, acompanhada por ID em `data/REVISAO_PEDAGOGICA.md`, e a fase nova terá outra rodada de playtest. As verificações automatizadas não substituem essa avaliação nem o teste em outro computador. O registro e roteiro estão em `PLAYTEST.md`; `ART_ANALYSIS.md` registra a seleção de arte.
 
@@ -114,11 +116,11 @@ No PowerShell, na pasta do projeto:
 .\tools\check.ps1 -Godot 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' -Export
 ```
 
-O segundo comando executa as dezessete suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques, resumo/revisão de partida, áudio e treino, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
+O segundo comando executa as dezoito suítes, incluindo variedade de questões, movimento inimigo, coordenação dos ataques, resumo/revisão de partida, áudio, treino e sprites do estudante, e exporta `builds/windows/SchoolRush.exe`, com recursos e catálogo embutidos. Distribua a pasta `windows` completa: guia, plano, roteiro, avisos do Godot e referências de arte/revisão. A cópia de `data/curriculum.json` ao lado do executável serve à revisão; modificá-la não altera o jogo exportado. Builds, capturas e caches não entram no Git.
 
 Para revisar questões ou ajustar recompensas, siga [data/README.md](data/README.md) no projeto-fonte e gere uma nova build.
 
-Para integrar os seus sprites às cenas dos monstros, siga [SPRITES.md](SPRITES.md) no projeto-fonte. A arte pode ser substituída sem alterar os ataques ou as colisões.
+Para configurar os sprites do estudante e dos monstros, siga [SPRITES.md](SPRITES.md) no projeto-fonte. A arte pode ser substituída sem alterar os ataques ou as colisões.
 
 Para gerar capturas das telas com renderização (abre uma janela temporária):
 
@@ -132,6 +134,7 @@ Para gerar capturas das telas com renderização (abre uma janela temporária):
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_difficulty.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_audio.gd
 & 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_training.gd
+& 'C:\caminho\Godot_v4.7.2-stable_win64_console.exe' --path . --script res://tests/capture_player.gd
 ```
 
 O plano, as decisões e as pendências de aceite estão em `PLANO_MVP.md`.

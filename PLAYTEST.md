@@ -1,8 +1,8 @@
 # School Rush — playtest aprovado e acompanhamento da fase 0.3
 
-Atualizado em 24/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc5**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
+Atualizado em 25/10/2026. **Playtest interno da base anterior aprovado pelo usuário e Igor.** Público: Ensino Médio. Nova candidata para avaliação: **0.3.0-rc6**, Windows x64, sem necessidade do editor Godot. Os campos em branco abaixo são o roteiro para a próxima rodada, não reprovações da base.
 
-**D1–D4 e E1–E5 implementados:** oitenta questões, progressão fácil → médio → médio → difícil nas duas opções, variedade dentro do nível, cinco questões revisadas e alternativas embaralhadas; separação e reposicionamento dos inimigos, dois leques do cacto, coordenação dos ataques, varredura do chefe, resumo/revisão de partida com relatório local opcional e acertos por nível, preferências de áudio no menu/pausa e treino opcional dos controles. Dezessete suítes aprovadas e capturas de textos/avisos conferidas. Não houve novo playtest humano dessa fase nesta entrega.
+**D1–D4 e E1–E6 implementados:** oitenta questões, progressão fácil → médio → médio → difícil nas duas opções, variedade dentro do nível, cinco questões revisadas e alternativas embaralhadas; combate aprimorado, resumo/revisão de partida, áudio, treino e estudante sem nome próprio com sprites de caminhada e régua. Dezoito suítes aprovadas e capturas de textos, avisos e personagem conferidas. Não houve novo playtest humano dessa fase nesta entrega.
 
 ## Resultado informado em 23/10/2026
 
@@ -55,6 +55,9 @@ Ao terminar, perguntar: quando você recebe o bônus? Como evitou o tiro da nuve
 Registrar se cada participante usou o treino antes da primeira partida. Observar se encontra a opção, compreende as instruções sem ajuda e consegue orientar a régua. O tempo de treino não entra na duração da partida nem no relatório; não comparar familiaridade com os controles sem considerar essa diferença.
 
 - [ ] Movimento, diagonal, corrida, régua e paredes respondem bem no teclado.
+- [ ] Estudante permanece reconhecível nos quatro pisos; caminhada, corrida e repouso combinam com a direção do movimento.
+- [ ] Ataque com régua parece imediato; indicador e arco deixam clara a direção física, inclusive nas diagonais.
+- [ ] Pausa congela o sprite; dano é visível; derrota e reinício não deixam animação, direção ou tintura antigas.
 - [ ] Treino permite concluir movimento, corrida, três golpes no alvo e saída; Shift parado e E longe da porta não pulam etapas.
 - [ ] Alvo de treino não ataca; pausa/áudio, recomeçar, abandonar e iniciar ambas as rotas funcionam sem resíduos.
 - [ ] Treino não concede bônus, não apresenta perguntas e não aparece como partida no relatório.
@@ -133,4 +136,4 @@ Se a maioria não perceber um aviso, ajustar primeiro sua legibilidade. Se recon
 - Duração de partidas concluídas avaliada contra o alvo de 5–8 minutos; registrar decisão caso o alvo seja revisto.
 - Sensação dos controles/áudio e execução em outro PC aprovadas pela equipe.
 
-Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc5, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.
+Registrar responsáveis, resultados e correções no `PLANO_MVP.md`. A base anterior já recebeu aceite interno; D5 permanece aberto para avaliação humana da 0.3.0-rc6, revisão pedagógica e execução em outro PC. A candidata não foi promovida automaticamente a versão final.

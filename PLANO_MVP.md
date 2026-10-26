@@ -2,7 +2,7 @@
 
 Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
-**Situação atual (24/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1–E5 implementados; candidata 0.3.0-rc5:** oitenta questões para Ensino Médio, progressão fácil → médio → médio → difícil, variedade dentro do nível, cinco questões revisadas, combate aprimorado, resumo/revisão com acertos por dificuldade, ajustes de áudio e treino opcional dos controles. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Dezessete suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
+**Situação atual (25/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1–E6 implementados; candidata 0.3.0-rc6:** oitenta questões para Ensino Médio, progressão fácil → médio → médio → difícil, variedade dentro do nível, combate aprimorado, resumo/revisão, áudio, treino opcional e estudante sem nome próprio com sprites de caminhada e régua. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Dezoito suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
 ## Objetivo e situação atual
 
@@ -24,7 +24,22 @@ O usuário informou que ele e Igor verificaram o jogo, aprovaram o playtest e so
 | E3 — comunicar e acompanhar a curva | Mostrar nível antes da escolha e acertos por dificuldade na revisão/relatório | Mesma classificação na oferta, resposta e revisão; nível não alcançado não conta como erro | Implementado; quinze suítes aprovadas; candidata 0.3.0-rc3 |
 | E4 — conforto de áudio | Ajustar música e efeitos pelo menu/pausa e salvar preferências | Volumes independentes, silêncio real em zero, pausa preservada e ajustes restaurados ao reabrir | Implementado; dezesseis suítes aprovadas; candidata 0.3.0-rc4 |
 | E5 — treino dos controles | Área opcional para mover, correr, atacar e sair | Ações reais concluem etapas; alvo não ataca; pausa funciona; perguntas, bônus e relatórios não são consumidos | Implementado; dezessete suítes aprovadas; candidata 0.3.0-rc5 |
-| E6 — primeiro sprite do jogador | Preparar a arte de um personagem fornecido e substituir o círculo provisório | Quadros limpos/transparência/pivô consistentes; movimento, direção da régua e colisão preservados | Planejado; começar por Matheus e manter Alice para a expansão seguinte |
+| E6 — sprites do estudante | Integrar caminhada e régua de `school_rush_player`; personagem sem nome próprio | Transparência, direção, pausa e reinício corretos; física e dano preservados | Implementado; dezoito suítes aprovadas; candidata 0.3.0-rc6 |
+
+#### E6 — estudante sem nome próprio (25/10/2026)
+
+O usuário determinou que o personagem não terá nome e forneceu `school_rush_player` com sprites prontos. Essa decisão substitui o plano anterior de preparar personagens nomeados das pranchas antigas. A documentação trata o protagonista apenas como **estudante**; nomes de integrantes da equipe nas atribuições históricas não se referem ao personagem.
+
+- `student_frames.tres` usa os 48 PNGs originais: oito animações de seis quadros, para caminhada e ataque em quatro direções. Sem edição dos pixels. Repouso usa o quadro 0 da caminhada, e a corrida acelera a reprodução junto à velocidade real do movimento.
+- `AnimatedSprite2D` em `scenes/player/player.tscn`, filtro Nearest, escala visual 0,28 e posição `(0, -8)`. O corpo continua em escala 1, colisão circular de raio 15, velocidade inicial 230, corrida ×1,4, dano 10, alcance 60 e recarga de 0,4 s. O treino passa a usar o mesmo estudante animado.
+- Ataque começa no quadro 3 (quarto quadro, impacto) e usa 3–5 a 15 fps, cerca de 0,2 s de impacto/recuperação visual. Os quadros de antecipação 0–2 permanecem no material fornecido, mas não atrasam o dano instantâneo existente. Avançar a animação nunca aplica dano adicional. Direção visual e arco do golpe ficam fixos na direção do ataque já emitido.
+- Diagonais mantêm o cone físico original, usando a vista vertical no empate entre eixos. O pequeno indicador dourado mostra a direção exata e o arco fino mostra o alcance no ataque. Dano tinge o sprite brevemente e mantém um anel durante a invulnerabilidade; derrota congela/escurece o estudante. Pausa congela quadros e recarga; reinício limpa pose, direção e tintura.
+- Os arquivos recebidos e seus recursos ficam versionados em `school_rush_player`. A exportação usa os PNGs individuais e o SpriteFrames; `source_generated.png` e o atlas duplicado ficam como referência no projeto, fora do executável. O guia original do pacote permanece preservado.
+- Dezoito suítes aprovadas. Nova suíte verifica os 48 quadros, dimensões/transparência, quatro direções, repouso, corrida, diagonal, dano imediato/único, recarga, pausa, derrota e reinício. As suítes de movimento, combate e treino continuam verificando a física real.
+- Capturas em `builds/previews/e6-*.png`, geradas por `tests/capture_player.gd`: vistas, caminhada, impacto, diagonal, dano, treino e ginásio redimensionado. Escala e indicadores foram inspecionados em 960×540 e 1280×720.
+- Pacote Windows: `builds/SchoolRush-MVP-0.3.0-rc6-windows-x64.zip`; log técnico: `builds/validation-0.3.0-rc6.log`. E5 foi preservado no commit `22904a4` e no pacote rc5.
+
+**Próximo passo:** validar a leitura do estudante e da régua no treino e nas duas rotas, junto da curva de perguntas e do combate de D5. Ajustar alinhamento/escala com feedback concreto, sem alterar a colisão para compensar a arte. Não há seleção de personagem ou nomes próprios no escopo atual.
 
 #### E5 — treino opcional dos controles (24/10/2026)
 
@@ -38,7 +53,7 @@ O usuário autorizou continuar com o próximo bloco. Foi acrescentado **Treinar 
 - Capturas das quatro etapas, menu, pausa e conclusão em 960×540 e 1280×720: `tests/capture_training.gd`; arquivos `builds/previews/e5-*.png`. Os controles do menu e textos foram inspecionados.
 - Candidata Windows: `builds/SchoolRush-MVP-0.3.0-rc5-windows-x64.zip`; log: `builds/validation-0.3.0-rc5.log`.
 
-**Próximo bloco técnico — E6:** preparar e integrar o primeiro sprite de jogador a partir do material fornecido, começando por Matheus. Conferir os quadros antes de definir animações; não usar títulos/fundos das pranchas como parte do personagem. Preservar alcance da régua, direção e colisão; validar a leitura em treino e combate. D5 humano segue em paralelo, com revisão pedagógica e playtest das duas rotas; este treino não substitui esse aceite.
+**Continuidade:** E6 foi concluído com o estudante sem nome próprio e o novo pacote fornecido, substituindo a preparação das pranchas antigas. D5 humano segue em paralelo, com revisão pedagógica e playtest das duas rotas; este treino não substitui esse aceite.
 
 #### E4 — ajustes de áudio (24/10/2026)
 
@@ -51,7 +66,7 @@ Com a continuidade autorizada e sem novo retorno humano de D5, este bloco trata 
 - Capturas em 960×540/1280×720 de menu, áudio, pausa, controles ajustados e aviso de erro; reprodução em `tests/capture_audio.gd`, arquivos `builds/previews/e4-*.png`. Layout compacto oferece mouse, Tab e setas. Conforto auditivo continua dependendo da avaliação da equipe.
 - Candidata Windows: `builds/SchoolRush-MVP-0.3.0-rc4-windows-x64.zip`; log: `builds/validation-0.3.0-rc4.log`. As candidatas anteriores permanecem disponíveis.
 
-**Próximo passo:** playtest da candidata atual com as duas rotas, revisão pedagógica e avaliação dos volumes. Registrar ajustes de perguntas/encontros com evidência; a preparação de Matheus/Alice continua no backlog de arte.
+**Próximo passo:** playtest da candidata atual com as duas rotas, revisão pedagógica e avaliação dos volumes. Registrar ajustes de perguntas/encontros com evidência; a arte do estudante foi integrada posteriormente em E6.
 
 #### E2 e E3 — progressão educacional (24/10/2026)
 
@@ -66,7 +81,7 @@ O usuário solicitou perguntas mais fáceis no começo e mais difíceis no final
 - Capturas das quatro salas e resultados por nível em 960×540/1280×720: `tests/capture_difficulty.gd`, arquivos `builds/previews/e2-*` e `e3-*`. As cinco questões revisadas também foram capturadas por `tests/capture_catalog.gd`, com verificação de largura e acesso à última alternativa. Isso não substitui avaliação de dificuldade por estudantes.
 - Pacote Windows: `builds/SchoolRush-MVP-0.3.0-rc3-windows-x64.zip`; log técnico: `builds/validation-0.3.0-rc3.log`. Mantidos os pacotes anteriores como referência.
 
-**Próximos blocos:** D5 humano — jogar ambas as rotas, observar a curva e revisar os cinco IDs alterados junto ao restante do banco; registrar acertos por nível e separar dúvidas de conteúdo de dificuldades do combate. Ajustar textos/classificações/encontros com esse retorno. Preparar Matheus/Alice segue no backlog de arte; não acrescentar sistemas grandes antes de validar a curva.
+**Próximos blocos:** D5 humano — jogar ambas as rotas, observar a curva e revisar os cinco IDs alterados junto ao restante do banco; registrar acertos por nível e separar dúvidas de conteúdo de dificuldades do combate. Ajustar textos/classificações/encontros com esse retorno. A arte do estudante foi integrada posteriormente em E6; não acrescentar sistemas grandes antes de validar a curva.
 
 #### E1 — resumo, revisão e apoio ao playtest (23/10/2026)
 
@@ -139,12 +154,12 @@ Quatorze suítes passaram. A nova suíte verifica teto, espera até sumir o peri
 
 Continuidade de D5:
 
-- Manter as dezessete suítes (incluindo áudio e treino) e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
+- Manter as dezoito suítes (incluindo áudio, treino e sprites do estudante) e ampliar a cobertura somente para regras novas. Testes de combate devem simular avisos, esquivas e impactos; eliminar inimigos por código continua servindo apenas para testar progressão.
 - Comparar as duas rotas com e sem recompensas. Registrar por partida a versão, rota, duração, sala final, perguntas repetidas/confusas e ataques difíceis de entender ou evitar. O alvo de 5–8 minutos continua uma hipótese de balanceamento.
 - Usuário e Igor avaliam se perceberam mais variedade e se os inimigos ficaram mais interessantes e compreensíveis. Registrar ajustes e repetir os encontros afetados; participantes externos são uma ampliação opcional da avaliação.
-- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc5 substitui a rc4 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
+- Atualizar este plano e o roteiro a cada ajuste, registrando motivo, validações e feedback. Fazer commits e pushes por etapa validada. A 0.3.0-rc6 substitui a rc5 como candidata para esta rodada; promover a versão somente após registrar os aceites correspondentes.
 
-Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural, histórico persistente e preparação dos sprites de Matheus/Alice. A arte existente acompanha as melhorias de combate; novos sistemas não são necessários para atender ao feedback atual.
+Ficam no backlog: novas disciplinas, Babuíno, loja, armas adicionais, geração procedural e histórico persistente. A preparação das pranchas antigas de personagens foi substituída pelo estudante sem nome próprio integrado em E6. Novos sistemas não são necessários para atender ao feedback atual.
 
 ### Histórico das expansões anteriores
 
@@ -238,7 +253,7 @@ B5 — preparação da candidata (21/10/2026):
 - Versão 0.2.0-rc1 exportada com guia e roteiro de playtest. Nove suítes aprovadas sem falhas; catálogo, cenas dos novos monstros e projéteis incluídos no executável. Inicialização standalone headless concluída com código 0. Registro local em `builds/validation-0.2.0-rc1.log`; pacote em `builds/SchoolRush-MVP-0.2.0-rc1-windows-x64.zip`.
 - Os testes automatizados comprovam regras e transições; as capturas comprovam a apresentação nos estados inspecionados. Nenhum deles comprova diversão, duração real ou aceite pedagógico. B5 permanece aberto até os aceites humanos do roteiro.
 
-**Próxima etapa:** E6 prepara o primeiro sprite do jogador, começando por Matheus. Em paralelo, concluir a avaliação humana de D5 com a 0.3.0-rc5 e ajustar questões e encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo; Alice permanece para uma expansão de arte posterior.
+**Próxima etapa:** concluir a avaliação humana de D5 com a 0.3.0-rc6, incluindo o estudante animado, e ajustar questões e encontros apontados no retorno. A revisão de Igor acompanha os oitenta IDs de conteúdo. O personagem não terá nome próprio; seleção de outros personagens permanece fora do escopo.
 
 Validar se alternar perguntas escolares e combate de ação cria uma partida divertida, compreensível e repetível. A entrega é uma partida completa para PC Windows, com início, progressão, derrota, reinício e vitória. Não basta demonstrar movimentação.
 
@@ -260,7 +275,7 @@ A tabela registra o recorte atual. B2 ampliou as disciplinas; B3/B4 adicionaram 
 | Matemática, História, Ciências e Português, vinte questões por matéria no projeto D1 | Outras matérias, puzzles e travessias especiais |
 | Vida, sala atual, resultado da pergunta e recompensa no HUD | Pontuação competitiva e metaprogressão |
 | Início, pausa, derrota, vitória e reinício | Save, narração e configurações avançadas |
-| Sprites de seis monstros, pisos selecionados e músicas adicionadas pela equipe | Sprites finais do jogador, armas, HUD e efeitos preparados |
+| Sprites do estudante sem nome próprio, seis monstros, pisos selecionados e músicas da equipe | Outras armas, HUD e efeitos preparados |
 
 Tempo-alvo de uma partida: 5–8 minutos, a confirmar com jogadores. Público definido: Ensino Médio. Igor deve revisar as oitenta questões quanto à correção e adequação antes do aceite pedagógico, usando a ficha por ID.
 
@@ -408,7 +423,7 @@ Rodada externa complementar proposta: cinco pessoas, duas partidas cada. Registr
 | Testar a pasta exportada em outro PC sem Godot | Equipe | Execução externa não confirmada; verificar vitória, derrota e reinício na próxima entrega |
 | Ampliar avaliação com participantes externos | Equipe | Rodada complementar opcional, conforme disponibilidade |
 
-O aceite interno da base autorizou a evolução. A 0.3.0-rc5 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
+O aceite interno da base autorizou a evolução. A 0.3.0-rc6 está preparada para uma nova rodada; sua promoção a versão final deve registrar revisão pedagógica, retorno do combate e validação de distribuição, sem presumir que o relato anterior confirmou os novos comportamentos.
 
 ### Histórico de versionamento
 
@@ -437,3 +452,4 @@ Trabalho na branch existente `master`, com pushes para `origin/master` após cad
 - E2/E3: dificuldade por sala, cinco questões revisadas e acertos por nível; candidata 0.3.0-rc3 (consultar `git log` para o hash).
 - E4: volumes independentes no menu/pausa e preferências locais; candidata 0.3.0-rc4 (consultar `git log` para o hash).
 - E5: treino opcional de movimento, corrida, régua e saída; candidata 0.3.0-rc5 (consultar `git log` para o hash).
+- E6: estudante sem nome próprio, animações de caminhada/régua fornecidas e documentação revisada; candidata 0.3.0-rc6 (consultar `git log` para o hash).

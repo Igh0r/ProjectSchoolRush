@@ -12,11 +12,54 @@ var max_health: int = BASE_MAX_HEALTH
 var health: int = BASE_MAX_HEALTH
 var damage: int = 10
 var speed_bonus_percent: float = 0.0
-var active: bool = false
+var active: bool = false:
+	set(value):
+		active = value
+		if not active:
+			attack_visual_active = false
+			_update_visual()
+			queue_redraw()
 var facing := Vector2.DOWN
 var invulnerability: float = 0.0
 var attack_cooldown: float = 0.0
 var swing_time: float = 0.0
+var attack_direction := Vector2.DOWN
+var attack_visual_active: bool = false
+@onready var visual: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
+
+func _ready() -> void:
+	if visual != null:
+		visual.animation_finished.connect(_on_visual_finished)
+	_update_visual()
+
+func _on_visual_finished() -> void:
+	attack_visual_active = false
+	_update_visual()
+
+func _visual_direction(direction: Vector2) -> String:
+	# Quatro vistas disponíveis; diagonais mantêm o cone físico e usam a vista vertical no empate.
+	if absf(direction.x) > absf(direction.y):
+		return "right" if direction.x > 0 else "left"
+	return "down" if direction.y >= 0 else "up"
+
+func _update_visual() -> void:
+	if visual == null:
+		return
+	visual.modulate = Color(0.6, 0.6, 0.6) if health <= 0 else (Color(1.4, 0.7, 0.7) if invulnerability > 0.58 else Color.WHITE)
+	if health <= 0:
+		visual.pause()
+		return
+	if active and attack_visual_active:
+		return
+	var animation_name := "walk_" + _visual_direction(facing)
+	if active and velocity.length_squared() > 1.0:
+		visual.speed_scale = velocity.length() / speed
+		visual.play(animation_name)
+	else:
+		visual.animation = animation_name
+		visual.pause()
+		visual.set_frame_and_progress(0, 0.0)
+		visual.speed_scale = 1.0
 
 func reset_run() -> void:
 	max_health = BASE_MAX_HEALTH
@@ -27,12 +70,16 @@ func reset_run() -> void:
 	invulnerability = 0.0
 	attack_cooldown = 0.0
 	swing_time = 0.0
+	attack_direction = Vector2.DOWN
+	attack_visual_active = false
 	velocity = Vector2.ZERO
 	health_changed.emit(health, max_health)
+	_update_visual()
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	if not active or health <= 0:
+		_update_visual()
 		return
 	invulnerability = maxf(0.0, invulnerability - delta)
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
@@ -44,6 +91,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if Input.is_action_pressed("attack"):
 		attack()
+	_update_visual()
 	queue_redraw()
 
 func attack() -> void:
@@ -51,6 +99,12 @@ func attack() -> void:
 		return
 	attack_cooldown = 0.4
 	swing_time = 0.14
+	attack_direction = facing
+	if visual != null:
+		attack_visual_active = true
+		visual.speed_scale = 1.25 # 12 fps da fonte → 15 fps; recuperação visual de 0,2 s.
+		visual.play("attack_" + _visual_direction(attack_direction))
+		visual.set_frame_and_progress(3, 0.0) # Quadro de impacto acompanha o dano imediato.
 	attacked.emit(global_position, facing, damage)
 	queue_redraw()
 
@@ -59,6 +113,7 @@ func take_damage(amount: int) -> void:
 		return
 	health = maxi(0, health - amount)
 	invulnerability = 0.7
+	_update_visual()
 	health_changed.emit(health, max_health)
 	queue_redraw()
 	hurt.emit()
@@ -103,10 +158,11 @@ func apply_reward(reward: Dictionary) -> bool:
 	return true
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, 15.0, Color.WHITE if invulnerability > 0.0 else Color("54d6a8"))
-	draw_arc(Vector2.ZERO, 15.0, 0.0, TAU, 36, Color("ffffff"), 2.0)
-	draw_circle(facing * 8.0, 3.0, Color("152632"))
-	if swing_time > 0.0:
-		draw_arc(Vector2.ZERO, 60.0, facing.angle() - PI / 3.0, facing.angle() + PI / 3.0, 16, Color("ffdb80"), 6.0)
-	else:
-		draw_line(facing * 18.0, facing * 34.0, Color("ffdb80"), 5.0)
+	draw_circle(Vector2.ZERO, 15.0, Color(0.03, 0.06, 0.1, 0.3))
+	if invulnerability > 0 and health > 0:
+		draw_arc(Vector2.ZERO, 17.0, 0, TAU, 32, Color.WHITE, 1.5)
+	if active and swing_time > 0.0:
+		draw_arc(Vector2.ZERO, 60.0, attack_direction.angle() - PI / 3.0, attack_direction.angle() + PI / 3.0, 24, Color("ffdb80"), 2.0)
+	elif health > 0:
+		# Indica a direção exata, inclusive nas diagonais que não têm sprites próprios.
+		draw_line(facing * 21.0, facing * 28.0, Color("ffdb80"), 2.0)
