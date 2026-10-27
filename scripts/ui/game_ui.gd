@@ -134,12 +134,21 @@ func update_hud(health: int, maximum: int, damage: int, room_number: int, enemie
 	header.text = "Régua %d   |   Sala %d/4   |   Inimigos %d" % [damage, room_number, enemies]
 	footer.text = message
 
-func show_panel(title: String, description: String, choices: Array) -> void:
+func show_panel(title: String, description: String, choices: Array, illustration: Texture2D = null, illustration_height: float = 190.0) -> void:
 	for child in content.get_children():
 		content.remove_child(child)
 		child.queue_free()
 	overlay.show()
 	scroll.scroll_vertical = 0
+	if illustration != null:
+		var image := TextureRect.new()
+		image.texture = illustration
+		image.custom_minimum_size = Vector2(0, illustration_height)
+		image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		image.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+		image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.add_child(image)
 	var heading := Label.new()
 	heading.text = title
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

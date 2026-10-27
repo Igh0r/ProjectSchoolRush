@@ -10,6 +10,10 @@ const AUDIO_PREFERENCES = preload("res://scripts/systems/audio_preferences.gd")
 const CONTROL_TRAINING = preload("res://scripts/systems/control_training.gd")
 const QUEST_BGM = preload("res://bgm/Quest Loop.ogg")
 const BOSS_BGM = preload("res://bgm/Marche du Roi.ogg")
+const DEFEAT_BGM = preload("res://bgm/Defeat.ogg")
+const VICTORY_BGM = preload("res://bgm/Victory Chime.ogg")
+const DEFEAT_IMAGE = preload("res://assets/history/defeat.png")
+const VICTORY_IMAGE = preload("res://assets/history/victory.png")
 enum State { MENU, QUESTION, ANSWER, FEEDBACK, COMBAT, CLEARED, DEFEAT, VICTORY, PAUSED, TRAINING, TRAINING_COMPLETE }
 var state: State = State.MENU
 var previous_state: State = State.COMBAT
@@ -344,6 +348,7 @@ func _process(delta: float) -> void:
 	_update_hud()
 
 func _finish_report(outcome: String) -> void:
+	play_music(DEFEAT_BGM if outcome == "defeat" else VICTORY_BGM, outcome == "defeat")
 	run_report.finish(outcome, room_index + 1, {
 		"health": player.health, "max_health": player.max_health,
 		"damage": player.damage, "speed_bonus_percent": player.speed_bonus_percent,
@@ -355,7 +360,7 @@ func show_run_summary() -> void:
 		return
 	var report: Dictionary = run_report.snapshot()
 	var won: bool = state == State.VICTORY
-	var description := "Napoleão foi derrotado e o livro se abriu." if won else "Você chegou à sala %d. Tente golpear e recuar entre ataques." % report.room_reached
+	var description := "Napoleão foi derrotado e o portal se abriu." if won else "Você chegou à sala %d. Tente golpear e recuar entre ataques." % report.room_reached
 	description += "\n%s • Salas concluídas: %d/4\nAcertos: %d/%d • Tempo: %s (sem pausas)\nVida: %d/%d • Régua: %d • Velocidade: +%s%%" % [report.route, report.rooms_cleared, report.correct_answers, report.answered_questions, RUN_REPORT.format_duration(report.elapsed_seconds), report.final_attributes.health, report.final_attributes.max_health, report.final_attributes.damage, String.num(report.final_attributes.speed_bonus_percent, 1)]
 	if not report_notice.is_empty():
 		description += "\n\n" + report_notice
@@ -369,7 +374,7 @@ func show_run_summary() -> void:
 		{"text": "Nova partida" if won else "Tentar novamente", "action": start_run},
 		{"text": "Início", "action": show_menu},
 	])
-	ui.show_panel("Você voltou para casa!" if won else "Fim da partida", description, choices)
+	ui.show_panel("Você voltou para casa!" if won else "Fim da partida", description, choices, VICTORY_IMAGE if won else DEFEAT_IMAGE, 360.0 if won else 190.0)
 
 func show_answer_review(index: int) -> void:
 	if state not in [State.VICTORY, State.DEFEAT]:
