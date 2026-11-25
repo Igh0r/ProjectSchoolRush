@@ -4,6 +4,10 @@ Data: 19/10/2026. Proposta de escopo para a equipe, sujeita a playtest.
 
 **Situação atual (25/10/2026):** base anterior aprovada pelo usuário e Igor. **D1–D4 e E1–E6 implementados; candidata 0.3.0-rc6:** oitenta questões para Ensino Médio, progressão fácil → médio → médio → difícil, variedade dentro do nível, combate aprimorado, resumo/revisão, áudio, treino opcional e estudante sem nome próprio com sprites de caminhada e régua. Permanecem seis monstros, duas rotas de quatro salas e quatro pisos. Dezoito suítes aprovadas. **D5 segue aberto para novo playtest, ajustes de balanceamento, revisão pedagógica e teste em outro PC.** Instruções em [COMO_JOGAR.md](COMO_JOGAR.md), análise em [ART_ANALYSIS.md](ART_ANALYSIS.md), integração em [SPRITES.md](SPRITES.md) e registro em [PLAYTEST.md](PLAYTEST.md).
 
+## Preparação para apresentação — 25/11/2026
+
+O usuário confirmou o playtest. Em 25/11, solicitou atualizar e testar o executável para apresentar nas escolas em 26/11. Pull cfde523 recebido; 18 suítes aprovadas, exportação e inicialização verificadas. Evidências, limitações e pacote estão em [VALIDACAO_APRESENTACAO.md](VALIDACAO_APRESENTACAO.md). O próximo bloco de funcionalidades fica para depois da apresentação. Revisão pedagógica por ID e teste no PC das escolas continuam sem confirmação.
+
 ## Objetivo e situação atual
 
 ### Nova fase — variedade e combate (23/10/2026)
